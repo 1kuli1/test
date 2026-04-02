@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX-OS PRO SYSTEM</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0b0f1a;
+    color: white;
+    margin: 0;
+    text-align: center;
+}
+
+h1 {
+    margin: 10px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.panel {
+    flex: 1;
+    min-width: 300px;
+    padding: 10px;
+}
+
+textarea, input {
+    width: 90%;
+    padding: 8px;
+    margin: 5px;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 8px;
+    border: none;
+    background: #eab308;
+    cursor: pointer;
+}
+
+#map {
+    height: 400px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📡 DX-OS PRO SYSTEM</h1>
+
+<div class="container">
+
+<!-- ANALYS -->
+<div class="panel">
+<h2>🤖 Analys</h2>
+
+<input id="freq" placeholder="Frekvens (kHz)">
+<input id="station" placeholder="Station (valfri)">
+<textarea id="notes" placeholder="Observationer..."></textarea>
+
+<button onclick="analysera()">Analysera + Auto-logga</button>
+<button onclick="skickaAI()">Öppna i ChatGPT</button>
+
+<p id="result"></p>
+</div>
+
+<!-- LOGG -->
+<div class="panel">
+<h2>📒 Logg</h2>
+
+<ul id="logg"></ul>
+
+<button onclick="exportera()">Exportera logg</button>
+<button onclick="rensa()">Rensa logg</button>
+</div>
+
+<!-- KARTA -->
+<div class="panel">
+<h2>🗺️ Karta</h2>
+<div id="map"></div>
+</div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+// ===============================
+// INIT MAP
+// ===============================
+let map = L.map('map').setView([59.3293, 18.0686], 4);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+// Din QTH
+let qth = [59.3293, 18.0686];
+L.marker(qth).addTo(map).bindPopup("Din position");
+
+// Exempel mottagare
+let rx1 = [52.0, 5.0]; // Nederländerna
+let rx2 = [51.5, -0.1]; // UK
+
+let m1 = L.marker(rx1).addTo(map).bindPopup("RX1");
+let m2 = L.marker(rx2).addTo(map).bindPopup("RX2");
+
+// Linjer
+L.polyline([qth, rx1], {color:'red'}).addTo(map);
+L.polyline([qth, rx2], {color:'blue'}).addTo(map);
+
+
+// ===============================
+// LOGG SYSTEM (localStorage)
+// ===============================
+function loadLogg() {
+    let data = JSON.parse(localStorage.getItem("dxlogg") || "[]");
+    let lista = document.getElementById("logg");
+    lista.innerHTML = "";
+
+    data.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = item;
+        lista.appendChild(li);
+    });
+}
+
+function sparaLogg(text) {
+    let data = JSON.parse(localStorage.getItem("dxlogg") || "[]");
+    data.push(text);
+    localStorage.setItem("dxlogg", JSON.stringify(data));
+    loadLogg();
+}
+
+function rensa() {
+    localStorage.removeItem("dxlogg");
+    loadLogg();
+}
+
+// ===============================
+// ANALYS + AUTO LOGG
+// ===============================
+function analysera() {
+    let freq = document.getElementById("freq").value;
+    let station = document.getElementById("station").value;
+    let notes = document.getElementById("notes").value;
+
+    let text = new Date().toLocaleString() + 
+        " | " + freq + " kHz | " + station + " | " + notes;
+
+    document.getElementById("result").innerText =
+        "✔ Analys klar – loggad";
+
+    sparaLogg(text);
+}
+
+// ===============================
+// EXPORT
+// ===============================
+function exportera() {
+    let data = localStorage.getItem("dxlogg");
+    let blob = new Blob([data], {type: "application/json"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "dxlogg.json";
+    a.click();
+}
+
+// ===============================
+// AI → ChatGPT
+// ===============================
+function skickaAI() {
+    let freq = document.getElementById("freq").value;
+    let notes = document.getElementById("notes").value;
+
+    let prompt = `Identifiera radiostation:
+Frekvens: ${freq} kHz
+Observationer: ${notes}`;
+
+    let url = "https://chat.openai.com/?q=" + encodeURIComponent(prompt);
+    window.open(url, "_blank");
+}
+
+// ===============================
+loadLogg();
+</script>
+
+</body>
+</html>

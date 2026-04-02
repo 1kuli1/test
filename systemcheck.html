@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX TEST – Systemcheck</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.box {
+    background: #111827;
+    padding: 20px;
+    margin: 15px auto;
+    border-radius: 12px;
+    max-width: 500px;
+}
+
+.ok {
+    color: #22c55e;
+}
+
+.warn {
+    color: #facc15;
+}
+
+button {
+    width: 80%;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧪 DX-OS TEST SYSTEMCHECK</h1>
+
+<div class="box">
+<p class="ok">✔ HTML laddad</p>
+<p class="ok">✔ CSS fungerar</p>
+<p class="ok">✔ GitHub Pages OK</p>
+</div>
+
+<div class="box">
+<p class="warn">Testa nästa steg:</p>
+
+<button onclick="location.href='testcenter.html'">🚀 Testcenter</button>
+
+<button onclick="testLogg()">📒 Test logg</button>
+
+<button onclick="testAI()">🤖 Test AI</button>
+</div>
+
+<div class="box">
+<p id="status">Status: Väntar...</p>
+</div>
+
+<script>
+function testLogg() {
+    document.getElementById("status").innerText = "✔ Loggfunktion svarar";
+}
+
+function testAI() {
+    document.getElementById("status").innerText = "✔ AI-modul svarar";
+}
+</script>
+
+</body>
+</html>

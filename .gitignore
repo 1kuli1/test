@@ -1,4 +1,3 @@
-
 # =========================
 # SYSTEMFILER
 # =========================
@@ -13,14 +12,14 @@ desktop.ini
 .idea/
 
 # =========================
-# NODE / JS (om du testar framtida funktioner)
+# NODE / JS (framtida stöd)
 # =========================
 node_modules/
 npm-debug.log*
 yarn-error.log*
 
 # =========================
-# PYTHON / AI TEST (om du kör lokalt)
+# PYTHON / AI TEST
 # =========================
 __pycache__/
 *.pyc
@@ -45,17 +44,20 @@ __pycache__/
 .env.local
 
 # =========================
-# TEST / DEBUG (LOKALT)
+# DX-OS TESTSTRUKTUR
 # =========================
 test_local/
 debug/
 sandbox/
+exports/
 
 # =========================
-# EXPORTER (tillfälliga filer)
+# DATAHANTERING (VIKTIGT)
 # =========================
-exports/
-*.csv
-*.json
+# Tillåt riktig data
+!data/
+
+# Blockera testdata
+test_data/
 
 

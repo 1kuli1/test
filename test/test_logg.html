@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>Logg Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<h1>📒 LOGG TEST</h1>
+
+<input id="freq" placeholder="Frekvens">
+<input id="station" placeholder="Station">
+
+<button onclick="spara()">Spara</button>
+
+<ul id="lista"></ul>
+
+<br>
+<button onclick="location.href='../testcenter.html'">⬅️ Tillbaka</button>
+
+<script>
+function spara() {
+    let freq = document.getElementById("freq").value;
+    let station = document.getElementById("station").value;
+
+    let li = document.createElement("li");
+    li.textContent = freq + " kHz - " + station;
+
+    document.getElementById("lista").appendChild(li);
+}
+</script>
+
+</body>
+</html>

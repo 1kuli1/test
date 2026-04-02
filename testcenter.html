@@ -2,28 +2,90 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>Testcenter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX-OS Testcenter</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 30px;
+}
+
+.container {
+    padding: 20px;
+}
+
+.section {
+    margin: 30px auto;
+    max-width: 500px;
+    background: #111827;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+button {
+    width: 80%;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #facc15;
+}
+</style>
 </head>
 
 <body>
 
-<h1>🧪 TESTCENTER</h1>
+<h1>DX-OS TESTCENTER</h1>
 
 <div class="container">
 
-<button onclick="location.href='test/test_ai.html'">🤖 Testa AI</button>
+    <div class="section">
+        <h2>Systemtester</h2>
 
-<button onclick="location.href='test/test_logg.html'">📒 Testa Logg</button>
+        <button onclick="location.href='dxos_pro_system_v2.html'">
+        ⚙️ DX-OS PRO SYSTEM V2
+        </button>
 
-<button onclick="location.href='test/test_map.html'">🗺️ Testa Karta</button>
+        <!-- NY KNAPP -->
+        <button onclick="location.href='dxos_pro_system.html'">
+        🚀 DX-OS PRO SYSTEM
+        </button>
+
+        <button onclick="location.href='dx_operations_center.html'">
+        🛰️ Operations Center
+        </button>
+
+        <button onclick="location.href='dx_map_system.html'">
+        🗺️ Karta
+        </button>
+
+        <button onclick="location.href='logg.html'">
+        📊 Logg
+        </button>
+
+        <button onclick="location.href='analys.html'">
+        🤖 Analys / AI
+        </button>
+
+    </div>
 
 </div>
-
-<br>
-<button onclick="location.href='index.html'">⬅️ Tillbaka</button>
 
 </body>
 </html>

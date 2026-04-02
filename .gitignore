@@ -1,0 +1,61 @@
+
+# =========================
+# SYSTEMFILER
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# EDITOR / IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# NODE / JS (om du testar framtida funktioner)
+# =========================
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# =========================
+# PYTHON / AI TEST (om du kör lokalt)
+# =========================
+__pycache__/
+*.pyc
+
+# =========================
+# LOGGAR & TEMP
+# =========================
+*.log
+*.tmp
+*.temp
+
+# =========================
+# BACKUP / AUTOSAVE
+# =========================
+*.bak
+*.swp
+
+# =========================
+# KÄNSLIGA DATA
+# =========================
+.env
+.env.local
+
+# =========================
+# TEST / DEBUG (LOKALT)
+# =========================
+test_local/
+debug/
+sandbox/
+
+# =========================
+# EXPORTER (tillfälliga filer)
+# =========================
+exports/
+*.csv
+*.json
+
+

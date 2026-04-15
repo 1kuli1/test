@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy AI – Popup</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.box {
+    background: #111827;
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 10px;
+    border: none;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2>DX Academy AI</h2>
+
+<div class="container">
+
+<div class="box">
+<h3>Identifiera station</h3>
+
+<input id="freq" placeholder="Frekvens">
+<input id="utc" placeholder="UTC">
+
+<button onclick="setUTC()">Sätt aktuell UTC</button>
+
+<input id="lang" placeholder="Språk">
+
+<textarea id="obs" placeholder="Observationer"></textarea>
+
+<!-- FLYTTAD HIT -->
+<input id="rx" placeholder="Mottagare/plats">
+
+<button onclick="askStation()">Fråga AI</button>
+</div>
+
+</div>
+
+<script>
+function setUTC() {
+    const now = new Date();
+    const h = String(now.getUTCHours()).padStart(2,'0');
+    const m = String(now.getUTCMinutes()).padStart(2,'0');
+    document.getElementById("utc").value = h + ":" + m + " UTC";
+}
+
+function askStation(){
+    let q = `Identifiera station:
+Frekvens: ${freq.value}
+Tid: ${utc.value}
+Språk: ${lang.value}
+Mottagare/plats: ${rx.value}
+Observationer: ${obs.value}`;
+
+    let url = "https://chat.openai.com/?q=" + encodeURIComponent(q);
+
+    window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>

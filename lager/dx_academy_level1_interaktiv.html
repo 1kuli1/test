@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy – Level 1 Interaktiv</title>
+<style>
+:root {
+  --bg: #0b0f1a;
+  --panel: #111827;
+  --panel-2: #0f172a;
+  --text: #ffffff;
+  --muted: #cbd5e1;
+  --accent: #eab308;
+  --accent-dark: #374151;
+  --ok: #16a34a;
+  --warn: #dc2626;
+  --link: #93c5fd;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+.header {
+  background: #0f172a;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.header h1 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 28px;
+}
+.header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+}
+.wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+}
+.sidebar, .content-card, .status-card {
+  background: var(--panel);
+  border-radius: 16px;
+  padding: 18px;
+}
+.sidebar {
+  position: sticky;
+  top: 108px;
+  align-self: start;
+}
+.lesson-nav {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+.lesson-nav button,
+.button,
+.action-row button,
+.quiz button,
+textarea,
+input,
+select {
+  font: inherit;
+}
+.lesson-nav button,
+.button,
+.action-row button,
+.quiz button {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.lesson-nav button {
+  background: #1f2937;
+  color: white;
+  text-align: left;
+}
+.lesson-nav button.active {
+  background: var(--accent);
+  color: black;
+}
+.button.primary, .action-row button.primary, .quiz button.primary {
+  background: var(--accent);
+  color: black;
+}
+.button.secondary, .action-row button.secondary, .quiz button.secondary {
+  background: var(--accent-dark);
+  color: white;
+}
+.progress-wrap {
+  background: #1f2937;
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+  margin: 12px 0 8px;
+}
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+.content-card h2 {
+  color: var(--accent);
+  margin-top: 0;
+}
+.section {
+  background: var(--panel-2);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+.section h3 {
+  color: var(--accent);
+  margin-top: 0;
+}
+.small {
+  color: var(--muted);
+  font-size: 14px;
+}
+.action-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.action-row button { flex: 1 1 180px; }
+.quiz {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+}
+.quiz-options {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+.quiz-options button {
+  background: #1f2937;
+  color: white;
+  text-align: left;
+}
+.feedback {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  display: none;
+}
+.feedback.ok {
+  background: rgba(22,163,74,0.18);
+  border: 1px solid rgba(22,163,74,0.45);
+  display: block;
+}
+.feedback.bad {
+  background: rgba(220,38,38,0.18);
+  border: 1px solid rgba(220,38,38,0.45);
+  display: block;
+}
+textarea, input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: #0b1220;
+  color: white;
+}
+textarea { min-height: 110px; resize: vertical; }
+.label {
+  display: block;
+  margin: 10px 0 6px;
+  color: var(--muted);
+}
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.toolbox {
+  background: rgba(255,255,255,0.04);
+  padding: 14px;
+  border-radius: 12px;
+}
+.waterfall-box {
+  background: #020617;
+  border-radius: 14px;
+  padding: 12px;
+  overflow-x: auto;
+}
+.lesson-status {
+  display: inline-block;
+  font-size: 13px;
+  color: #d1fae5;
+  background: rgba(22,163,74,0.2);
+  border: 1px solid rgba(22,163,74,0.45);
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-top: 8px;
+}
+.top-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.top-links a {
+  color: var(--link);
+  text-decoration: none;
+}
+.footer-back {
+  margin-top: 20px;
+}
+@media (max-width: 860px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <h1>📡 DX Academy – Level 1 Interaktiv</h1>
+      <p>En samlad, interaktiv kursfil för nybörjare. Fungerar både lokalt och online.</p>
+    </div>
+    <div class="top-links">
+      <a href="https://classroom.google.com/c/ODUwMTY5MDUwODU2">Till Classroom</a>
+      <a href="#" id="resetAllLink">Nollställ kursdata</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper">
+  <aside class="sidebar">
+    <h2 style="margin-top:0;color:var(--accent);">Lektioner</h2>
+    <div class="small">Klicka på en lektion. Dina svar sparas i webbläsaren.</div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="small" id="progressText">0 av 9 klara</div>
+    <div class="lesson-nav" id="lessonNav"></div>
+    <div class="section" style="margin-top:16px;margin-bottom:0;">
+      <h3>Snabbverktyg</h3>
+      <button class="button primary" onclick="window.open('https://classroom.google.com/c/ODUwMTY5MDUwODU2','_blank')">⬅ Till Classroom</button>
+      <button class="button secondary" onclick="exportNotes()">💾 Exportera anteckningar</button>
+      <button class="button secondary" onclick="window.print()">🖨️ Skriv ut</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="content-card" id="lessonContainer"></div>
+  </main>
+</div>
+
+<script>
+const classroomUrl = 'https://classroom.google.com/c/ODUwMTY5MDUwODU2';
+
+const lessons = [
+  {
+    id: 1,
+    title: 'Lektion 1 – Vad är DX-ing?',
+    intro: 'Här lär eleven sig vad DX-ing är och varför det handlar om att lyssna långt bort.',
+    content: `
+      <div class="section">
+        <h3>📡 Vad är DX-ing?</h3>
+        <p>DX-ing betyder att lyssna på radiostationer som ligger långt bort. Du kan sitta hemma och ändå höra andra länder, andra språk och andra typer av program.</p>
+        <p>Det handlar inte bara om att höra något. Det handlar om att upptäcka, jämföra och förstå vad du faktiskt lyssnar på.</p>
+      </div>
+      <div class="section">
+        <h3>🎯 Varför är det spännande?</h3>
+        <p>Varje gång du hör en ny station har du hittat något. Du tränar örat, tålamodet och din förmåga att lägga märke till små ledtrådar.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Vad beskriver DX-ing bäst?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(1, false, this)">Att bara lyssna på lokala FM-stationer</button>
+          <button onclick="checkQuiz(1, true, this)">Att lyssna på stationer långt bort och försöka förstå vad man hör</button>
+          <button onclick="checkQuiz(1, false, this)">Att bara titta på waterfall utan att lyssna</button>
+        </div>
+        <div id="feedback-1" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>📝 Dina anteckningar</h3>
+        <label class="label" for="note-1">Skriv vad du tycker verkar mest spännande med DX-ing:</label>
+        <textarea id="note-1" oninput="saveNote(1)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 2,
+    title: 'Lektion 2 – Frekvens',
+    intro: 'Här förstår eleven vad frekvens är, hur kHz och MHz fungerar och hur band är uppdelade.',
+    content: `
+      <div class="section">
+        <h3>📶 Vad är en frekvens?</h3>
+        <p>En frekvens är en plats på radion, men också hur snabbt en radiosignal svänger. Den mäts i Hertz.</p>
+        <p><strong>1 kHz = 1 000 Hz</strong><br><strong>1 MHz = 1 000 000 Hz</strong></p>
+        <p>Exempel: 648 kHz betyder 648 000 svängningar per sekund.</p>
+      </div>
+      <div class="section">
+        <h3>🧭 Band och avstånd</h3>
+        <p>Långvåg, mellanvåg, kortvåg och FM är olika delar av radiospektrumet. På mellanvåg ligger stationer ofta i 9 kHz-steg i Europa.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Hur många Hertz är 1 kHz?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(2, true, this)">1 000 Hz</button>
+          <button onclick="checkQuiz(2, false, this)">100 Hz</button>
+          <button onclick="checkQuiz(2, false, this)">10 000 Hz</button>
+        </div>
+        <div id="feedback-2" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>🧮 Frekvenshjälp</h3>
+        <div class="tools-grid">
+          <div class="toolbox">
+            <label class="label" for="khzInput">Skriv kHz:</label>
+            <input type="text" id="khzInput" placeholder="t.ex. 648">
+            <button class="button primary" onclick="convertKhzToHz()">Räkna om till Hz</button>
+            <div class="small" id="khzResult"></div>
+          </div>
+          <div class="toolbox">
+            <label class="label" for="stepInput">Startfrekvens i kHz:</label>
+            <input type="text" id="stepInput" placeholder="t.ex. 648">
+            <button class="button secondary" onclick="showMwSteps()">Visa -9 / +9 kHz</button>
+            <div class="small" id="stepResult"></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <h3>📝 Dina anteckningar</h3>
+        <label class="label" for="note-2">Skriv tre frekvenser du vill testa senare:</label>
+        <textarea id="note-2" oninput="saveNote(2)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 3,
+    title: 'Lektion 3 – Signalstyrka',
+    intro: 'Här förstår eleven vad en signal är och hur stark eller svag signalen kan vara.',
+    content: `
+      <div class="section">
+        <h3>📡 Vad är en signal?</h3>
+        <p>En signal är själva radiosändningen som kommer från en sändare till din mottagare. Det kan vara tal, musik, brus eller annan information.</p>
+      </div>
+      <div class="section">
+        <h3>📊 Signalstyrka</h3>
+        <p>Signalstyrkan visar hur stark signalen är när den når din radio. Ofta används en S-skala där S1 är mycket svagt och S9 är mycket starkt.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Vilket S-värde är starkast av dessa?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(3, false, this)">S2</button>
+          <button onclick="checkQuiz(3, false, this)">S5</button>
+          <button onclick="checkQuiz(3, true, this)">S9</button>
+        </div>
+        <div id="feedback-3" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>🎚️ Öva på att tolka signalstyrka</h3>
+        <label class="label" for="signalRange">Dra reglaget och se hur du kan beskriva signalen:</label>
+        <input type="range" min="1" max="9" value="5" id="signalRange" oninput="updateSignalDescription()">
+        <div class="small" id="signalDescription">S5 – medelstark signal</div>
+      </div>
+      <div class="section">
+        <h3>📝 Dina anteckningar</h3>
+        <label class="label" for="note-3">Skriv hur en svag respektive stark signal låter enligt dig:</label>
+        <textarea id="note-3" oninput="saveNote(3)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 4,
+    title: 'Lektion 4 – Signaltyper',
+    intro: 'Här tränar eleven örat för tal, musik, brus, pip och fading.',
+    content: `
+      <div class="section">
+        <h3>🎧 Vanliga signaltyper</h3>
+        <p>I DX hör du inte bara stationer. Du hör också olika typer av signaler: tal, musik, brus, pip och fading.</p>
+      </div>
+      <div class="section">
+        <h3>🌊 Fading</h3>
+        <p>Fading betyder att signalen går upp och ner i styrka. Den kan nästan försvinna för att sedan komma tillbaka igen.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Vad betyder fading?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(4, false, this)">Att signalen ligger still och aldrig förändras</button>
+          <button onclick="checkQuiz(4, true, this)">Att signalen varierar i styrka och går upp och ner</button>
+          <button onclick="checkQuiz(4, false, this)">Att radion alltid är trasig</button>
+        </div>
+        <div id="feedback-4" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>🧠 Miniövning</h3>
+        <label class="label" for="signalTypeSelect">Vilken signaltyp vill du beskriva?</label>
+        <select id="signalTypeSelect" onchange="describeSignalType()" style="width:100%;padding:12px;border-radius:10px;background:#0b1220;color:white;border:1px solid rgba(255,255,255,0.15);">
+          <option value="">Välj signaltyp</option>
+          <option value="tal">Tal</option>
+          <option value="musik">Musik</option>
+          <option value="brus">Brus</option>
+          <option value="pip">Pip/ton</option>
+          <option value="fading">Fading</option>
+        </select>
+        <div class="small" id="signalTypeInfo"></div>
+      </div>
+      <div class="section">
+        <h3>📝 Dina anteckningar</h3>
+        <label class="label" for="note-4">Skriv vilken signaltyp du tycker är lättast respektive svårast att känna igen:</label>
+        <textarea id="note-4" oninput="saveNote(4)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 5,
+    title: 'Lektion 5 – Språkigenkänning',
+    intro: 'Här tränar eleven på att känna igen språk genom ljud, rytm och tempo.',
+    content: `
+      <div class="section">
+        <h3>🌍 Språkigenkänning</h3>
+        <p>Du behöver inte förstå varje ord. Det viktiga är att lyssna efter rytm, tempo, hårda eller mjuka ljud och återkommande ord.</p>
+      </div>
+      <div class="section">
+        <h3>🔍 Ledtrådar</h3>
+        <p>Språket är en av de viktigaste ledtrådarna när du försöker förstå vilket land eller vilken station du hör.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Vad är viktigast i språkigenkänning på nybörjarnivå?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(5, false, this)">Att du kan skriva all grammatik korrekt</button>
+          <button onclick="checkQuiz(5, true, this)">Att du lyssnar efter hur språket låter</button>
+          <button onclick="checkQuiz(5, false, this)">Att du alltid vet exakt station direkt</button>
+        </div>
+        <div id="feedback-5" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>📝 Din språkbedömning</h3>
+        <label class="label" for="note-5">Beskriv hur ett språk du hört lät: snabbt, mjukt, hackigt, tydligt?</label>
+        <textarea id="note-5" oninput="saveNote(5)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 6,
+    title: 'Lektion 6 – Tid och DX',
+    intro: 'Här lär eleven sig varför samma frekvens kan ge olika resultat beroende på tid på dygnet.',
+    content: `
+      <div class="section">
+        <h3>⏰ Tid påverkar DX</h3>
+        <p>Samma frekvens kan ge olika resultat beroende på när du lyssnar. Kväll och natt är ofta bättre för långväga DX än dagtid.</p>
+      </div>
+      <div class="section">
+        <h3>🌙 Kväll och natt</h3>
+        <p>Då kan signaler färdas längre. Därför kan fler utländska stationer dyka upp.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>När är det ofta bäst att DX:a långt bort?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(6, false, this)">Mitt på dagen</button>
+          <button onclick="checkQuiz(6, true, this)">Kväll och natt</button>
+          <button onclick="checkQuiz(6, false, this)">Det spelar aldrig någon roll</button>
+        </div>
+        <div id="feedback-6" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>📝 Dina anteckningar</h3>
+        <label class="label" for="note-6">Skriv när du vill testa samma frekvens två gånger:</label>
+        <textarea id="note-6" oninput="saveNote(6)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 7,
+    title: 'Lektion 7 – Loggning',
+    intro: 'Här förstår eleven varför loggning är bevis, minne, analysunderlag och viktig dokumentation.',
+    content: `
+      <div class="section">
+        <h3>📝 Varför logga?</h3>
+        <p>Loggning är din dokumentation. Den visar vad du hört, när du hörde det och på vilken frekvens. Utan logg blir det svårt att bevisa, jämföra eller gå tillbaka.</p>
+        <p>Det är också viktigt om du behöver vidarebefordra viktig information, till exempel ett meddelande om en naturkatastrof eller annan nödsituation.</p>
+      </div>
+      <div class="section">
+        <h3>📋 Det här bör finnas med</h3>
+        <p>Tid, frekvens, signalstyrka, språk, innehåll och gärna en kort kommentar.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Varför är loggning viktig?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(7, false, this)">Bara för att göra sidan längre</button>
+          <button onclick="checkQuiz(7, true, this)">För att du ska kunna gå tillbaka, bevisa och dela viktig information</button>
+          <button onclick="checkQuiz(7, false, this)">För att slippa lyssna</button>
+        </div>
+        <div id="feedback-7" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>🧾 Enkel loggövning</h3>
+        <label class="label" for="logTime">Tid:</label>
+        <input type="text" id="logTime" placeholder="t.ex. 21:15 UTC">
+        <label class="label" for="logFreq">Frekvens:</label>
+        <input type="text" id="logFreq" placeholder="t.ex. 648 kHz">
+        <label class="label" for="logContent">Vad hör du?</label>
+        <textarea id="logContent" placeholder="t.ex. engelska nyheter, S7, tydlig signal"></textarea>
+        <button class="button primary" onclick="savePracticeLog()">Spara loggexempel</button>
+        <div class="small" id="practiceLogResult"></div>
+      </div>
+      <div class="section">
+        <h3>📝 Dina anteckningar</h3>
+        <label class="label" for="note-7">Skriv varför du tycker loggning är viktig:</label>
+        <textarea id="note-7" oninput="saveNote(7)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 8,
+    title: 'Lektion 8 – Waterfall',
+    intro: 'Här lär eleven sig att se signaler med ögonen och skilja signaler från störningar.',
+    content: `
+      <div class="section">
+        <h3>👁️ Vad är en waterfall?</h3>
+        <p>En waterfall är en visuell bild av radiosignaler. Frekvens går från vänster till höger och tid går uppifrån och ner. Ljusa och tydliga spår betyder ofta starkare signaler.</p>
+      </div>
+      <div class="section">
+        <h3>🖼️ Exempelbild</h3>
+        <div class="waterfall-box">
+          <svg width="900" height="520" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pedagogisk waterfall">
+            <defs>
+              <marker id="arrowW" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L9,3 z" fill="#facc15"></path>
+              </marker>
+            </defs>
+            <rect x="0" y="0" width="900" height="520" rx="14" fill="#03111f"></rect>
+            <rect x="0" y="40" width="900" height="430" fill="#0ea5e9" opacity="0.08"></rect>
+            <line x1="120" y1="45" x2="120" y2="470" stroke="#67e8f9" stroke-width="1.5" opacity="0.35"></line>
+            <rect x="265" y="45" width="26" height="425" fill="#f97316" opacity="0.25"></rect>
+            <line x1="278" y1="45" x2="278" y2="470" stroke="#fde68a" stroke-width="3"></line>
+            <line x1="430" y1="45" x2="430" y2="120" stroke="#22d3ee" stroke-width="2" opacity="0.25"></line>
+            <line x1="430" y1="120" x2="430" y2="210" stroke="#22d3ee" stroke-width="4" opacity="0.95"></line>
+            <line x1="430" y1="210" x2="430" y2="300" stroke="#22d3ee" stroke-width="1.5" opacity="0.30"></line>
+            <line x1="430" y1="300" x2="430" y2="390" stroke="#22d3ee" stroke-width="4" opacity="0.95"></line>
+            <line x1="430" y1="390" x2="430" y2="470" stroke="#22d3ee" stroke-width="2" opacity="0.25"></line>
+            <rect x="580" y="45" width="70" height="425" fill="#ef4444" opacity="0.18"></rect>
+            <g opacity="0.55">
+              <line x1="590" y1="45" x2="590" y2="470" stroke="#fca5a5" stroke-width="2"></line>
+              <line x1="605" y1="45" x2="605" y2="470" stroke="#f87171" stroke-width="2"></line>
+              <line x1="620" y1="45" x2="620" y2="470" stroke="#fca5a5" stroke-width="2"></line>
+            </g>
+            <line x1="60" y1="95" x2="112" y2="95" stroke="#facc15" stroke-width="2" marker-end="url(#arrowW)"></line>
+            <text x="8" y="99" fill="#facc15" font-size="16">Svag signal</text>
+            <line x1="165" y1="145" x2="260" y2="145" stroke="#facc15" stroke-width="2" marker-end="url(#arrowW)"></line>
+            <text x="25" y="149" fill="#facc15" font-size="16">AM-signal</text>
+            <line x1="525" y1="150" x2="438" y2="150" stroke="#facc15" stroke-width="2" marker-end="url(#arrowW)"></line>
+            <text x="535" y="154" fill="#facc15" font-size="16">Fading</text>
+            <line x1="760" y1="170" x2="650" y2="170" stroke="#facc15" stroke-width="2" marker-end="url(#arrowW)"></line>
+            <text x="765" y="174" fill="#facc15" font-size="16">Störning</text>
+            <text x="40" y="500" fill="#93c5fd" font-size="14">Tid går nedåt ↓</text>
+            <text x="690" y="500" fill="#93c5fd" font-size="14">Frekvens går åt höger →</text>
+          </svg>
+        </div>
+        <p class="small">Pedagogisk bild. Du kan själv ändra text och etiketter i koden senare.</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Vad visar en waterfall tydligt?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(8, false, this)">Bara kursens färgtema</button>
+          <button onclick="checkQuiz(8, true, this)">Hur signaler ser ut visuellt över tid och frekvens</button>
+          <button onclick="checkQuiz(8, false, this)">Bara elevens namn</button>
+        </div>
+        <div id="feedback-8" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>📝 Dina anteckningar</h3>
+        <label class="label" for="note-8">Skriv vad du tycker är lättast att se i en waterfall:</label>
+        <textarea id="note-8" oninput="saveNote(8)"></textarea>
+      </div>
+    `
+  },
+  {
+    id: 9,
+    title: 'Lektion 9 – DX-analys',
+    intro: 'Här knyts allt ihop till riktig nybörjaranalys.',
+    content: `
+      <div class="section">
+        <h3>🧠 Vad är DX-analys?</h3>
+        <p>DX-analys betyder att du använder alla ledtrådar tillsammans: frekvens, tid, signalstyrka, språk, signaltyp, waterfall och logg.</p>
+      </div>
+      <div class="section">
+        <h3>🔍 Så tänker du</h3>
+        <p>Vilken frekvens är det? Hur stark är signalen? Vilket språk hörs? Är det kväll eller dag? Hur ser signalen ut? Vad säger loggen?</p>
+      </div>
+      <div class="section quiz">
+        <h3>Interaktiv kontrollfråga</h3>
+        <p>Vad är bästa sättet att göra DX-analys?</p>
+        <div class="quiz-options">
+          <button onclick="checkQuiz(9, false, this)">Att bara gissa snabbt utan att titta på något</button>
+          <button onclick="checkQuiz(9, true, this)">Att samla flera ledtrådar innan du drar slutsats</button>
+          <button onclick="checkQuiz(9, false, this)">Att alltid hoppa över loggen</button>
+        </div>
+        <div id="feedback-9" class="feedback"></div>
+      </div>
+      <div class="section">
+        <h3>📝 Analysövning</h3>
+        <label class="label" for="analysisBox">Skriv en enkel DX-analys här:</label>
+        <textarea id="note-9" oninput="saveNote(9)" placeholder="t.ex. 648 kHz, kväll, engelska, tydlig AM-signal, kan vara brittisk station"></textarea>
+      </div>
+    `
+  }
+];
+
+let currentLesson = Number(localStorage.getItem('dxacademy_current_lesson') || 1);
+const completed = JSON.parse(localStorage.getItem('dxacademy_completed') || '{}');
+
+function renderNav() {
+  const nav = document.getElementById('lessonNav');
+  nav.innerHTML = '';
+  lessons.forEach(lesson => {
+    const btn = document.createElement('button');
+    btn.textContent = `${lesson.id}. ${lesson.title.replace(/^Lektion \d+ – /,'')}`;
+    if (lesson.id === currentLesson) btn.classList.add('active');
+    btn.onclick = () => showLesson(lesson.id);
+    nav.appendChild(btn);
+  });
+  updateProgress();
+}
+
+function lessonStatusHtml(id) {
+  return completed[id] ? '<div class="lesson-status">✔ Markerad som klar</div>' : '';
+}
+
+function showLesson(id) {
+  currentLesson = id;
+  localStorage.setItem('dxacademy_current_lesson', String(id));
+  const lesson = lessons.find(l => l.id === id);
+  const container = document.getElementById('lessonContainer');
+  const prevBtn = id > 1 ? `<button class="secondary" onclick="showLesson(${id-1})">⬅ Föregående lektion</button>` : '';
+  const nextBtn = id < lessons.length ? `<button class="primary" onclick="showLesson(${id+1})">Nästa lektion ➡</button>` : '';
+  container.innerHTML = `
+    <button class="button secondary" onclick="window.location.href='${classroomUrl}'">⬅ Tillbaka till Classroom</button>
+    <h2>${lesson.title}</h2>
+    <p class="small">${lesson.intro}</p>
+    ${lessonStatusHtml(id)}
+    ${lesson.content}
+    <div class="action-row">
+      ${prevBtn}
+      <button class="primary" onclick="markComplete(${id})">✔ Markera lektion som klar</button>
+      ${nextBtn}
+    </div>
+    <div class="footer-back">
+      <button class="button secondary" onclick="window.location.href='${classroomUrl}'">⬅ Tillbaka till Classroom</button>
+    </div>
+  `;
+  renderNav();
+  loadSavedInputs();
+  updateSignalDescription();
+}
+
+function checkQuiz(id, isCorrect) {
+  const box = document.getElementById(`feedback-${id}`);
+  box.className = 'feedback ' + (isCorrect ? 'ok' : 'bad');
+  box.textContent = isCorrect ? 'Rätt! Bra tänkt.' : 'Inte riktigt. Läs igen och försök en gång till.';
+}
+
+function markComplete(id) {
+  completed[id] = true;
+  localStorage.setItem('dxacademy_completed', JSON.stringify(completed));
+  showLesson(id);
+}
+
+function updateProgress() {
+  const total = lessons.length;
+  const done = Object.keys(completed).filter(k => completed[k]).length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${done} av ${total} klara`;
+}
+
+function saveNote(id) {
+  const el = document.getElementById(`note-${id}`);
+  if (el) localStorage.setItem(`dxacademy_note_${id}`, el.value);
+}
+
+function loadSavedInputs() {
+  lessons.forEach(lesson => {
+    const note = document.getElementById(`note-${lesson.id}`);
+    if (note) note.value = localStorage.getItem(`dxacademy_note_${lesson.id}`) || '';
+  });
+  const logTime = document.getElementById('logTime');
+  const logFreq = document.getElementById('logFreq');
+  const logContent = document.getElementById('logContent');
+  if (logTime) logTime.value = localStorage.getItem('dxacademy_log_time') || '';
+  if (logFreq) logFreq.value = localStorage.getItem('dxacademy_log_freq') || '';
+  if (logContent) logContent.value = localStorage.getItem('dxacademy_log_content') || '';
+}
+
+function convertKhzToHz() {
+  const input = document.getElementById('khzInput');
+  const result = document.getElementById('khzResult');
+  if (!input || !result) return;
+  const value = parseFloat((input.value || '').replace(',', '.'));
+  if (isNaN(value)) {
+    result.textContent = 'Skriv ett tal först.';
+    return;
+  }
+  result.textContent = `${value} kHz = ${(value * 1000).toLocaleString('sv-SE')} Hz`;
+}
+
+function showMwSteps() {
+  const input = document.getElementById('stepInput');
+  const result = document.getElementById('stepResult');
+  if (!input || !result) return;
+  const value = parseFloat((input.value || '').replace(',', '.'));
+  if (isNaN(value)) {
+    result.textContent = 'Skriv en frekvens först.';
+    return;
+  }
+  result.textContent = `På mellanvåg i 9 kHz-steg: ${value - 9} kHz | ${value} kHz | ${value + 9} kHz`;
+}
+
+function updateSignalDescription() {
+  const range = document.getElementById('signalRange');
+  const out = document.getElementById('signalDescription');
+  if (!range || !out) return;
+  const map = {
+    1: 'S1 – mycket svag signal',
+    2: 'S2 – svag signal',
+    3: 'S3 – ganska svag signal',
+    4: 'S4 – under medel',
+    5: 'S5 – medelstark signal',
+    6: 'S6 – ganska tydlig signal',
+    7: 'S7 – stark signal',
+    8: 'S8 – mycket stark signal',
+    9: 'S9 – mycket stark och tydlig signal'
+  };
+  out.textContent = map[range.value];
+}
+
+function describeSignalType() {
+  const sel = document.getElementById('signalTypeSelect');
+  const out = document.getElementById('signalTypeInfo');
+  if (!sel || !out) return;
+  const info = {
+    tal: 'Tal känns ofta igen på pauser, meningsrytm och återkommande röster.',
+    musik: 'Musik är oftast lätt att känna igen direkt eftersom tonen och rytmen skiljer sig från tal.',
+    brus: 'Brus låter som ett surr eller sus i bakgrunden och finns ofta även när ingen tydlig station hörs.',
+    pip: 'Pip eller toner är smalare och mer elektroniska ljud som kan vara signaler eller störningar.',
+    fading: 'Fading betyder att signalen växlar mellan starkare och svagare över tid.'
+  };
+  out.textContent = info[sel.value] || '';
+}
+
+function savePracticeLog() {
+  const t = document.getElementById('logTime');
+  const f = document.getElementById('logFreq');
+  const c = document.getElementById('logContent');
+  const out = document.getElementById('practiceLogResult');
+  if (!t || !f || !c || !out) return;
+  localStorage.setItem('dxacademy_log_time', t.value);
+  localStorage.setItem('dxacademy_log_freq', f.value);
+  localStorage.setItem('dxacademy_log_content', c.value);
+  out.textContent = `Sparat loggexempel: ${t.value || '(ingen tid)'} | ${f.value || '(ingen frekvens)'} | ${c.value || '(ingen anteckning)'}`;
+}
+
+function exportNotes() {
+  const payload = {
+    export_datum: new Date().toISOString(),
+    kurs: 'DX Academy Level 1 Interaktiv',
+    anteckningar: {},
+    loggexempel: {
+      tid: localStorage.getItem('dxacademy_log_time') || '',
+      frekvens: localStorage.getItem('dxacademy_log_freq') || '',
+      innehåll: localStorage.getItem('dxacademy_log_content') || ''
+    },
+    klara_lektioner: completed
+  };
+  lessons.forEach(l => {
+    payload.anteckningar[l.title] = localStorage.getItem(`dxacademy_note_${l.id}`) || '';
+  });
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'dx_academy_level1_anteckningar.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('resetAllLink').addEventListener('click', function(e) {
+  e.preventDefault();
+  if (confirm('Vill du nollställa sparade anteckningar och status för hela kursen?')) {
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('dxacademy_')) localStorage.removeItem(key);
+    });
+    location.reload();
+  }
+});
+
+renderNav();
+showLesson(currentLesson);
+</script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!doctype html> <!-- Anger att dokumentet är ett HTML5-dokument. -->
+<html lang="sv"> <!-- Startar HTML-dokumentet och anger svenska som språk. -->
+<head> <!-- Startar dokumentets head-del med metadata och titel. -->
+  <meta charset="utf-8"> <!-- Anger teckenkodning så att svenska tecken visas korrekt. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Gör sidan mobilvänlig och anpassad till skärmbredden. -->
+  <title>DX Academy – KiwiSDR mobilstart</title> <!-- Sätter sidans titel i webbläsarfliken. -->
+  <style> /* Startar CSS-stilarna för sidan. */
+    * { box-sizing: border-box; } /* Gör att padding och border räknas in i elementens totala bredd och höjd. */
+
+    body { /* Väljer hela sidans bakgrund och grundstil. */
+      margin: 0; /* Tar bort webbläsarens standardmarginaler. */
+      font-family: Arial, sans-serif; /* Anger typsnitt för sidan. */
+      background: #0b0f1a; /* Sätter mörk bakgrundsfärg. */
+      color: #ffffff; /* Sätter vit textfärg. */
+      line-height: 1.5; /* Ger luftigare radavstånd. */
+    } /* Avslutar stilen för body. */
+
+    .wrap { /* Väljer sidans yttre behållare. */
+      max-width: 760px; /* Begränsar sidans bredd på större skärmar. */
+      margin: 0 auto; /* Centrerar innehållet horisontellt. */
+      padding: 20px; /* Lägger till luft runt innehållet. */
+    } /* Avslutar stilen för wrap. */
+
+    .card { /* Väljer huvudkortet som innehåller allt. */
+      background: #111827; /* Sätter mörk panelbakgrund. */
+      border-radius: 18px; /* Rundar hörnen på kortet. */
+      padding: 20px; /* Lägger till luft inne i kortet. */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35); /* Ger kortet en mjuk skugga. */
+    } /* Avslutar stilen för card. */
+
+    h1 { /* Väljer huvudrubriken. */
+      margin-top: 0; /* Tar bort extra marginal över rubriken. */
+      font-size: 1.8rem; /* Sätter rubrikens storlek. */
+      text-align: center; /* Centrerar rubriken. */
+    } /* Avslutar stilen för h1. */
+
+    .lead { /* Väljer den inledande beskrivningstexten. */
+      text-align: center; /* Centrerar texten. */
+      color: #d1d5db; /* Sätter en mjukare ljusgrå färg. */
+      margin-bottom: 22px; /* Lägger till luft under texten. */
+    } /* Avslutar stilen för lead. */
+
+    .grid { /* Väljer rutnätslayouten för formulärfälten. */
+      display: grid; /* Aktiverar grid-layout. */
+      grid-template-columns: 1fr; /* Visar en kolumn som standard. */
+      gap: 14px; /* Lägger mellanrum mellan rutnätsobjekten. */
+    } /* Avslutar stilen för grid. */
+
+    label { /* Väljer etiketter ovanför formulärfälten. */
+      display: block; /* Gör etiketten till blockelement. */
+      margin-bottom: 6px; /* Lägger luft mellan etikett och fält. */
+      font-weight: bold; /* Gör etiketten fet. */
+    } /* Avslutar stilen för label. */
+
+    input, select, textarea { /* Väljer alla formulärfält. */
+      width: 100%; /* Gör att fälten fyller hela bredden. */
+      padding: 12px; /* Lägger luft inne i fälten. */
+      border: none; /* Tar bort standardkantlinje. */
+      border-radius: 12px; /* Rundar hörnen på fälten. */
+      font-size: 1rem; /* Sätter textstorleken i fälten. */
+      background: #1f2937; /* Ger fälten mörk bakgrund. */
+      color: #ffffff; /* Ger fälten vit text. */
+    } /* Avslutar stilen för formulärfält. */
+
+    textarea { /* Väljer endast textområdet. */
+      min-height: 110px; /* Ger textområdet en bra starthöjd. */
+      resize: vertical; /* Tillåter bara vertikal storleksändring. */
+    } /* Avslutar stilen för textarea. */
+
+    .buttons { /* Väljer området där knapparna ligger. */
+      display: grid; /* Aktiverar grid-layout för knapparna. */
+      grid-template-columns: 1fr; /* Visar en kolumn som standard. */
+      gap: 12px; /* Lägger mellanrum mellan knapparna. */
+      margin-top: 18px; /* Lägger luft ovanför knapparna. */
+    } /* Avslutar stilen för buttons. */
+
+    button { /* Väljer alla knappar. */
+      width: 100%; /* Gör att knapparna fyller hela bredden. */
+      padding: 14px 16px; /* Lägger luft inne i knapparna. */
+      border: none; /* Tar bort standardkantlinje. */
+      border-radius: 12px; /* Rundar hörnen på knapparna. */
+      font-size: 1rem; /* Sätter textstorleken på knapparna. */
+      font-weight: bold; /* Gör knapptexten fet. */
+      background: #b88900; /* Sätter mörkgul knappfärg. */
+      color: #111111; /* Sätter mörk textfärg på knapparna. */
+      cursor: pointer; /* Visar handpekare över knapparna. */
+    } /* Avslutar stilen för button. */
+
+    button.secondary { /* Väljer sekundärknappen. */
+      background: #d1d5db; /* Ger sekundärknappen ljusgrå bakgrund. */
+      color: #111111; /* Ger sekundärknappen mörk text. */
+    } /* Avslutar stilen för secondary-knappen. */
+
+    .tips { /* Väljer tipsrutan längst ned. */
+      margin-top: 20px; /* Lägger luft ovanför tipsrutan. */
+      background: #0f172a; /* Sätter lite annan mörk bakgrund. */
+      border-radius: 14px; /* Rundar hörnen. */
+      padding: 16px; /* Lägger luft inne i rutan. */
+      color: #d1d5db; /* Sätter ljusgrå text. */
+      font-size: 0.95rem; /* Gör texten lite mindre. */
+    } /* Avslutar stilen för tips. */
+
+    .small { /* Väljer mindre hjälpinformation. */
+      font-size: 0.9rem; /* Gör texten mindre. */
+      color: #cbd5e1; /* Sätter mild ljusgrå färg. */
+      margin-top: 6px; /* Lägger liten luft ovanför texten. */
+    } /* Avslutar stilen för small. */
+
+    @media (min-width: 700px) { /* Startar media query för större skärmar. */
+      .grid { grid-template-columns: 1fr 1fr; } /* Visar två kolumner på större skärmar. */
+      .buttons { grid-template-columns: 1fr 1fr 1fr; } /* Visar tre knappar bredvid varandra på större skärmar. */
+      .full { grid-column: 1 / -1; } /* Gör att vissa element kan ta hela bredden. */
+    } /* Avslutar media queryn. */
+  </style> <!-- Avslutar CSS-stilarna. -->
+</head> <!-- Avslutar head-delen. -->
+<body> <!-- Startar sidans synliga innehåll. -->
+  <div class="wrap"> <!-- Startar den yttre behållaren. -->
+    <div class="card"> <!-- Startar huvudkortet. -->
+      <h1>DX Academy – KiwiSDR mobilstart</h1> <!-- Visar sidans huvudrubrik. -->
+      <p class="lead">Öppna KiwiSDR direkt i mobilen, fyll i det du hör och skicka stationen till ChatGPT för identifiering.</p> <!-- Visar en kort beskrivning av sidan. -->
+
+      <div class="grid"> <!-- Startar formulärets grid-layout. -->
+        <div> <!-- Startar första formulärblocket. -->
+          <label for="receiver">Mottagare / Kiwi-länk</label> <!-- Visar etikett för mottagarlänken. -->
+          <select id="receiver"> <!-- Startar rullistan för val av mottagare. -->
+            <option value="http://websdr.ewi.utwente.nl:8901/">WebSDR Twente</option> <!-- Lägger till Twente som standardval. -->
+            <option value="http://vhj.psokotka.com:55001/">Finland – Psokotka</option> <!-- Lägger till en Kiwi-länk i Finland. -->
+            <option value="https://rx.linkfanel.net/">Lista – rx.linkfanel.net</option> <!-- Lägger till länk till mottagarlista. -->
+            <option value="custom">Egen mottagarlänk</option> <!-- Lägger till val för egen mottagarlänk. -->
+          </select> <!-- Avslutar rullistan. -->
+          <div class="small">Välj mottagare eller ange en egen länk nedan.</div> <!-- Visar hjälpinformation under rullistan. -->
+        </div> <!-- Avslutar första formulärblocket. -->
+
+        <div> <!-- Startar andra formulärblocket. -->
+          <label for="frequency">Frekvens</label> <!-- Visar etikett för frekvensfältet. -->
+          <input id="frequency" type="text" inputmode="decimal" placeholder="t.ex. 198 eller 6070" value="198"> <!-- Skapar frekvensfältet med förifyllt exempelvärde. -->
+          <div class="small">Skriv bara siffran, exempelvis 198, 1413 eller 6070.</div> <!-- Visar hjälpinformation under frekvensfältet. -->
+        </div> <!-- Avslutar andra formulärblocket. -->
+
+        <div class="full"> <!-- Startar blocket som tar full bredd. -->
+          <label for="customReceiver">Egen mottagarlänk</label> <!-- Visar etikett för eget mottagarfält. -->
+          <input id="customReceiver" type="url" placeholder="Klistra in en KiwiSDR- eller WebSDR-länk här"> <!-- Skapar ett fält för egen mottagarlänk. -->
+        </div> <!-- Avslutar blocket för egen mottagarlänk. -->
+
+        <div> <!-- Startar tidsblocket. -->
+          <label for="time">Tid (UTC)</label> <!-- Visar etikett för tidsfältet. -->
+          <input id="time" type="text" placeholder="t.ex. 22:45 UTC"> <!-- Skapar tidsfältet. -->
+        </div> <!-- Avslutar tidsblocket. -->
+
+        <div> <!-- Startar språkblocket. -->
+          <label for="language">Språk</label> <!-- Visar etikett för språkfältet. -->
+          <input id="language" type="text" placeholder="t.ex. engelska, polska, arabiska"> <!-- Skapar språkfältet. -->
+        </div> <!-- Avslutar språkblocket. -->
+
+        <div class="full"> <!-- Startar observationsblocket som tar full bredd. -->
+          <label for="notes">Observationer</label> <!-- Visar etikett för observationsfältet. -->
+          <textarea id="notes" placeholder="Skriv vad du hör: musik, nyheter, man/kvinna, ortsnamn, ord du uppfattar, signalstyrka, osv."></textarea> <!-- Skapar textområdet för observationer. -->
+        </div> <!-- Avslutar observationsblocket. -->
+      </div> <!-- Avslutar formulärets grid-layout. -->
+
+      <div class="buttons"> <!-- Startar knapplayouten. -->
+        <button type="button" id="openKiwi">Öppna KiwiSDR</button> <!-- Skapar knappen som öppnar mottagaren. -->
+        <button type="button" id="identifyBtn">Identifiera station</button> <!-- Skapar knappen som öppnar ChatGPT med ifylld fråga. -->
+        <button type="button" class="secondary" id="copyBtn">Kopiera prompt</button> <!-- Skapar knappen som kopierar prompten. -->
+      </div> <!-- Avslutar knapplayouten. -->
+
+      <div class="tips"> <!-- Startar tipsrutan. -->
+        <strong>Tips för iPhone:</strong><br> <!-- Visar rubrikrad i tipsrutan. -->
+        Tryck först på sidan efter att Kiwi öppnats så att ljudet får starta. Om du inte hör något direkt, prova att zooma in på waterfall, byt mode eller testa en annan mottagare. <!-- Visar praktiska tips för användning på iPhone. -->
+      </div> <!-- Avslutar tipsrutan. -->
+    </div> <!-- Avslutar huvudkortet. -->
+  </div> <!-- Avslutar den yttre behållaren. -->
+
+  <script> // Startar JavaScript-koden för sidans funktioner.
+    const receiverSelect = document.getElementById("receiver"); // Hämtar rullistan för mottagarval.
+    const customReceiverInput = document.getElementById("customReceiver"); // Hämtar fältet för egen mottagarlänk.
+    const frequencyInput = document.getElementById("frequency"); // Hämtar frekvensfältet.
+    const timeInput = document.getElementById("time"); // Hämtar tidsfältet.
+    const languageInput = document.getElementById("language"); // Hämtar språkfältet.
+    const notesInput = document.getElementById("notes"); // Hämtar observationsfältet.
+    const openKiwiButton = document.getElementById("openKiwi"); // Hämtar knappen för att öppna KiwiSDR.
+    const identifyButton = document.getElementById("identifyBtn"); // Hämtar knappen för att identifiera station.
+    const copyButton = document.getElementById("copyBtn"); // Hämtar knappen för att kopiera prompten.
+
+    function getReceiverUrl() { // Startar en funktion som hämtar vald mottagarlänk.
+      const selectedValue = receiverSelect.value; // Hämtar det valda värdet i rullistan.
+      const customValue = customReceiverInput.value.trim(); // Hämtar egen mottagarlänk utan extra mellanslag.
+
+      if (selectedValue === "custom" && customValue !== "") { return customValue; } // Returnerar egen länk om användaren valt egen mottagare och skrivit in en länk.
+      if (selectedValue === "custom" && customValue === "") { return ""; } // Returnerar tom sträng om egen mottagare är vald men inget är ifyllt.
+      if (selectedValue !== "custom") { return selectedValue; } // Returnerar den valda standardlänken om användaren inte valt egen mottagare.
+
+      return ""; // Returnerar tom sträng som säkerhetslösning om inget annat passar.
+    } // Avslutar funktionen som hämtar mottagarlänk.
+
+    function buildKiwiUrl() { // Startar en funktion som bygger länken till mottagaren.
+      const baseUrl = getReceiverUrl(); // Hämtar vald mottagarlänk.
+      const frequency = frequencyInput.value.trim(); // Hämtar frekvensen utan extra mellanslag.
+
+      if (baseUrl === "") { return ""; } // Returnerar tom sträng om ingen mottagarlänk finns.
+      if (frequency === "") { return baseUrl; } // Returnerar grundlänken om ingen frekvens är ifylld.
+
+      const separator = baseUrl.includes("?") ? "&" : "#"; // Väljer separator beroende på om länken redan innehåller parametrar.
+      return baseUrl + separator + "f=" + encodeURIComponent(frequency); // Returnerar länken med frekvensen tillagd.
+    } // Avslutar funktionen som bygger mottagarlänken.
+
+    function buildPrompt() { // Startar en funktion som bygger prompten till ChatGPT.
+      const receiver = getReceiverUrl() || "ej angiven"; // Hämtar mottagarlänken eller sätter standardtext om den saknas.
+      const frequency = frequencyInput.value.trim() || "ej angiven"; // Hämtar frekvens eller sätter standardtext om den saknas.
+      const time = timeInput.value.trim() || "ej angiven"; // Hämtar tid eller sätter standardtext om den saknas.
+      const language = languageInput.value.trim() || "ej angivet"; // Hämtar språk eller sätter standardtext om det saknas.
+      const notes = notesInput.value.trim() || "inga observationer"; // Hämtar observationer eller sätter standardtext om de saknas.
+
+      return "Identifiera station:\n" + // Startar prompten med första raden.
+        "Frekvens: " + frequency + "\n" + // Lägger till frekvensraden.
+        "Tid: " + time + "\n" + // Lägger till tidsraden.
+        "Språk: " + language + "\n" + // Lägger till språkraden.
+        "Mottagare/plats: " + receiver + "\n" + // Lägger till raden för mottagare eller plats.
+        "Observationer: " + notes; // Lägger till observationsraden.
+    } // Avslutar funktionen som bygger prompten.
+
+    openKiwiButton.addEventListener("click", function () { // Startar klickhändelsen för att öppna mottagaren.
+      const kiwiUrl = buildKiwiUrl(); // Bygger mottagarlänken.
+      if (kiwiUrl === "") { alert("Välj eller skriv in en mottagarlänk först."); return; } // Visar varning om ingen mottagarlänk finns.
+      window.open(kiwiUrl, "_blank"); // Öppnar mottagaren i en ny flik.
+    }); // Avslutar klickhändelsen för mottagaren.
+
+    identifyButton.addEventListener("click", function () { // Startar klickhändelsen för att öppna ChatGPT.
+      const prompt = buildPrompt(); // Bygger prompten från formulärfälten.
+      const chatgptUrl = "https://chat.openai.com/?q=" + encodeURIComponent(prompt); // Bygger ChatGPT-länken med prompten.
+      window.open(chatgptUrl, "_blank"); // Öppnar ChatGPT i en ny flik.
+    }); // Avslutar klickhändelsen för ChatGPT.
+
+    copyButton.addEventListener("click", async function () { // Startar klickhändelsen för kopieringsknappen.
+      const prompt = buildPrompt(); // Bygger prompten som ska kopieras.
+
+      try { // Startar ett försök att kopiera texten med clipboard-API.
+        await navigator.clipboard.writeText(prompt); // Kopierar prompten till urklipp.
+        alert("Prompten är kopierad."); // Visar bekräftelse om kopieringen lyckades.
+      } catch (error) { // Fångar upp fel om clipboard-API inte fungerar.
+        const tempArea = document.createElement("textarea"); // Skapar ett tillfälligt textområde som reservlösning.
+        tempArea.value = prompt; // Lägger prompten i det tillfälliga textområdet.
+        document.body.appendChild(tempArea); // Lägger till textområdet på sidan.
+        tempArea.select(); // Markerar texten i textområdet.
+        document.execCommand("copy"); // Försöker kopiera texten med äldre metod.
+        document.body.removeChild(tempArea); // Tar bort det tillfälliga textområdet från sidan.
+        alert("Prompten är kopierad."); // Visar bekräftelse även för reservlösningen.
+      } // Avslutar felhanteringen för kopiering.
+    }); // Avslutar klickhändelsen för kopieringsknappen.
+
+    function setCurrentUtcTime() { // Startar en funktion som fyller i aktuell UTC-tid.
+      const now = new Date(); // Hämtar aktuell tid från enheten.
+      const hours = String(now.getUTCHours()).padStart(2, "0"); // Hämtar UTC-timmar och fyller ut med nolla vid behov.
+      const minutes = String(now.getUTCMinutes()).padStart(2, "0"); // Hämtar UTC-minuter och fyller ut med nolla vid behov.
+      timeInput.value = hours + ":" + minutes + " UTC"; // Skriver in tiden i tidsfältet.
+    } // Avslutar funktionen för aktuell UTC-tid.
+
+    setCurrentUtcTime(); // Kör funktionen direkt när sidan öppnas så att tidsfältet fylls i automatiskt.
+  </script> <!-- Avslutar JavaScript-koden. -->
+</body> <!-- Avslutar sidans synliga innehåll. -->
+</html> <!-- Avslutar hela HTML-dokumentet. -->

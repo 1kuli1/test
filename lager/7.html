@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 30px;
+}
+
+.container {
+    padding: 20px;
+}
+
+.section {
+    margin: 30px auto;
+    max-width: 500px;
+    background: #111827;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+button {
+    width: 80%;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #facc15;
+}
+</style>
+</head>
+
+<body>
+
+<h1>DX Academy</h1>
+<p>Lär dig lyssna, förstå och identifiera radiosignaler</p>
+
+<div class="container">
+
+    <!-- START -->
+    <div class="section">
+        <h2>Start</h2>
+        <button onclick="location.href='kurs.html'">▶ Starta kurs</button>
+        <button onclick="openAI()">🤖 Öppna AI-hjälp</button>
+    </div>
+
+    <!-- SNABBSTART -->
+    <div class="section">
+        <h2>Snabbstart</h2>
+        <button onclick="window.open('http://kiwisdr.com/public/', '_blank')">🔊 Lyssna på radio</button>
+        <button onclick="location.href='file:///C:/Users/tommy/Desktop/DX/DX-ACADEMY/ai_niva1.html'">📡 Identifiera station</button>
+        <button onclick="location.href='signaler.html'">📘 Lär dig signaler</button>
+    </div>
+
+    <!-- NIVÅER -->
+    <div class="section">
+        <h2>Kursnivåer</h2>
+        <button onclick="location.href='niva1.html'">Nivå 1 – Nybörjare</button>
+        <button onclick="location.href='niva2.html'">Nivå 2 – Fortsättning</button>
+        <button onclick="location.href='niva3.html'">Nivå 3 – Avancerad</button>
+    </div>
+
+    <!-- VERKTYG -->
+    <div class="section">
+        <h2>Verktyg</h2>
+        <button onclick="location.href='ai.html'">🧠 AI-verktyg</button>
+        <button onclick="location.href='logg.html'">📊 Loggbok</button>
+        <button onclick="location.href='karta.html'">🌍 DX-karta</button>
+    </div>
+
+</div>
+
+<script>
+function openAI() {
+    window.open("https://chat.openai.com/", "_blank");
+}
+</script>
+
+</body>
+</html>

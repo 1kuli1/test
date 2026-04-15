@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy – Lektion 1</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #eab308;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.section {
+    background: #111827;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+}
+
+.note {
+    background: #1f2937;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.highlight {
+    color: #38bdf8;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📡 DX Academy – Lektion 1</h1>
+<p><span class="highlight">Mål:</span> Du ska kunna lyssna på en radiosignal och förstå vad du hör.</p>
+
+<!-- DEL 1 -->
+<div class="section">
+<h2>🔍 Vad är DX?</h2>
+
+<p>DX betyder att lyssna på radiostationer långt bort.</p>
+
+<div class="note">
+👉 Du använder radio som ett verktyg för att upptäcka världen.
+</div>
+
+<p>Det kan vara:</p>
+<ul>
+<li>📻 Nyheter från andra länder</li>
+<li>🎵 Musik du inte hört</li>
+<li>🗣️ Språk du inte förstår</li>
+</ul>
+
+</div>
+
+<!-- DEL 2 -->
+<div class="section">
+<h2>🎧 Din första uppgift</h2>
+
+<p>Nu ska du börja direkt.</p>
+
+<div class="note">
+👉 Gå till en SDR-radio och lyssna.
+</div>
+
+<button onclick="openRadio()">🔊 Öppna WebSDR</button>
+
+<p>Lyssna i minst <span class="highlight">5 minuter</span>.</p>
+
+</div>
+
+<!-- DEL 3 -->
+<div class="section">
+<h2>🧠 Vad ska du lyssna efter?</h2>
+
+<ul>
+<li>🗣️ Språk</li>
+<li>🎵 Musik eller tal</li>
+<li>📶 Stark eller svag signal</li>
+<li>🌍 Känsla – var kan det komma ifrån?</li>
+</ul>
+
+</div>
+
+<!-- DEL 4 -->
+<div class="section">
+<h2>✍️ Din första analys</h2>
+
+<p>Svara på frågorna ovan:</p>
+
+<textarea id="analysis" rows="8" placeholder="Vad hör du?"></textarea>
+
+<button onclick="save()">💾 Spara svar</button>
+
+</div>
+
+<!-- DEL 5 -->
+<div class="section">
+<h2>🧑‍🏫 Tips</h2>
+
+<div class="note">
+Du behöver inte ha rätt.<br><br>
+👉 Det viktiga är att du börjar lyssna och tänka.
+</div>
+
+</div>
+
+</div>
+
+<script>
+function openRadio() {
+    window.open("http://sa4bna.hopto.org:8073/", "_blank");
+}
+
+function save() {
+    const text = document.getElementById("analysis").value;
+    localStorage.setItem("lektion1", text);
+    alert("Sparat!");
+}
+</script>
+
+</body>
+</html>

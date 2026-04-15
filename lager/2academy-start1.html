@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy – Start</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
+
+.container {
+    padding: 30px 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #9ecfff;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #111827;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: #facc15;
+}
+
+/* Portal-knapp */
+#portalBtn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #eab308;
+    color: black;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="portalBtn" onclick="goPortal()">⬅️ Portal</div>
+
+<div class="container">
+
+<h1>🌍 DX Academy</h1>
+<div class="subtitle">Din resa börjar här</div>
+
+<div class="card">
+<h2>📡 Vad du ska göra nu</h2>
+<p>
+Du ska lyssna på världen – på riktigt.
+Inte via sociala medier. Inte via nyheter.
+Utan direkt från radiovågor.
+</p>
+</div>
+
+<div class="card">
+<h2>🎧 Testa direkt</h2>
+<p>
+Klicka här och lyssna på en riktig radiomottagare:
+</p>
+
+<button class="button" onclick="openSDR()">
+🎧 Starta radio
+</button>
+</div>
+
+<div class="card">
+<h2>🎓 Börja kursen</h2>
+
+<button class="button" onclick="startLesson()">
+👉 Starta Lektion 1
+</button>
+</div>
+
+</div>
+
+<script>
+
+// Portal
+function goPortal() {
+    window.location.href = "https://1kuli1.github.io/dx-system/";
+}
+
+// SDR
+function openSDR() {
+    window.open("http://websdr.ewi.utwente.nl:8901/", "_blank");
+}
+
+// Start lektion
+function startLesson() {
+    window.location.href = "lektion1.html";
+}
+
+</script>
+
+</body>
+</html>

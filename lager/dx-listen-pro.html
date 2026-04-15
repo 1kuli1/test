@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Listen PRO</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0f14;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+h1 { color: #38bdf8; }
+
+.section {
+  background: #111827;
+  padding: 15px;
+  margin: 15px auto;
+  border-radius: 10px;
+  max-width: 600px;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.main { background: #22c55e; color: black; }
+.secondary { background: #6366f1; color: white; }
+.tool { background: #f59e0b; color: black; }
+
+input {
+  width: 80%;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+.logbox {
+  background: #1e293b;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  text-align: left;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎧 DX Listen PRO</h1>
+
+<div class="section">
+  <h2>🎧 Mottagare</h2>
+
+  <button class="main" onclick="openMain()">▶️ Öppna huvudmottagare</button>
+
+  <br><br>
+
+  <input id="rx1" placeholder="Valfri mottagare 1 (URL)">
+  <button class="secondary" onclick="openRX(1)">Öppna RX1</button>
+
+  <br>
+
+  <input id="rx2" placeholder="Valfri mottagare 2 (URL)">
+  <button class="secondary" onclick="openRX(2)">Öppna RX2</button>
+
+  <br><br>
+
+  <button class="tool" onclick="openKiwi()">🌍 KiwiSDR karta</button>
+</div>
+
+<div class="section">
+  <h2>📝 Logg</h2>
+
+  <input id="freq" placeholder="Frekvens (kHz)">
+  <input id="station" placeholder="Station / ?">
+  <input id="lang" placeholder="Språk">
+  <input id="signal" placeholder="Signal (S)">
+  <input id="comment" placeholder="Kommentar">
+
+  <br>
+
+  <button class="main" onclick="saveLog()">💾 Spara logg</button>
+
+  <div id="log" class="logbox"></div>
+</div>
+
+<div class="section">
+  <h2>🗺️ Karta</h2>
+  <button class="tool" onclick="openMap()">Öppna karta</button>
+</div>
+
+<script>
+function openMain() {
+  window.open("http://sa4bna.hopto.org:8074/", "_blank");
+}
+
+function openRX(nr) {
+  let url = document.getElementById("rx" + nr).value;
+  if (url) window.open(url, "_blank");
+}
+
+function openKiwi() {
+  window.open("http://kiwisdr.com/.public/");
+}
+
+function openMap() {
+  window.open("https://www.openstreetmap.org", "_blank");
+}
+
+function saveLog() {
+  let time = new Date().toLocaleString();
+
+  let entry = {
+    time: time,
+    freq: document.getElementById("freq").value,
+    station: document.getElementById("station").value,
+    lang: document.getElementById("lang").value,
+    signal: document.getElementById("signal").value,
+    comment: document.getElementById("comment").value
+  };
+
+  let logs = JSON.parse(localStorage.getItem("dxlog") || "[]");
+  logs.unshift(entry);
+  localStorage.setItem("dxlog", JSON.stringify(logs));
+
+  renderLog();
+}
+
+function renderLog() {
+  let logs = JSON.parse(localStorage.getItem("dxlog") || "[]");
+
+  let html = "";
+
+  logs.forEach(l => {
+    html += `<p>
+    <b>${l.time}</b><br>
+    ${l.freq} kHz | ${l.station} | ${l.lang} | ${l.signal}<br>
+    ${l.comment}
+    </p><hr>`;
+  });
+
+  document.getElementById("log").innerHTML = html;
+}
+
+renderLog();
+</script>
+
+</body>
+</html>

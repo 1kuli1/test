@@ -1,0 +1,1626 @@
+<!doctype html>
+<!-- Anger att dokumentet är ett HTML5-dokument. -->
+<html lang="sv">
+<!-- Startar HTML-dokumentet och anger svenska som språk. -->
+<head>
+  <!-- Startar dokumentets head-del med metadata och titel. -->
+  <meta charset="utf-8">
+  <!-- Anger teckenkodning så att svenska tecken visas korrekt. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Gör sidan mobilvänlig och anpassad till skärmbredden. -->
+  <title>DX Academy – Störningar och ljuddemo</title>
+  <!-- Sätter sidans titel i webbläsarfliken. -->
+  <style>
+    /* Startar CSS-stilarna för sidan. */
+    :root{
+      /* Definierar återanvändbara färgvariabler för hela sidan. */
+      --bg:#0b1220;
+      /* Mörk bakgrundsfärg. */
+      --panel:#121b2e;
+      /* Panelbakgrund för kort och rutor. */
+      --soft:#1a2640;
+      /* Lite ljusare bakgrund för hover och sekundära ytor. */
+      --line:#2a3a60;
+      /* Linjefärg för ramar och avdelare. */
+      --text:#eaf1ff;
+      /* Huvudfärg för text. */
+      --muted:#b8c5e4;
+      /* Dämpad textfärg för hjälpinformation. */
+      --accent:#79e2a7;
+      /* Accentfärg för knappar och markeringar. */
+      --warn:#ffd166;
+      /* Varningsfärg för tips och etiketter. */
+      --danger:#ff7b7b;
+      /* Färg för fel och stopp. */
+    }
+    /* Avslutar rotvariablerna. */
+
+    *{
+      /* Väljer alla element på sidan. */
+      box-sizing:border-box;
+      /* Gör att padding och border räknas in i elementets storlek. */
+    }
+    /* Avslutar global regel för alla element. */
+
+    body{
+      /* Stilar för hela sidans kropp. */
+      margin:0;
+      /* Tar bort standardmarginal runt sidan. */
+      font-family:Arial, Helvetica, sans-serif;
+      /* Anger ett tydligt standardsnitt. */
+      background:linear-gradient(180deg,#09101d 0%, #0b1220 100%);
+      /* Ger en mörk tonad bakgrund. */
+      color:var(--text);
+      /* Sätter standardfärg på texten. */
+    }
+    /* Avslutar body-stilen. */
+
+    .wrap{
+      /* Yttercontainer som håller hela sidans innehåll. */
+      max-width:1200px;
+      /* Begränsar innehållets bredd för bättre läsbarhet. */
+      margin:0 auto;
+      /* Centrerar innehållet horisontellt. */
+      padding:24px;
+      /* Ger luft runt allt innehåll. */
+    }
+    /* Avslutar yttercontainern. */
+
+    header{
+      /* Stilar för sidhuvudet. */
+      display:grid;
+      /* Använder grid-layout i toppen. */
+      gap:14px;
+      /* Ger avstånd mellan delarna i sidhuvudet. */
+      margin-bottom:22px;
+      /* Ger luft under sidhuvudet. */
+    }
+    /* Avslutar header-stilen. */
+
+    .hero{
+      /* Stilar för toppkortet med introduktion. */
+      background:linear-gradient(135deg,#13203a 0%, #10182a 100%);
+      /* Ger ett mörkt tonat bakgrundskort. */
+      border:1px solid var(--line);
+      /* Lägger en diskret ram runt kortet. */
+      border-radius:20px;
+      /* Rundar hörnen på kortet. */
+      padding:22px;
+      /* Ger innerutrymme i kortet. */
+      box-shadow:0 10px 30px rgba(0,0,0,0.25);
+      /* Ger en mjuk skugga under kortet. */
+    }
+    /* Avslutar hero-kortet. */
+
+    h1{
+      /* Stilar för huvudrubriken. */
+      margin:0 0 8px 0;
+      /* Ger luft under rubriken men inte ovanför. */
+      font-size:clamp(28px,4vw,42px);
+      /* Gör rubrikstorleken responsiv. */
+      line-height:1.1;
+      /* Ger tät men läsbar radavstånd i rubriken. */
+    }
+    /* Avslutar h1-stilen. */
+
+    p{
+      /* Stilar för vanliga stycken. */
+      line-height:1.6;
+      /* Ger god läsbarhet i brödtext. */
+    }
+    /* Avslutar p-stilen. */
+
+    .muted{
+      /* Stilar för dämpad hjälpinformation. */
+      color:var(--muted);
+      /* Sätter en svagare färg. */
+    }
+    /* Avslutar muted-stilen. */
+
+    .badge-row{
+      /* Container för små etiketter högst upp. */
+      display:flex;
+      /* Visar etiketter i rad. */
+      flex-wrap:wrap;
+      /* Tillåter radbrytning på smalare skärmar. */
+      gap:10px;
+      /* Ger mellanrum mellan etiketterna. */
+      margin-top:12px;
+      /* Ger luft ovanför etikett-raden. */
+    }
+    /* Avslutar badge-raden. */
+
+    .badge{
+      /* Stilar för en enskild etikett. */
+      display:inline-block;
+      /* Gör etiketten till ett kompakt block. */
+      padding:8px 12px;
+      /* Ger inre luft i etiketten. */
+      border:1px solid var(--line);
+      /* Lägger ram runt etiketten. */
+      border-radius:999px;
+      /* Gör etiketten helt rundad. */
+      background:#0d1729;
+      /* Sätter mörk bakgrund. */
+      color:var(--muted);
+      /* Sätter dämpad textfärg. */
+      font-size:14px;
+      /* Gör etiketttexten lite mindre. */
+    }
+    /* Avslutar badge-stilen. */
+
+    .grid{
+      /* Huvudgrid för sidans två spalter. */
+      display:grid;
+      /* Aktiverar grid-layout. */
+      grid-template-columns:1.25fr 0.95fr;
+      /* Delar upp sidan i en större vänsterdel och en mindre högerdel. */
+      gap:20px;
+      /* Ger mellanrum mellan spalterna. */
+      align-items:start;
+      /* Justerar innehåll till toppen av respektive spalt. */
+    }
+    /* Avslutar grid-stilen. */
+
+    .panel{
+      /* Gemensam stil för alla paneler och kort. */
+      background:var(--panel);
+      /* Sätter panelbakgrund. */
+      border:1px solid var(--line);
+      /* Ger diskret ram. */
+      border-radius:18px;
+      /* Rundar hörn. */
+      padding:18px;
+      /* Ger luft inne i panelen. */
+      box-shadow:0 8px 24px rgba(0,0,0,0.2);
+      /* Ger en mjuk skugga. */
+    }
+    /* Avslutar panel-stilen. */
+
+    .section-title{
+      /* Stilar för underrubriker i panelerna. */
+      display:flex;
+      /* Gör att rubriken kan ligga med ev. extra element i rad. */
+      justify-content:space-between;
+      /* Trycker isär rubrik och hjälptelement. */
+      align-items:center;
+      /* Centrerar dem vertikalt. */
+      gap:10px;
+      /* Ger mellanrum mellan elementen. */
+      margin-bottom:12px;
+      /* Ger luft under rubrikraden. */
+    }
+    /* Avslutar section-title-stilen. */
+
+    .section-title h2{
+      /* Stilar för h2-rubriken i sektionsrubriken. */
+      margin:0;
+      /* Tar bort standardmarginal. */
+      font-size:22px;
+      /* Anger rubrikstorlek. */
+    }
+    /* Avslutar section-title h2-stilen. */
+
+    .cards{
+      /* Grid för alla ljudkort. */
+      display:grid;
+      /* Aktiverar grid-layout. */
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      /* Visar två kort per rad på större skärmar. */
+      gap:14px;
+      /* Ger luft mellan korten. */
+    }
+    /* Avslutar cards-stilen. */
+
+    .card{
+      /* Stilar för ett enskilt ljudkort. */
+      background:#0f1728;
+      /* Sätter kortets bakgrund. */
+      border:1px solid var(--line);
+      /* Lägger till en tunn ram. */
+      border-radius:16px;
+      /* Rundar hörnen. */
+      padding:16px;
+      /* Ger luft inne i kortet. */
+      display:grid;
+      /* Använder grid för innehållet i kortet. */
+      gap:10px;
+      /* Ger avstånd mellan delarna i kortet. */
+    }
+    /* Avslutar card-stilen. */
+
+    .card h3{
+      /* Stilar för kortens rubriker. */
+      margin:0;
+      /* Tar bort standardmarginal. */
+      font-size:20px;
+      /* Sätter rubrikstorlek på kortet. */
+    }
+    /* Avslutar card h3-stilen. */
+
+    .desc{
+      /* Stilar för förklaringsrutan under ljudlistan. */
+      background:#0e1625;
+      /* Sätter bakgrund på informationsrutan. */
+      border:1px dashed var(--line);
+      /* Lägger till streckad ram. */
+      border-radius:16px;
+      /* Rundar hörnen. */
+      padding:16px;
+      /* Ger luft i rutan. */
+      margin-top:16px;
+      /* Ger luft ovanför rutan. */
+    }
+    /* Avslutar desc-stilen. */
+
+    .controls{
+      /* Rad för knappar i ljudkorten. */
+      display:flex;
+      /* Visar knappar i rad. */
+      flex-wrap:wrap;
+      /* Tillåter radbrytning om det behövs. */
+      gap:10px;
+      /* Ger mellanrum mellan knapparna. */
+    }
+    /* Avslutar controls-stilen. */
+
+    button{
+      /* Grundstil för alla knappar. */
+      appearance:none;
+      /* Tar bort olika webbläsares standardutseende. */
+      border:none;
+      /* Tar bort standardram. */
+      border-radius:12px;
+      /* Rundar knappens hörn. */
+      padding:11px 14px;
+      /* Ger bra klickyta och luft i knappen. */
+      font-weight:700;
+      /* Gör knapptexten tydlig. */
+      cursor:pointer;
+      /* Visar handpekare vid hover. */
+      transition:transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+      /* Ger mjuk animation på hover och klick. */
+    }
+    /* Avslutar knappstilen. */
+
+    button:hover{
+      /* Förstärker knapp vid hover. */
+      transform:translateY(-1px);
+      /* Flyttar knappen lite uppåt vid hover. */
+    }
+    /* Avslutar hover-stilen för knappar. */
+
+    button:disabled{
+      /* Stil för inaktiva knappar. */
+      opacity:0.6;
+      /* Gör knappen blekare när den inte går att använda. */
+      cursor:not-allowed;
+      /* Visar att knappen är låst. */
+      transform:none;
+      /* Tar bort hover-lyft för låsta knappar. */
+    }
+    /* Avslutar disabled-stilen. */
+
+    .play{
+      /* Stil för spela-knapp. */
+      background:var(--accent);
+      /* Sätter accentfärg på spela-knapp. */
+      color:#08110d;
+      /* Ger mörk text för bra kontrast. */
+    }
+    /* Avslutar play-stilen. */
+
+    .stop{
+      /* Stil för stopp-knapp. */
+      background:#21304d;
+      /* Sätter mörkare bakgrund på stopp-knapp. */
+      color:var(--text);
+      /* Sätter ljus text. */
+    }
+    /* Avslutar stop-stilen. */
+
+    .secondary{
+      /* Stil för sekundära knappar. */
+      background:#18243a;
+      /* Sätter mörk ton på sekundärknapp. */
+      color:var(--text);
+      /* Sätter ljus text. */
+      border:1px solid var(--line);
+      /* Lägger till ram för tydlighet. */
+    }
+    /* Avslutar secondary-stilen. */
+
+    .mini{
+      /* Stil för små informationsetiketter. */
+      font-size:13px;
+      /* Gör texten kompakt. */
+      color:var(--muted);
+      /* Ger dämpad färg. */
+    }
+    /* Avslutar mini-stilen. */
+
+    .quiz-list{
+      /* Grid för frågorna i quiz-delen. */
+      display:grid;
+      /* Aktiverar grid-layout. */
+      gap:14px;
+      /* Ger luft mellan frågekorten. */
+    }
+    /* Avslutar quiz-list-stilen. */
+
+    .q{
+      /* Stil för ett frågekort. */
+      background:#0f1728;
+      /* Sätter mörk bakgrund på frågekort. */
+      border:1px solid var(--line);
+      /* Lägger tunn ram runt frågekortet. */
+      border-radius:16px;
+      /* Rundar hörnen på frågekortet. */
+      padding:14px;
+      /* Ger luft inne i frågekortet. */
+    }
+    /* Avslutar q-stilen. */
+
+    .q h3{
+      /* Stil för frågerubriken. */
+      margin:0 0 8px 0;
+      /* Ger luft under rubriken men inte ovanför. */
+      font-size:18px;
+      /* Sätter lämplig frågerubrikstorlek. */
+    }
+    /* Avslutar q h3-stilen. */
+
+    .options{
+      /* Container för svarsalternativen. */
+      display:grid;
+      /* Aktiverar grid-layout. */
+      gap:8px;
+      /* Ger avstånd mellan alternativen. */
+    }
+    /* Avslutar options-stilen. */
+
+    label.option{
+      /* Stil för ett klickbart svarsalternativ. */
+      display:flex;
+      /* Visar knapp och text på en rad. */
+      gap:10px;
+      /* Ger avstånd mellan knapp och text. */
+      align-items:flex-start;
+      /* Låter texten börja högst upp med radioknappen. */
+      padding:10px 12px;
+      /* Ger klickyta och luft. */
+      border:1px solid var(--line);
+      /* Lägger ram runt alternativet. */
+      border-radius:12px;
+      /* Rundar hörn. */
+      background:#10192b;
+      /* Sätter bakgrund på alternativet. */
+      cursor:pointer;
+      /* Visar att alternativet går att klicka. */
+    }
+    /* Avslutar option-stilen. */
+
+    .score{
+      /* Stil för poängrutan. */
+      margin-top:14px;
+      /* Ger luft ovanför poängrutan. */
+      padding:14px;
+      /* Ger luft i poängrutan. */
+      border-radius:14px;
+      /* Rundar hörnen. */
+      border:1px solid var(--line);
+      /* Lägger till en tunn ram. */
+      background:#0d1728;
+      /* Sätter bakgrund på poängrutan. */
+    }
+    /* Avslutar score-stilen. */
+
+    .good{
+      /* Stil för rätt-resultat och positiv markering. */
+      color:var(--accent);
+      /* Sätter positiv accentfärg. */
+      font-weight:700;
+      /* Gör texten tydligare. */
+    }
+    /* Avslutar good-stilen. */
+
+    .bad{
+      /* Stil för fel-resultat och varning. */
+      color:var(--danger);
+      /* Sätter rödaktig färg på felinformation. */
+      font-weight:700;
+      /* Gör texten tydligare. */
+    }
+    /* Avslutar bad-stilen. */
+
+    .exercise{
+      /* Stil för övningspanelen längst ned. */
+      margin-top:18px;
+      /* Ger luft ovanför övningsdelen. */
+      padding:16px;
+      /* Ger luft i övningspanelen. */
+      border-radius:16px;
+      /* Rundar hörnen. */
+      border:1px solid var(--line);
+      /* Lägger till en tunn ram. */
+      background:#0f1728;
+      /* Sätter en mörk bakgrund. */
+    }
+    /* Avslutar exercise-stilen. */
+
+    .wave{
+      /* Stil för den enkla ljudvisualiseringen. */
+      display:grid;
+      /* Aktiverar grid-layout. */
+      grid-template-columns:repeat(24,1fr);
+      /* Skapar 24 smala staplar i rad. */
+      gap:4px;
+      /* Ger avstånd mellan staplarna. */
+      height:80px;
+      /* Sätter höjd på visualiseringsytan. */
+      align-items:end;
+      /* Låter staplarna stå på botten. */
+      margin-top:12px;
+      /* Ger luft ovanför visualiseringen. */
+    }
+    /* Avslutar wave-stilen. */
+
+    .bar{
+      /* Stil för varje stapel i visualiseringen. */
+      background:linear-gradient(180deg,#79e2a7 0%, #2f9fda 100%);
+      /* Ger en grön-blå tonad stapel. */
+      border-radius:10px 10px 4px 4px;
+      /* Rundar toppen på staplarna. */
+      opacity:0.9;
+      /* Gör staplarna lätt genomskinliga. */
+      min-height:12px;
+      /* Ser till att varje stapel alltid syns lite. */
+    }
+    /* Avslutar bar-stilen. */
+
+    .tip{
+      /* Stil för tipsrutor. */
+      border-left:4px solid var(--warn);
+      /* Markerar tipsrutan med gul vänsterkant. */
+      padding-left:12px;
+      /* Ger luft mellan vänsterkant och text. */
+    }
+    /* Avslutar tip-stilen. */
+
+    .footer-note{
+      /* Stil för fotnot längst ned på sidan. */
+      margin-top:18px;
+      /* Ger luft ovanför fotnoten. */
+      font-size:14px;
+      /* Gör texten något mindre. */
+      color:var(--muted);
+      /* Ger dämpad färg. */
+    }
+    /* Avslutar footer-note-stilen. */
+
+    @media (max-width:980px){
+      /* Startar media query för mindre skärmar. */
+      .grid{
+        /* Ändrar huvudgrid för surfplattor och mindre skärmar. */
+        grid-template-columns:1fr;
+        /* Lägger allt i en kolumn. */
+      }
+      /* Avslutar grid-ändringen i media query. */
+    }
+    /* Avslutar media query för 980 px. */
+
+    @media (max-width:720px){
+      /* Startar media query för mobilskärmar. */
+      .cards{
+        /* Ändrar ljudkortens grid på mobil. */
+        grid-template-columns:1fr;
+        /* Visar ett kort per rad på små skärmar. */
+      }
+      /* Avslutar cards-ändringen i media query. */
+    }
+    /* Avslutar media query för 720 px. */
+  </style>
+  <!-- Avslutar CSS-delen. -->
+</head>
+<!-- Avslutar head-delen. -->
+<body>
+  <!-- Startar sidans synliga innehåll. -->
+  <div class="wrap">
+    <!-- Startar ytterbehållaren för allt innehåll på sidan. -->
+
+    <header>
+      <!-- Startar sidhuvudet. -->
+      <div class="hero">
+        <!-- Startar introduktionskortet överst på sidan. -->
+        <h1>DX Academy – störningar du kan höra</h1>
+        <!-- Visar sidans huvudrubrik. -->
+        <p class="muted">Klicka på ett ljud för att höra ett pedagogiskt exempel. Ljuden är syntetiskt skapade i sidan för att fungera både lokalt via <strong>file://</strong> och online. De ersätter inte riktiga SDR-inspelningar, men de är mycket bra för träning och genomgång.</p>
+        <!-- Förklarar hur sidan fungerar och att ljuden är pedagogiska simuleringar. -->
+        <div class="badge-row">
+          <!-- Startar rad med etiketter. -->
+          <span class="badge">Fungerar lokalt och online</span>
+          <!-- Visar etikett om lokal och online-kompatibilitet. -->
+          <span class="badge">Inga externa filer krävs</span>
+          <!-- Visar etikett om att sidan är fristående. -->
+          <span class="badge">Ljuddemo + quiz + övning</span>
+          <!-- Visar etikett om innehållet i sidan. -->
+        </div>
+        <!-- Avslutar etikett-raden. -->
+      </div>
+      <!-- Avslutar introduktionskortet. -->
+    </header>
+    <!-- Avslutar sidhuvudet. -->
+
+    <div class="grid">
+      <!-- Startar tvåspaltslayouten för ljuddel och quizdel. -->
+
+      <section class="panel">
+        <!-- Startar vänster panel med ljudbibliotek. -->
+        <div class="section-title">
+          <!-- Startar rubrikraden för ljudpanelen. -->
+          <h2>Ljudbibliotek</h2>
+          <!-- Visar rubrik för ljudpanelen. -->
+          <span class="mini">Välj ett ljud och läs förklaringen nedanför</span>
+          <!-- Visar hjälpinformation till användaren. -->
+        </div>
+        <!-- Avslutar rubrikraden. -->
+
+        <div class="cards">
+          <!-- Startar grid med alla ljudkort. -->
+
+          <article class="card">
+            <!-- Startar kort för brus. -->
+            <h3>1. Brus</h3>
+            <!-- Visar rubrik för brus-kortet. -->
+            <div class="mini">Konstant bakgrundsljud – “ssssss”</div>
+            <!-- Visar kort förklaring till hur ljudet låter. -->
+            <div class="controls">
+              <!-- Startar knapp-raden i kortet. -->
+              <button class="play" data-sound="noise">▶ Spela</button>
+              <!-- Knapp som spelar upp brus. -->
+              <button class="stop" data-stop="true">■ Stopp</button>
+              <!-- Knapp som stoppar pågående ljud. -->
+              <button class="secondary" data-info="noise">Visa förklaring</button>
+              <!-- Knapp som visar textförklaring för brus. -->
+            </div>
+            <!-- Avslutar knapp-raden. -->
+          </article>
+          <!-- Avslutar kort för brus. -->
+
+          <article class="card">
+            <!-- Startar kort för elektrisk störning. -->
+            <h3>2. Elektrisk störning</h3>
+            <!-- Visar rubrik för elektrisk störning. -->
+            <div class="mini">Surr, brum eller tick från elektronik</div>
+            <!-- Visar kort beskrivning av ljudtypen. -->
+            <div class="controls">
+              <!-- Startar knapp-raden i kortet. -->
+              <button class="play" data-sound="electrical">▶ Spela</button>
+              <!-- Knapp som spelar upp elektrisk störning. -->
+              <button class="stop" data-stop="true">■ Stopp</button>
+              <!-- Knapp som stoppar ljudet. -->
+              <button class="secondary" data-info="electrical">Visa förklaring</button>
+              <!-- Knapp som visar textförklaring för elektrisk störning. -->
+            </div>
+            <!-- Avslutar knapp-raden. -->
+          </article>
+          <!-- Avslutar kort för elektrisk störning. -->
+
+          <article class="card">
+            <!-- Startar kort för atmosfärisk störning. -->
+            <h3>3. Atmosfärisk störning</h3>
+            <!-- Visar rubrik för atmosfärisk störning. -->
+            <div class="mini">Knäppar och kraschar från åska långt bort</div>
+            <!-- Visar kort beskrivning av ljudtypen. -->
+            <div class="controls">
+              <!-- Startar knapp-raden i kortet. -->
+              <button class="play" data-sound="atmospheric">▶ Spela</button>
+              <!-- Knapp som spelar upp atmosfärisk störning. -->
+              <button class="stop" data-stop="true">■ Stopp</button>
+              <!-- Knapp som stoppar ljudet. -->
+              <button class="secondary" data-info="atmospheric">Visa förklaring</button>
+              <!-- Knapp som visar textförklaring för atmosfärisk störning. -->
+            </div>
+            <!-- Avslutar knapp-raden. -->
+          </article>
+          <!-- Avslutar kort för atmosfärisk störning. -->
+
+          <article class="card">
+            <!-- Startar kort för överlagrade stationer. -->
+            <h3>4. Överlagrade stationer</h3>
+            <!-- Visar rubrik för överlagrade stationer. -->
+            <div class="mini">Två röster eller toner som krockar</div>
+            <!-- Visar kort beskrivning av ljudtypen. -->
+            <div class="controls">
+              <!-- Startar knapp-raden i kortet. -->
+              <button class="play" data-sound="overlap">▶ Spela</button>
+              <!-- Knapp som spelar upp överlagrade stationer. -->
+              <button class="stop" data-stop="true">■ Stopp</button>
+              <!-- Knapp som stoppar ljudet. -->
+              <button class="secondary" data-info="overlap">Visa förklaring</button>
+              <!-- Knapp som visar textförklaring för överlagrade stationer. -->
+            </div>
+            <!-- Avslutar knapp-raden. -->
+          </article>
+          <!-- Avslutar kort för överlagrade stationer. -->
+
+          <article class="card">
+            <!-- Startar kort för fading. -->
+            <h3>5. Fading</h3>
+            <!-- Visar rubrik för fading. -->
+            <div class="mini">Signalen blir starkare och svagare</div>
+            <!-- Visar kort beskrivning av fading-ljudet. -->
+            <div class="controls">
+              <!-- Startar knapp-raden i kortet. -->
+              <button class="play" data-sound="fading">▶ Spela</button>
+              <!-- Knapp som spelar upp fading-ljudet. -->
+              <button class="stop" data-stop="true">■ Stopp</button>
+              <!-- Knapp som stoppar ljudet. -->
+              <button class="secondary" data-info="fading">Visa förklaring</button>
+              <!-- Knapp som visar textförklaring för fading. -->
+            </div>
+            <!-- Avslutar knapp-raden. -->
+          </article>
+          <!-- Avslutar kort för fading. -->
+
+          <article class="card">
+            <!-- Startar kort för digital signal. -->
+            <h3>6. Digital signal</h3>
+            <!-- Visar rubrik för digital signal. -->
+            <div class="mini">Maskinliknande ljud – “alienljud”</div>
+            <!-- Visar kort beskrivning av digital signal. -->
+            <div class="controls">
+              <!-- Startar knapp-raden i kortet. -->
+              <button class="play" data-sound="digital">▶ Spela</button>
+              <!-- Knapp som spelar upp digital signal. -->
+              <button class="stop" data-stop="true">■ Stopp</button>
+              <!-- Knapp som stoppar ljudet. -->
+              <button class="secondary" data-info="digital">Visa förklaring</button>
+              <!-- Knapp som visar textförklaring för digital signal. -->
+            </div>
+            <!-- Avslutar knapp-raden. -->
+          </article>
+          <!-- Avslutar kort för digital signal. -->
+
+        </div>
+        <!-- Avslutar grid med ljudkort. -->
+
+        <div class="desc" id="infoBox">
+          <!-- Startar informationsrutan som uppdateras när användaren klickar. -->
+          <strong>Förklaring visas här.</strong>
+          <!-- Visar standardrubrik innan något valts. -->
+          <p class="muted">Klicka på <em>Visa förklaring</em> under ett ljudkort. Här kan du läsa vad du hör, vad det brukar bero på och hur du kan förklara det för nybörjare.</p>
+          <!-- Visar standardtext i informationsrutan. -->
+          <div class="wave" id="wave">
+            <!-- Startar enkel ljudvisualisering. -->
+          </div>
+          <!-- Avslutar ljudvisualiseringen. -->
+        </div>
+        <!-- Avslutar informationsrutan. -->
+
+        <div class="exercise">
+          <!-- Startar övningsrutan. -->
+          <h2>Praktisk övning</h2>
+          <!-- Visar rubrik för den praktiska övningen. -->
+          <p><strong>Gör så här:</strong> Lyssna först på ett exempel här. Gå sedan till en riktig SDR-mottagare och flytta frekvensen lite fel medvetet.</p>
+          <!-- Förklarar första delen av övningen. -->
+          <div class="tip">
+            <!-- Startar tipsruta. -->
+            <p><strong>Vad händer?</strong> Ofta hör du mer brus, mer distorsion eller att stationen “glider ur centrum”. Det är ett bra sätt att lära sig hur noggrann inställningen måste vara.</p>
+            <!-- Förklarar vad deltagaren ska uppmärksamma i övningen. -->
+          </div>
+          <!-- Avslutar tipsrutan. -->
+          <p class="footer-note">Tips till lärare: spela först upp ett simulerat ljud här, och låt sedan deltagaren försöka hitta samma typ av ljud i verklig mottagning.</p>
+          <!-- Ger lärartips till användning i kursen. -->
+        </div>
+        <!-- Avslutar övningsrutan. -->
+      </section>
+      <!-- Avslutar vänster panel. -->
+
+      <aside class="panel">
+        <!-- Startar höger panel med quiz. -->
+        <div class="section-title">
+          <!-- Startar rubrikraden för quizpanelen. -->
+          <h2>Quiz – känner du igen störningen?</h2>
+          <!-- Visar rubrik för quiz-delen. -->
+          <span class="mini">Tre frågor med automatisk rättning</span>
+          <!-- Visar hjälpinformation om quizet. -->
+        </div>
+        <!-- Avslutar rubrikraden. -->
+
+        <form id="quizForm" class="quiz-list">
+          <!-- Startar formuläret för quiz-frågorna. -->
+
+          <div class="q">
+            <!-- Startar frågekort 1. -->
+            <h3>1. Vilket ljud liknar oftast ett konstant “ssssss”?</h3>
+            <!-- Visar fråga 1. -->
+            <div class="options">
+              <!-- Startar svarsalternativ för fråga 1. -->
+              <label class="option"><input type="radio" name="q1" value="a"> A: Brus</label>
+              <!-- Visar alternativ A för fråga 1. -->
+              <label class="option"><input type="radio" name="q1" value="b"> B: Digital signal</label>
+              <!-- Visar alternativ B för fråga 1. -->
+              <label class="option"><input type="radio" name="q1" value="c"> C: Överlagrade stationer</label>
+              <!-- Visar alternativ C för fråga 1. -->
+            </div>
+            <!-- Avslutar svarsalternativ för fråga 1. -->
+          </div>
+          <!-- Avslutar frågekort 1. -->
+
+          <div class="q">
+            <!-- Startar frågekort 2. -->
+            <h3>2. Vilken typ av störning kommer ofta från LED-lampor, laddare och annan elektronik?</h3>
+            <!-- Visar fråga 2. -->
+            <div class="options">
+              <!-- Startar svarsalternativ för fråga 2. -->
+              <label class="option"><input type="radio" name="q2" value="a"> A: Atmosfärisk störning</label>
+              <!-- Visar alternativ A för fråga 2. -->
+              <label class="option"><input type="radio" name="q2" value="b"> B: Elektrisk störning</label>
+              <!-- Visar alternativ B för fråga 2. -->
+              <label class="option"><input type="radio" name="q2" value="c"> C: Fading</label>
+              <!-- Visar alternativ C för fråga 2. -->
+            </div>
+            <!-- Avslutar svarsalternativ för fråga 2. -->
+          </div>
+          <!-- Avslutar frågekort 2. -->
+
+          <div class="q">
+            <!-- Startar frågekort 3. -->
+            <h3>3. Vad betyder fading i DX-sammanhang?</h3>
+            <!-- Visar fråga 3. -->
+            <div class="options">
+              <!-- Startar svarsalternativ för fråga 3. -->
+              <label class="option"><input type="radio" name="q3" value="a"> A: Att två stationer ligger ovanpå varandra</label>
+              <!-- Visar alternativ A för fråga 3. -->
+              <label class="option"><input type="radio" name="q3" value="b"> B: Att signalen blir starkare och svagare</label>
+              <!-- Visar alternativ B för fråga 3. -->
+              <label class="option"><input type="radio" name="q3" value="c"> C: Att man hör digital kodtrafik</label>
+              <!-- Visar alternativ C för fråga 3. -->
+            </div>
+            <!-- Avslutar svarsalternativ för fråga 3. -->
+          </div>
+          <!-- Avslutar frågekort 3. -->
+
+          <div class="controls">
+            <!-- Startar knapp-rad för quizet. -->
+            <button type="button" class="play" id="checkQuiz">Rätta quiz</button>
+            <!-- Knapp som rättar quizet. -->
+            <button type="reset" class="secondary" id="resetQuiz">Nollställ</button>
+            <!-- Knapp som nollställer alla svar i quizet. -->
+          </div>
+          <!-- Avslutar knapp-rad för quizet. -->
+        </form>
+        <!-- Avslutar quiz-formuläret. -->
+
+        <div class="score" id="scoreBox">
+          <!-- Startar poängrutan för quizet. -->
+          <strong>Resultat:</strong>
+          <!-- Visar rubrik i poängrutan. -->
+          <p class="muted">När du klickar på <em>Rätta quiz</em> visas poäng och kort feedback här.</p>
+          <!-- Visar standardtext innan rättning skett. -->
+        </div>
+        <!-- Avslutar poängrutan. -->
+
+        <div class="exercise">
+          <!-- Startar liten lärarruta i högerpanelen. -->
+          <h2>Lärartips</h2>
+          <!-- Visar rubrik för lärartips. -->
+          <p>Den här sidan fungerar bra som första träning innan deltagarna lyssnar live på SDR. Du kan låta eleverna spela ett ljud, beskriva det med egna ord och först därefter visa förklaringen.</p>
+          <!-- Ger konkret användningstips i undervisningen. -->
+          <p class="footer-note">Äkta SDR-inspelningar kan läggas till senare som MP3-filer, men den här versionen är byggd för att fungera direkt utan extra filer.</p>
+          <!-- Förklarar begränsningen och styrkan i denna version. -->
+        </div>
+        <!-- Avslutar lärarrutan. -->
+      </aside>
+      <!-- Avslutar höger panel. -->
+
+    </div>
+    <!-- Avslutar tvåspaltslayouten. -->
+  </div>
+  <!-- Avslutar ytterbehållaren för sidan. -->
+
+  <script>
+    // Startar JavaScript-delen som styr ljud, info och quiz.
+
+    const infoData = {
+      // Skapar ett objekt med förklaringar till varje ljudtyp.
+      noise: {
+        // Startar data för brus.
+        title: "Brus",
+        // Anger rubrik för ljudtypen.
+        text: "Brus är det jämna bakgrundsljudet som ofta låter som ett konstant “ssssss”. Det finns nästan alltid där. För en nybörjare är detta viktigt, eftersom all användbar signal måste höras ovanför brusnivån.",
+        // Förklarar vad brus är pedagogiskt.
+        teach: "Förklaring till elev: 'Det här är bakgrunden. Stationen måste upp över detta för att bli tydlig.'"
+        // Ger ett lärarvänligt sätt att formulera förklaringen.
+      },
+      // Avslutar data för brus.
+      electrical: {
+        // Startar data för elektrisk störning.
+        title: "Elektrisk störning",
+        // Anger rubrik för ljudtypen.
+        text: "Elektrisk störning kommer ofta från modern elektronik: LED-lampor, nätaggregat, laddare, datorer och ibland solcellsanläggningar. Den kan låta som surr, brum, pulser eller tick.",
+        // Förklarar vad elektrisk störning är.
+        teach: "Förklaring till elev: 'Det här kommer ofta från våra egna prylar – inte från stationen du försöker höra.'"
+        // Ger lärarvänlig formulering.
+      },
+      // Avslutar data för elektrisk störning.
+      atmospheric: {
+        // Startar data för atmosfärisk störning.
+        title: "Atmosfärisk störning",
+        // Anger rubrik för ljudtypen.
+        text: "Atmosfärisk störning, ofta kallad QRN, orsakas bland annat av åska. Den hörs som knäppar, knastrande smällar eller kraschar. Det fascinerande är att du ibland hör väderstörningar från mycket långt bort.",
+        // Förklarar vad atmosfärisk störning är.
+        teach: "Förklaring till elev: 'Du kan faktiskt höra vädret genom radion.'"
+        // Ger lärarvänlig formulering.
+      },
+      // Avslutar data för atmosfärisk störning.
+      overlap: {
+        // Startar data för överlagrade stationer.
+        title: "Överlagrade stationer",
+        // Anger rubrik för ljudtypen.
+        text: "När två stationer ligger nära eller på samma frekvens kan du höra två röster samtidigt, eller en ton som uppstår mellan dem. Det här är vanligt på täta band och vid kvällslyssning.",
+        // Förklarar vad överlagrade stationer innebär.
+        teach: "Förklaring till elev: 'Flera stationer försöker använda samma plats samtidigt.'"
+        // Ger lärarvänlig formulering.
+      },
+      // Avslutar data för överlagrade stationer.
+      fading: {
+        // Startar data för fading.
+        title: "Fading",
+        // Anger rubrik för ljudtypen.
+        text: "Fading betyder att signalen blir starkare och svagare över tid. Det beror ofta på hur radiovågen studsar och förändras i atmosfären, särskilt via jonosfären.",
+        // Förklarar fading.
+        teach: "Förklaring till elev: 'Signalen kommer fram ojämnt – ibland bra, ibland sämre.'"
+        // Ger lärarvänlig formulering.
+      },
+      // Avslutar data för fading.
+      digital: {
+        // Startar data för digital signal.
+        title: "Digital signal",
+        // Anger rubrik för ljudtypen.
+        text: "Digitala signaler låter ofta maskinlika, hårda eller 'alienaktiga'. De är gjorda för datorer eller dekodrar snarare än för våra öron. Därför låter de konstiga för en ny lyssnare.",
+        // Förklarar digital signal.
+        teach: "Förklaring till elev: 'Det här är inte tal eller musik för människor – det är information för maskiner.'"
+        // Ger lärarvänlig formulering.
+      }
+      // Avslutar data för digital signal.
+    };
+    // Avslutar objektet med informationsdata.
+
+    const infoBox = document.getElementById("infoBox");
+    // Hämtar informationsrutan där förklaringar ska visas.
+    const wave = document.getElementById("wave");
+    // Hämtar området där enkla staplar ska visas som visuell effekt.
+    const scoreBox = document.getElementById("scoreBox");
+    // Hämtar rutan där quizresultat ska visas.
+    const quizForm = document.getElementById("quizForm");
+    // Hämtar quiz-formuläret för senare användning.
+
+    let audioContext = null;
+    // Skapar en variabel för Web Audio-kontexten som initieras vid behov.
+    let activeNodes = [];
+    // Skapar en lista för alla ljudnoder som är aktiva just nu.
+    let activeTimeouts = [];
+    // Skapar en lista för alla timeouts som används under uppspelning.
+    let waveInterval = null;
+    // Skapar en variabel som håller visualiserings-intervallen.
+
+    function ensureAudioContext(){
+      // Startar en funktion som ser till att ljudmotorn finns.
+      if(!audioContext){
+        // Kontrollerar om ljudkontexten ännu inte skapats.
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        // Skapar en ny Web Audio-kontext på ett kompatibelt sätt.
+      }
+      // Avslutar villkoret för att skapa ljudkontext.
+      if(audioContext.state === "suspended"){
+        // Kontrollerar om ljudkontexten är pausad av webbläsaren.
+        audioContext.resume();
+        // Återupptar ljudkontexten om den varit pausad.
+      }
+      // Avslutar kontrollen för pausad ljudkontext.
+    }
+    // Avslutar funktionen som säkerställer ljudkontext.
+
+    function clearWave(){
+      // Startar funktion som tömmer visualiseringsfältet.
+      wave.innerHTML = "";
+      // Tar bort alla staplar i visualiseringen.
+      for(let i = 0; i < 24; i += 1){
+        // Loopar 24 gånger för att skapa nya staplar.
+        const bar = document.createElement("div");
+        // Skapar ett nytt div-element för en stapel.
+        bar.className = "bar";
+        // Ger stapeln rätt CSS-klass.
+        bar.style.height = `${12 + Math.random() * 20}px`;
+        // Sätter en grundhöjd så att stapeln syns.
+        wave.appendChild(bar);
+        // Lägger till stapeln i visualiseringsområdet.
+      }
+      // Avslutar loopen som skapar staplar.
+    }
+    // Avslutar funktionen som bygger visualiseringens staplar.
+
+    function startWave(mode){
+      // Startar funktion som animerar staplarna beroende på ljudtyp.
+      clearInterval(waveInterval);
+      // Stoppar eventuell tidigare animation.
+      clearWave();
+      // Bygger upp nya staplar innan animationen startar.
+      const bars = Array.from(wave.children);
+      // Hämtar alla staplar som en vanlig array.
+      waveInterval = setInterval(() => {
+        // Startar återkommande uppdatering av staplarna.
+        bars.forEach((bar, index) => {
+          // Går igenom varje stapel för att sätta ny höjd.
+          let base = 20;
+          // Sätter en grundnivå för stapelhöjd.
+          if(mode === "noise"){
+            // Kontrollerar om läget är brus.
+            base = 22 + Math.random() * 40;
+            // Ger ganska jämn men livlig variation för brus.
+          } else if(mode === "electrical"){
+            // Kontrollerar om läget är elektrisk störning.
+            base = (index % 6 === 0) ? 65 : 15 + Math.random() * 20;
+            // Ger regelbundna toppar som liknar tick eller pulser.
+          } else if(mode === "atmospheric"){
+            // Kontrollerar om läget är atmosfärisk störning.
+            base = (Math.random() > 0.82) ? 72 : 12 + Math.random() * 18;
+            // Ger plötsliga kraftiga toppar bland lugnare nivåer.
+          } else if(mode === "overlap"){
+            // Kontrollerar om läget är överlagrade stationer.
+            base = 18 + Math.abs(Math.sin((Date.now() / 220) + index)) * 48;
+            // Ger tvåliknande svängningar som korsar varandra.
+          } else if(mode === "fading"){
+            // Kontrollerar om läget är fading.
+            base = 12 + ((Math.sin(Date.now() / 500) + 1) / 2) * 58;
+            // Ger långsam vågform som går upp och ned.
+          } else if(mode === "digital"){
+            // Kontrollerar om läget är digital signal.
+            base = (index % 2 === 0) ? 60 + Math.random() * 10 : 16 + Math.random() * 12;
+            // Ger hackig hög-låg-variation som känns maskinlik.
+          }
+          // Avslutar valet av basnivå.
+          bar.style.height = `${base}px`;
+          // Sätter stapelns nya höjd.
+        });
+        // Avslutar uppdateringen av varje stapel.
+      }, 120);
+      // Kör animationen ungefär åtta gånger per sekund.
+    }
+    // Avslutar funktionen för stapelanimation.
+
+    function stopWave(){
+      // Startar funktion som stoppar ljudvisualiseringen.
+      clearInterval(waveInterval);
+      // Stoppar den återkommande uppdateringen av staplarna.
+      clearWave();
+      // Återställer staplarna till lugnt läge.
+    }
+    // Avslutar funktionen som stoppar visualiseringen.
+
+    function stopAllAudio(){
+      // Startar funktion som stoppar allt ljud som spelar.
+      activeNodes.forEach((node) => {
+        // Går igenom alla aktiva ljudnoder.
+        try{
+          // Startar skydd mot fel om en nod redan stoppats.
+          if(node.stop){
+            // Kontrollerar om noden har en stop-metod.
+            node.stop();
+            // Stoppar noden om möjligt.
+          }
+          // Avslutar kontrollen av stop-metod.
+          if(node.disconnect){
+            // Kontrollerar om noden kan kopplas bort.
+            node.disconnect();
+            // Kopplar bort noden från ljudkedjan.
+          }
+          // Avslutar kontrollen av disconnect-metod.
+        }catch(error){
+          // Fångar upp eventuella fel när en nod stoppas.
+          console.log("Ljudnod stoppades eller var redan avslutad.", error);
+          // Skriver ett ofarligt meddelande i konsolen.
+        }
+        // Avslutar felhanteringen.
+      });
+      // Avslutar genomgången av alla aktiva ljudnoder.
+
+      activeNodes = [];
+      // Tömmer listan över aktiva ljudnoder.
+      activeTimeouts.forEach((timeoutId) => {
+        // Går igenom alla registrerade timeouts.
+        clearTimeout(timeoutId);
+        // Stoppar varje timeout.
+      });
+      // Avslutar genomgången av timeouts.
+      activeTimeouts = [];
+      // Tömmer listan över timeouts.
+      stopWave();
+      // Stoppar visualiseringen när ljudet stoppas.
+    }
+    // Avslutar funktionen som stoppar allt ljud.
+
+    function makeGain(value){
+      // Startar hjälpfunktion som skapar en gain-nod.
+      const gain = audioContext.createGain();
+      // Skapar en gain-nod för volymkontroll.
+      gain.gain.value = value;
+      // Sätter startvolymen på gain-noden.
+      gain.connect(audioContext.destination);
+      // Kopplar gain-noden till högtalarutgången.
+      activeNodes.push(gain);
+      // Lägger gain-noden i listan över aktiva noder.
+      return gain;
+      // Returnerar gain-noden så att den kan användas vidare.
+    }
+    // Avslutar hjälpfunktionen för gain-noder.
+
+    function playNoise(){
+      // Startar funktionen som spelar upp brus.
+      ensureAudioContext();
+      // Säkerställer att ljudkontexten är klar.
+      stopAllAudio();
+      // Stoppar eventuellt tidigare ljud först.
+      startWave("noise");
+      // Startar visualiseringen för brus.
+
+      const bufferSize = 2 * audioContext.sampleRate;
+      // Beräknar buffertstorleken för cirka två sekunders ljud.
+      const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      // Skapar en ljudbuffert med en kanal för brus.
+      const output = noiseBuffer.getChannelData(0);
+      // Hämtar ljuddata för buffertens enda kanal.
+      for(let i = 0; i < bufferSize; i += 1){
+        // Loopar igenom alla sampel i bufferten.
+        output[i] = (Math.random() * 2 - 1) * 0.22;
+        // Skriver slumpvärden som skapar vitt brus.
+      }
+      // Avslutar loopen som fyller bufferten.
+      const white = audioContext.createBufferSource();
+      // Skapar en spelare för bufferten.
+      white.buffer = noiseBuffer;
+      // Kopplar brusbufferten till spelaren.
+      white.loop = true;
+      // Gör så att brusbufferten spelas om i loop.
+      const gain = makeGain(0.8);
+      // Skapar en gain-nod för lagom brusvolym.
+      white.connect(gain);
+      // Kopplar brusspelaren till volymkontrollen.
+      white.start();
+      // Startar uppspelningen av brus.
+      activeNodes.push(white);
+      // Lägger brusspelaren i listan över aktiva ljudnoder.
+    }
+    // Avslutar funktionen som spelar brus.
+
+    function playElectrical(){
+      // Startar funktionen som spelar elektrisk störning.
+      ensureAudioContext();
+      // Säkerställer att ljudkontexten är klar.
+      stopAllAudio();
+      // Stoppar tidigare ljud innan nytt startar.
+      startWave("electrical");
+      // Startar visualisering för elektrisk störning.
+
+      const hum = audioContext.createOscillator();
+      // Skapar en oscillator för nätbrum.
+      hum.type = "sawtooth";
+      // Väljer en sågformad våg som låter skarpare.
+      hum.frequency.value = 100;
+      // Sätter grundfrekvensen till cirka 100 Hz.
+      const humGain = makeGain(0.035);
+      // Skapar låg volym för brumet.
+      hum.connect(humGain);
+      // Kopplar brumoscillatorn till sin volymkontroll.
+      hum.start();
+      // Startar brumoscillatorn.
+      activeNodes.push(hum);
+      // Sparar oscillatorn som aktiv nod.
+
+      const tickNoiseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.08, audioContext.sampleRate);
+      // Skapar en kort ljudbuffert för tick-ljud.
+      const tickData = tickNoiseBuffer.getChannelData(0);
+      // Hämtar kanaldatan för tick-bufferten.
+      for(let i = 0; i < tickData.length; i += 1){
+        // Loopar igenom buffertens alla sampel.
+        tickData[i] = (Math.random() * 2 - 1) * Math.exp(-i / 1800);
+        // Skapar kort, snabbt avtagande brus som klickljud.
+      }
+      // Avslutar loopen som bygger tick-ljudet.
+
+      for(let n = 0; n < 18; n += 1){
+        // Skapar flera tick-ljud över tid.
+        const timeoutId = setTimeout(() => {
+          // Väntar en stund innan varje tick skapas.
+          const src = audioContext.createBufferSource();
+          // Skapar en buffertspelare för ett tick.
+          src.buffer = tickNoiseBuffer;
+          // Kopplar tick-bufferten till spelaren.
+          const filter = audioContext.createBiquadFilter();
+          // Skapar ett filter för att forma tick-ljudet.
+          filter.type = "bandpass";
+          // Väljer bandpass för ett mer spetsigt ljud.
+          filter.frequency.value = 2500;
+          // Ställer filtret till ett övre mellanregister.
+          const gain = makeGain(0.65);
+          // Skapar tillräcklig volym för att tick ska höras tydligt.
+          src.connect(filter);
+          // Kopplar ticksignalen genom filtret.
+          filter.connect(gain);
+          // Kopplar filtret vidare till volymkontrollen.
+          src.start();
+          // Spelar upp tick-ljudet.
+          activeNodes.push(src);
+          // Lägger till tick-källan i aktiva noder.
+          activeNodes.push(filter);
+          // Lägger till filtret i aktiva noder.
+        }, n * 340);
+        // Sprider ut tick-ljuden med jämna mellanrum.
+        activeTimeouts.push(timeoutId);
+        // Sparar timeouten så att den kan stoppas vid behov.
+      }
+      // Avslutar skapandet av tick-ljud.
+    }
+    // Avslutar funktionen för elektrisk störning.
+
+    function playAtmospheric(){
+      // Startar funktionen som spelar atmosfärisk störning.
+      ensureAudioContext();
+      // Säkerställer att ljudkontexten är klar.
+      stopAllAudio();
+      // Stoppar tidigare ljud.
+      startWave("atmospheric");
+      // Startar visualiseringen för atmosfärisk störning.
+
+      const baseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.12, audioContext.sampleRate);
+      // Skapar en kort buffert för knäpp/knaster.
+      const baseData = baseBuffer.getChannelData(0);
+      // Hämtar ljuddata för bufferten.
+      for(let i = 0; i < baseData.length; i += 1){
+        // Loopar igenom varje sampel.
+        baseData[i] = (Math.random() * 2 - 1) * Math.exp(-i / 900);
+        // Skapar ett hårt, snabbt avtagande brus som låter som en knäpp.
+      }
+      // Avslutar byggandet av brusknäpp-bufferten.
+
+      for(let n = 0; n < 14; n += 1){
+        // Skapar flera oregelbundna knäppar.
+        const timeoutId = setTimeout(() => {
+          // Väntar slumpmässigt innan varje knäpp.
+          const src = audioContext.createBufferSource();
+          // Skapar spelare för en knäpp.
+          src.buffer = baseBuffer;
+          // Kopplar den korta bufferten till spelaren.
+          const filter = audioContext.createBiquadFilter();
+          // Skapar ett filter för att ge knäppen karaktär.
+          filter.type = "highpass";
+          // Väljer highpass för ett mer sprött ljud.
+          filter.frequency.value = 1300 + Math.random() * 1500;
+          // Varierar frekvensen så att knäpparna låter olika.
+          const gain = makeGain(0.85);
+          // Skapar relativt tydlig volym för knäpparna.
+          src.connect(filter);
+          // Kopplar ljudkällan till filtret.
+          filter.connect(gain);
+          // Kopplar filtret till volymkontrollen.
+          src.start();
+          // Startar uppspelningen av knäppen.
+          activeNodes.push(src);
+          // Sparar källnoden som aktiv.
+          activeNodes.push(filter);
+          // Sparar filtret som aktiv nod.
+        }, 180 + Math.random() * 3200);
+        // Sprider knäpparna oregelbundet över några sekunder.
+        activeTimeouts.push(timeoutId);
+        // Sparar timeout-id för senare stopp.
+      }
+      // Avslutar skapandet av knäppar.
+    }
+    // Avslutar funktionen för atmosfärisk störning.
+
+    function playOverlap(){
+      // Startar funktionen som simulerar överlagrade stationer.
+      ensureAudioContext();
+      // Säkerställer att ljudmotorn är klar.
+      stopAllAudio();
+      // Stoppar tidigare ljud.
+      startWave("overlap");
+      // Startar visualisering för överlagrade stationer.
+
+      const osc1 = audioContext.createOscillator();
+      // Skapar första tonen som representerar en station.
+      osc1.type = "sine";
+      // Väljer sinusvåg för ren ton.
+      osc1.frequency.value = 420;
+      // Sätter första stationens tonhöjd.
+      const gain1 = makeGain(0.055);
+      // Skapar volymkontroll för första tonen.
+      osc1.connect(gain1);
+      // Kopplar första oscillatorn till volymen.
+      osc1.start();
+      // Startar första tonen.
+      activeNodes.push(osc1);
+      // Sparar första oscillatorn som aktiv.
+
+      const osc2 = audioContext.createOscillator();
+      // Skapar andra tonen som representerar en annan station.
+      osc2.type = "sine";
+      // Väljer sinusvåg även för andra tonen.
+      osc2.frequency.value = 450;
+      // Sätter andra stationens tonhöjd nära den första.
+      const gain2 = makeGain(0.05);
+      // Skapar volymkontroll för andra tonen.
+      osc2.connect(gain2);
+      // Kopplar andra oscillatorn till volymen.
+      osc2.start();
+      // Startar andra tonen.
+      activeNodes.push(osc2);
+      // Sparar andra oscillatorn som aktiv.
+
+      const lfo = audioContext.createOscillator();
+      // Skapar en långsam modulation som får tonen att “driva”.
+      lfo.type = "sine";
+      // Väljer sinus för mjuk modulering.
+      lfo.frequency.value = 0.8;
+      // Sätter låg frekvens för långsam variation.
+      const lfoGain = audioContext.createGain();
+      // Skapar gain-nod för moduleringens styrka.
+      lfoGain.gain.value = 18;
+      // Sätter hur mycket frekvensen ska påverkas.
+      lfo.connect(lfoGain);
+      // Kopplar LFO till sin styrkekontroll.
+      lfoGain.connect(osc2.frequency);
+      // Låter LFO påverka den andra tonens frekvens.
+      lfo.start();
+      // Startar den långsamma moduleringen.
+      activeNodes.push(lfo);
+      // Sparar LFO-oscillatorn som aktiv.
+      activeNodes.push(lfoGain);
+      // Sparar gain-noden för LFO som aktiv.
+    }
+    // Avslutar funktionen för överlagrade stationer.
+
+    function playFading(){
+      // Startar funktionen som simulerar fading.
+      ensureAudioContext();
+      // Säkerställer att ljudmotorn är redo.
+      stopAllAudio();
+      // Stoppar tidigare ljud.
+      startWave("fading");
+      // Startar fading-visualisering.
+
+      const bufferSize = 2 * audioContext.sampleRate;
+      // Skapar en buffertstorlek för brusbakgrunden.
+      const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+      // Skapar en brusbuffert.
+      const output = noiseBuffer.getChannelData(0);
+      // Hämtar ljuddata för bufferten.
+      for(let i = 0; i < bufferSize; i += 1){
+        // Loopar igenom alla sampel.
+        output[i] = (Math.random() * 2 - 1) * 0.11;
+        // Skapar lågmält brus i bakgrunden.
+      }
+      // Avslutar skapandet av brusbakgrunden.
+
+      const noise = audioContext.createBufferSource();
+      // Skapar spelare för brusbakgrunden.
+      noise.buffer = noiseBuffer;
+      // Kopplar bufferten till spelaren.
+      noise.loop = true;
+      // Låter bakgrundsbruset loopa.
+      const noiseGain = makeGain(0.45);
+      // Skapar volymkontroll för bakgrundsbruset.
+      noise.connect(noiseGain);
+      // Kopplar bruset till dess volym.
+      noise.start();
+      // Startar brusbakgrunden.
+      activeNodes.push(noise);
+      // Sparar brusspelaren som aktiv.
+
+      const tone = audioContext.createOscillator();
+      // Skapar en ton som representerar en station.
+      tone.type = "triangle";
+      // Väljer triangle-våg för en mjuk men tydlig ton.
+      tone.frequency.value = 700;
+      // Sätter tonens frekvens.
+      const toneGain = makeGain(0.001);
+      // Skapar mycket låg startvolym för tonen.
+      tone.connect(toneGain);
+      // Kopplar tonen till sin volymkontroll.
+      tone.start();
+      // Startar tonen.
+      activeNodes.push(tone);
+      // Sparar tonen som aktiv nod.
+
+      const now = audioContext.currentTime;
+      // Hämtar aktuell tid i ljudkontexten.
+      toneGain.gain.cancelScheduledValues(now);
+      // Nollställer tidigare schemalagda volymändringar.
+      toneGain.gain.setValueAtTime(0.01, now);
+      // Sätter en låg startvolym direkt nu.
+      toneGain.gain.linearRampToValueAtTime(0.14, now + 2.2);
+      // Låter tonen stiga i volym under drygt två sekunder.
+      toneGain.gain.linearRampToValueAtTime(0.03, now + 4.8);
+      // Låter tonen sjunka igen.
+      toneGain.gain.linearRampToValueAtTime(0.16, now + 7.0);
+      // Låter tonen åter stiga.
+      toneGain.gain.linearRampToValueAtTime(0.015, now + 9.5);
+      // Låter tonen sjunka tydligt igen för att simulera fading.
+    }
+    // Avslutar funktionen för fading.
+
+    function playDigital(){
+      // Startar funktionen som simulerar en digital signal.
+      ensureAudioContext();
+      // Säkerställer att ljudmotorn är klar.
+      stopAllAudio();
+      // Stoppar tidigare ljud.
+      startWave("digital");
+      // Startar visualisering för digital signal.
+
+      const freqs = [820, 1240, 920, 1460, 1020, 1320, 760, 1180];
+      // Skapar en lista med frekvenser som ska hoppa mellan olika toner.
+
+      freqs.forEach((freq, index) => {
+        // Går igenom alla frekvenser och skapar korta segment.
+        const timeoutId = setTimeout(() => {
+          // Väntar rätt tid innan varje segment startar.
+          const osc = audioContext.createOscillator();
+          // Skapar en oscillator för segmentet.
+          osc.type = "square";
+          // Väljer square-våg för maskinlik hård ton.
+          osc.frequency.value = freq;
+          // Sätter segmentets frekvens.
+          const gain = makeGain(0.045);
+          // Skapar låg men tydlig volym för tonen.
+          const filter = audioContext.createBiquadFilter();
+          // Skapar ett filter för att ge radio-känsla.
+          filter.type = "bandpass";
+          // Väljer bandpass så att signalen låter mer fokuserad.
+          filter.frequency.value = 1400;
+          // Sätter filtercentrum i ett tydligt mellanregister.
+          osc.connect(filter);
+          // Kopplar oscillatorn till filtret.
+          filter.connect(gain);
+          // Kopplar filtret till volymkontrollen.
+          osc.start();
+          // Startar oscillatorsignalen.
+          osc.stop(audioContext.currentTime + 0.14);
+          // Stoppar segmentet efter kort tid.
+          activeNodes.push(osc);
+          // Sparar oscillatorn som aktiv nod.
+          activeNodes.push(filter);
+          // Sparar filtret som aktiv nod.
+        }, index * 170);
+        // Sprider segmenten i snabb följd för digital känsla.
+        activeTimeouts.push(timeoutId);
+        // Sparar timeout-id för att kunna avbryta uppspelningen.
+      });
+      // Avslutar segment-loopen.
+
+      for(let burst = 0; burst < 12; burst += 1){
+        // Skapar extra brusburst för digitalt raspigt ljud.
+        const timeoutId = setTimeout(() => {
+          // Väntar lite innan varje brusburst läggs in.
+          const burstBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.04, audioContext.sampleRate);
+          // Skapar en mycket kort buffert för ett burst-ljud.
+          const data = burstBuffer.getChannelData(0);
+          // Hämtar kanaldatan för bufferten.
+          for(let i = 0; i < data.length; i += 1){
+            // Loopar igenom alla sampel i burst-bufferten.
+            data[i] = (Math.random() * 2 - 1) * 0.5 * Math.exp(-i / 500);
+            // Skapar ett snabbt avtagande brusknäpp.
+          }
+          // Avslutar byggandet av burst-ljudet.
+          const src = audioContext.createBufferSource();
+          // Skapar spelare för brusburst.
+          src.buffer = burstBuffer;
+          // Kopplar burst-bufferten till spelaren.
+          const gain = makeGain(0.2);
+          // Skapar en låg men hörbar volym för burst.
+          src.connect(gain);
+          // Kopplar burst-signalen till volymen.
+          src.start();
+          // Spelar upp brusbursten.
+          activeNodes.push(src);
+          // Sparar burst-källan som aktiv nod.
+        }, 120 + burst * 140);
+        // Sprider ut brusburst i tät följd.
+        activeTimeouts.push(timeoutId);
+        // Sparar timeout-id för senare stopp.
+      }
+      // Avslutar skapandet av brusburst.
+    }
+    // Avslutar funktionen för digital signal.
+
+    function showInfo(key){
+      // Startar funktion som visar förklaring för vald ljudtyp.
+      const item = infoData[key];
+      // Hämtar rätt informationsobjekt utifrån nyckeln.
+      infoBox.innerHTML = `
+        <strong>${item.title}</strong>
+        <p>${item.text}</p>
+        <p class="good">${item.teach}</p>
+        <div class="wave" id="wave"></div>
+      `;
+      // Skriver ny HTML i informationsrutan med rubrik, text, lärarformulering och visualisering.
+      const newWave = document.getElementById("wave");
+      // Hämtar den nya wave-behållaren som just skapades i rutan.
+      while(newWave.firstChild){
+        // Kontrollerar om visualiseringsbehållaren redan har innehåll.
+        newWave.removeChild(newWave.firstChild);
+        // Tar bort befintligt innehåll om något finns kvar.
+      }
+      // Avslutar tömningsloopen.
+      window.wave = newWave;
+      // Sparar den nya wave-behållaren på window för enkel referens.
+    }
+    // Avslutar funktionen som visar information.
+
+    function rebuildWaveReference(){
+      // Startar funktion som säkerställer att wave-variabeln pekar rätt efter omritning.
+      const currentWave = document.getElementById("wave");
+      // Hämtar aktuell wave-behållare i DOM.
+      if(currentWave){
+        // Kontrollerar att wave-elementet verkligen finns.
+        window.wave = currentWave;
+        // Sparar referensen på window-objektet.
+      }
+      // Avslutar kontrollen av wave-element.
+    }
+    // Avslutar funktionen som återbygger wave-referensen.
+
+    document.querySelectorAll("[data-info]").forEach((button) => {
+      // Går igenom alla knappar som visar förklaring.
+      button.addEventListener("click", () => {
+        // Körs när användaren klickar på en förklaringsknapp.
+        showInfo(button.dataset.info);
+        // Visar rätt text baserat på knappens data-info-värde.
+        rebuildWaveReference();
+        // Säkerställer att wave-variabeln pekar på den nya visualiseringen.
+        clearWave();
+        // Ritar upp en lugn grundvisualisering.
+      });
+      // Avslutar klickhändelsen för förklaringsknappen.
+    });
+    // Avslutar genomgången av alla förklaringsknappar.
+
+    document.querySelectorAll("[data-stop]").forEach((button) => {
+      // Går igenom alla stoppknappar.
+      button.addEventListener("click", () => {
+        // Körs när användaren klickar på stopp.
+        stopAllAudio();
+        // Stoppar allt aktivt ljud och animationer.
+      });
+      // Avslutar klickhändelsen för stoppknappen.
+    });
+    // Avslutar genomgången av stoppknappar.
+
+    document.querySelectorAll("[data-sound]").forEach((button) => {
+      // Går igenom alla spela-knappar.
+      button.addEventListener("click", () => {
+        // Körs när användaren klickar på en spela-knapp.
+        const sound = button.dataset.sound;
+        // Hämtar vilken ljudtyp knappen representerar.
+        showInfo(sound);
+        // Visar rätt förklaring direkt när ljudet spelas.
+        rebuildWaveReference();
+        // Säkerställer att wave-referensen är aktuell.
+        if(sound === "noise"){
+          // Kontrollerar om användaren valt brus.
+          playNoise();
+          // Spelar upp brus.
+        } else if(sound === "electrical"){
+          // Kontrollerar om användaren valt elektrisk störning.
+          playElectrical();
+          // Spelar upp elektrisk störning.
+        } else if(sound === "atmospheric"){
+          // Kontrollerar om användaren valt atmosfärisk störning.
+          playAtmospheric();
+          // Spelar upp atmosfärisk störning.
+        } else if(sound === "overlap"){
+          // Kontrollerar om användaren valt överlagrade stationer.
+          playOverlap();
+          // Spelar upp överlagrade stationer.
+        } else if(sound === "fading"){
+          // Kontrollerar om användaren valt fading.
+          playFading();
+          // Spelar upp fading.
+        } else if(sound === "digital"){
+          // Kontrollerar om användaren valt digital signal.
+          playDigital();
+          // Spelar upp digital signal.
+        }
+        // Avslutar val av ljudfunktion.
+      });
+      // Avslutar klickhändelsen för spela-knappen.
+    });
+    // Avslutar genomgången av alla spela-knappar.
+
+    document.getElementById("checkQuiz").addEventListener("click", () => {
+      // Startar händelsehanterare för att rätta quizet.
+      const answers = {
+        // Skapar objekt med rätta svar.
+        q1: "a",
+        // Rätt svar för fråga 1 är brus.
+        q2: "b",
+        // Rätt svar för fråga 2 är elektrisk störning.
+        q3: "b"
+        // Rätt svar för fråga 3 är fading.
+      };
+      // Avslutar objektet med facit.
+
+      let score = 0;
+      // Skapar en räknare för poäng.
+      let feedback = "";
+      // Skapar en sträng för återkoppling till användaren.
+
+      Object.keys(answers).forEach((key, index) => {
+        // Går igenom varje fråga i facit.
+        const selected = quizForm.querySelector(`input[name="${key}"]:checked`);
+        // Hämtar vilket alternativ användaren valt på frågan.
+        if(selected && selected.value === answers[key]){
+          // Kontrollerar om användaren har valt rätt svar.
+          score += 1;
+          // Ökar poängen med ett.
+          feedback += `<p class="good">Fråga ${index + 1}: rätt.</p>`;
+          // Lägger till positiv återkoppling för frågan.
+        } else if(selected){
+          // Kontrollerar om användaren har svarat men fel.
+          feedback += `<p class="bad">Fråga ${index + 1}: fel.</p>`;
+          // Lägger till negativ återkoppling för frågan.
+        } else {
+          // Körs om användaren inte svarat alls på frågan.
+          feedback += `<p class="bad">Fråga ${index + 1}: inget svar valt.</p>`;
+          // Meddelar att inget svar valts.
+        }
+        // Avslutar valideringen av en fråga.
+      });
+      // Avslutar genomgången av alla frågor.
+
+      let summary = "";
+      // Skapar variabel för sammanfattningstext.
+      if(score === 3){
+        // Kontrollerar om alla svar blev rätt.
+        summary = "Mycket bra – du känner redan igen de viktigaste störningstyperna.";
+        // Sätter positiv sammanfattning vid full poäng.
+      } else if(score === 2){
+        // Kontrollerar om användaren fick två rätt.
+        summary = "Bra jobbat – du har god grund, men lyssna gärna en gång till på de ljud du missade.";
+        // Sätter uppmuntrande sammanfattning vid två rätt.
+      } else {
+        // Körs om användaren fick ett eller noll rätt.
+        summary = "Det här är helt normalt i början. Spela ljuden igen och försök beskriva dem med egna ord innan du gör quizet en gång till.";
+        // Sätter lugnande och pedagogisk sammanfattning.
+      }
+      // Avslutar valet av sammanfattning.
+
+      scoreBox.innerHTML = `
+        <strong>Resultat: ${score} / 3</strong>
+        <p>${summary}</p>
+        ${feedback}
+      `;
+      // Skriver ut poäng, sammanfattning och återkoppling i resultatrutan.
+    });
+    // Avslutar händelsehanteraren för quizrättning.
+
+    document.getElementById("resetQuiz").addEventListener("click", () => {
+      // Startar händelsehanterare för nollställning av quiz.
+      scoreBox.innerHTML = `
+        <strong>Resultat:</strong>
+        <p class="muted">När du klickar på <em>Rätta quiz</em> visas poäng och kort feedback här.</p>
+      `;
+      // Återställer resultatrutan till ursprungsläge.
+    });
+    // Avslutar händelsehanteraren för quiz-nollställning.
+
+    clearWave();
+    // Ritar upp en första lugn visualisering när sidan laddas.
+  </script>
+  <!-- Avslutar JavaScript-delen. -->
+</body>
+<!-- Avslutar sidans synliga innehåll. -->
+</html>
+<!-- Avslutar HTML-dokumentet. -->

@@ -1,0 +1,605 @@
+<!doctype html>
+<!-- Anger att dokumentet är ett HTML5-dokument. -->
+<html lang="sv">
+<!-- Startar HTML-dokumentet och anger svenska som språk. -->
+<head>
+  <!-- Startar dokumentets head-del. -->
+  <meta charset="utf-8">
+  <!-- Anger teckenkodning så att svenska tecken visas rätt. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Gör sidan mobilvänlig och anpassad till skärmens bredd. -->
+  <title>DX Academy – Mobil lyssna och översätt</title>
+  <!-- Sätter titeln som visas i webbläsarfliken. -->
+  <style>
+    /* Nollställer standardmarginaler och gör boxmodell mer förutsägbar. */
+    * { box-sizing: border-box; }
+
+    /* Styr sidans grundstil, färger och typsnitt. */
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #0f172a;
+      color: #e5eefc;
+      line-height: 1.5;
+    }
+
+    /* Håller allt innehåll centrerat och lagom brett. */
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Visar en tydlig toppsektion med rubrik och beskrivning. */
+    .hero {
+      background: linear-gradient(180deg, #1e293b 0%, #111827 100%);
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    }
+
+    /* Ger huvudrubriken rätt storlek och avstånd. */
+    h1 {
+      margin: 0 0 10px 0;
+      font-size: 1.9rem;
+    }
+
+    /* Ger underrubriker tydlig struktur. */
+    h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.2rem;
+    }
+
+    /* Delar upp innehållet i kort med samma stil. */
+    .card {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    /* Skapar ett flexibelt rutnät för knappar och fält. */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    /* Byter till två kolumner på större skärmar. */
+    @media (min-width: 760px) {
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Styr utseendet på textfält och inmatningar. */
+    textarea,
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #475569;
+      background: #0b1220;
+      color: #e5eefc;
+      font-size: 1rem;
+    }
+
+    /* Gör textfälten bekväma att skriva i på mobil. */
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Ger etiketter tydlig plats ovanför fält. */
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    /* Skapar en flexibel rad för knappar. */
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* Styr standardutseendet på alla knappar. */
+    button,
+    .link-button {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+    }
+
+    /* Ger huvudknapparna blå färg och bra kontrast. */
+    .primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    /* Ger sekundära knappar mörkare stil. */
+    .secondary {
+      background: #1f2937;
+      color: #e5eefc;
+      border: 1px solid #475569;
+    }
+
+    /* Ger varningsknappar en röd ton. */
+    .danger {
+      background: #b91c1c;
+      color: white;
+    }
+
+    /* Visar små informationsrutor på ett lugnt sätt. */
+    .notice {
+      background: #0b1220;
+      border: 1px dashed #475569;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.96rem;
+    }
+
+    /* Markerar teknisk status tydligt. */
+    .status {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #0b1220;
+      border: 1px solid #334155;
+      font-size: 0.95rem;
+    }
+
+    /* Ger mindre hjälptest lite svagare ton. */
+    .small {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+    }
+
+    /* Gör en enkel lista luftig. */
+    ul {
+      padding-left: 20px;
+      margin: 8px 0 0 0;
+    }
+
+    /* Ger kodliknande ytor bättre läsbarhet. */
+    .output {
+      white-space: pre-wrap;
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 120px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Startar sidans synliga innehåll. -->
+  <div class="wrap">
+    <!-- Skapar toppblocket med rubrik och snabb förklaring. -->
+    <section class="hero">
+      <h1>DX Academy – Lyssna och översätt i mobilen</h1>
+      <p>Den här sidan är gjord för mobil. Eleven kan öppna en mottagare, lyssna, använda mobilens mikrofon för taligenkänning, skriva egna anteckningar och skapa en färdig AI-prompt för översättning och stationstolkning.</p>
+      <div class="notice">
+        <strong>Viktigt:</strong> Sidan kan inte själv lyssna direkt inne i KiwiSDR. Den fungerar genom att eleven spelar upp ljud i mobilen eller nära mobilen, och sedan använder mikrofonknappen här för att fånga tal och göra text av det.
+      </div>
+    </section>
+
+    <!-- Skapar första kortet med lyssningsdelen. -->
+    <section class="card">
+      <h2>1. Öppna radio</h2>
+      <p class="small">Tryck på knappen nedan för att öppna KiwiSDR. Eleven lyssnar där och kommer sedan tillbaka hit för att skriva eller tala in vad som hörs.</p>
+      <div class="button-row">
+        <a class="link-button primary" href="http://21366.proxy2.kiwisdr.com:8073/" target="_blank" rel="noopener noreferrer">🎧 Öppna KiwiSDR</a>
+        <button class="secondary" id="freq198Button" type="button">📻 Visa tips för 198 kHz</button>
+      </div>
+      <div class="status" id="stationHint">Stationstips visas här när du trycker på knappen.</div>
+    </section>
+
+    <!-- Skapar andra kortet med metadata om lyssningen. -->
+    <section class="card">
+      <h2>2. Fyll i grunddata</h2>
+      <div class="grid grid-2">
+        <div>
+          <label for="frequency">Frekvens</label>
+          <input id="frequency" type="text" value="198 kHz" placeholder="Till exempel 198 kHz">
+        </div>
+        <div>
+          <label for="utcTime">Tid UTC</label>
+          <input id="utcTime" type="text" placeholder="Till exempel 14:30 UTC">
+        </div>
+        <div>
+          <label for="receiver">Mottagare / plats</label>
+          <input id="receiver" type="text" placeholder="Till exempel KiwiSDR / Sverige">
+        </div>
+        <div>
+          <label for="language">Språk du tror att du hör</label>
+          <input id="language" type="text" placeholder="Till exempel engelska">
+        </div>
+      </div>
+    </section>
+
+    <!-- Skapar tredje kortet med mikrofonfunktion och anteckningar. -->
+    <section class="card">
+      <h2>3. Lyssna, tala in eller skriv själv</h2>
+      <p class="small">På många Android-mobiler fungerar taligenkänning direkt i Chrome. På vissa iPhone-modeller och webbläsare kan den vara begränsad. Om mikrofonknappen inte fungerar skriver eleven i rutan manuellt.</p>
+      <div class="button-row">
+        <button class="primary" id="startSpeechButton" type="button">🎤 Starta mikrofon</button>
+        <button class="danger" id="stopSpeechButton" type="button">⏹ Stoppa mikrofon</button>
+        <button class="secondary" id="clearTranscriptButton" type="button">🧹 Töm text</button>
+      </div>
+      <div class="status" id="speechStatus">Mikrofonstatus visas här.</div>
+      <div style="margin-top:12px;">
+        <label for="heardText">Det här hör jag</label>
+        <textarea id="heardText" placeholder="Skriv eller tala in det du hör här..."></textarea>
+      </div>
+      <div style="margin-top:12px;">
+        <label for="notes">Egna observationer</label>
+        <textarea id="notes" placeholder="Till exempel: manlig röst, nyheter, musik, svag fading, nämnde London..."></textarea>
+      </div>
+    </section>
+
+    <!-- Skapar fjärde kortet med enkel ljudinspelning till fil. -->
+    <section class="card">
+      <h2>4. Spela in kort ljudklipp</h2>
+      <p class="small">Den här delen sparar ett ljudklipp lokalt i mobilen om webbläsaren stöder inspelning. Det kan vara bra när eleven vill spara ett bevis eller jämföra senare.</p>
+      <div class="button-row">
+        <button class="primary" id="startRecordButton" type="button">⏺ Starta inspelning</button>
+        <button class="danger" id="stopRecordButton" type="button">⏹ Stoppa inspelning</button>
+        <button class="secondary" id="downloadRecordButton" type="button">💾 Ladda ner ljudklipp</button>
+      </div>
+      <div class="status" id="recordStatus">Inspelningsstatus visas här.</div>
+      <audio id="audioPlayback" controls style="width:100%; margin-top:12px;"></audio>
+    </section>
+
+    <!-- Skapar femte kortet med AI-promptgenerator. -->
+    <section class="card">
+      <h2>5. Skapa färdig AI-prompt</h2>
+      <p class="small">Här gör sidan en färdig prompt som eleven kan kopiera in i ChatGPT för översättning, språkigenkänning och enkel stationsbedömning.</p>
+      <div class="button-row">
+        <button class="primary" id="buildPromptButton" type="button">🧠 Bygg prompt</button>
+        <button class="secondary" id="copyPromptButton" type="button">📋 Kopiera prompt</button>
+      </div>
+      <div style="margin-top:12px;">
+        <label for="promptOutput">Färdig prompt</label>
+        <div class="output" id="promptOutput"></div>
+      </div>
+    </section>
+
+    <!-- Skapar sista kortet med användningstips. -->
+    <section class="card">
+      <h2>Så använder eleven sidan</h2>
+      <ul>
+        <li>Öppna mottagaren och lyssna.</li>
+        <li>Gå tillbaka hit och använd mikrofon eller skriv manuellt.</li>
+        <li>Lägg till egna observationer.</li>
+        <li>Bygg prompten och klistra in den i ChatGPT.</li>
+        <li>Få hjälp med översättning, språk och trolig station.</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- Startar JavaScript-delen för sidans funktioner. -->
+  <script>
+    // Hämtar alla element som vi behöver styra med JavaScript.
+    const freq198Button = document.getElementById('freq198Button');
+    // Hämtar knappen som visar stationstips för 198 kHz.
+    const stationHint = document.getElementById('stationHint');
+    // Hämtar rutan där stationstipset ska visas.
+    const startSpeechButton = document.getElementById('startSpeechButton');
+    // Hämtar knappen för att starta taligenkänning.
+    const stopSpeechButton = document.getElementById('stopSpeechButton');
+    // Hämtar knappen för att stoppa taligenkänning.
+    const clearTranscriptButton = document.getElementById('clearTranscriptButton');
+    // Hämtar knappen som tömmer textfältet.
+    const speechStatus = document.getElementById('speechStatus');
+    // Hämtar rutan där mikrofonstatus ska visas.
+    const heardText = document.getElementById('heardText');
+    // Hämtar textfältet där tal eller manuell text hamnar.
+    const notes = document.getElementById('notes');
+    // Hämtar textfältet för egna observationer.
+    const frequency = document.getElementById('frequency');
+    // Hämtar fältet för frekvens.
+    const utcTime = document.getElementById('utcTime');
+    // Hämtar fältet för UTC-tid.
+    const receiver = document.getElementById('receiver');
+    // Hämtar fältet för mottagare eller plats.
+    const language = document.getElementById('language');
+    // Hämtar fältet för språk.
+    const startRecordButton = document.getElementById('startRecordButton');
+    // Hämtar knappen för att starta ljudinspelning.
+    const stopRecordButton = document.getElementById('stopRecordButton');
+    // Hämtar knappen för att stoppa ljudinspelning.
+    const downloadRecordButton = document.getElementById('downloadRecordButton');
+    // Hämtar knappen för att ladda ner inspelningen.
+    const recordStatus = document.getElementById('recordStatus');
+    // Hämtar rutan där inspelningsstatus ska visas.
+    const audioPlayback = document.getElementById('audioPlayback');
+    // Hämtar ljudspelaren för uppspelning av inspelat klipp.
+    const buildPromptButton = document.getElementById('buildPromptButton');
+    // Hämtar knappen som bygger AI-prompten.
+    const copyPromptButton = document.getElementById('copyPromptButton');
+    // Hämtar knappen som kopierar prompten.
+    const promptOutput = document.getElementById('promptOutput');
+    // Hämtar rutan där den färdiga prompten visas.
+
+    // Skapar variabler för taligenkänning.
+    let recognition = null;
+    // Förbereder en variabel som senare kan innehålla taligenkänningen.
+    let speechSupported = false;
+    // Anger om taligenkänning stöds eller inte.
+
+    // Skapar variabler för ljudinspelning.
+    let mediaRecorder = null;
+    // Förbereder en variabel som kan innehålla inspelningsobjektet.
+    let recordedChunks = [];
+    // Skapar en lista där inspelade ljuddelar lagras.
+    let recordedBlob = null;
+    // Förbereder en variabel för den färdiga ljudfilen.
+    let recordStream = null;
+    // Förbereder en variabel för mikrofonströmmen vid inspelning.
+
+    // Skapar en funktion som visar tips om 198 kHz.
+    function show198Hint() {
+      // Skriver ett tydligt tips till eleven om vanlig station på 198 kHz.
+      stationHint.textContent = '198 kHz i Europa är ofta starkt kopplat till BBC Radio 4 på långvåg. Eleven kan lyssna efter engelskt tal, nyheter, dokumentärer eller samtal.';
+    }
+
+    // Kopplar knappen till funktionen som visar stationstips.
+    freq198Button.addEventListener('click', show198Hint);
+
+    // Hämtar rätt taligenkänningsklass beroende på webbläsare.
+    const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+    // Kontrollerar om webbläsaren har stöd för taligenkänning.
+
+    // Bygger upp taligenkänning om stöd finns.
+    if (SpeechRecognitionClass) {
+      // Markerar att taligenkänning finns i den här webbläsaren.
+      speechSupported = true;
+      // Skapar själva taligenkänningsobjektet.
+      recognition = new SpeechRecognitionClass();
+      // Anger att igenkänningen ska fortsätta tills vi stoppar den.
+      recognition.continuous = true;
+      // Anger att vi vill få delresultat medan eleven talar.
+      recognition.interimResults = true;
+      // Anger svenska som första val för igenkänning.
+      recognition.lang = 'sv-SE';
+
+      // Körs när taligenkänningen startar.
+      recognition.onstart = function () {
+        // Visar att mikrofonlyssningen har startat.
+        speechStatus.textContent = 'Mikrofonen är igång. Tala tydligt nära mobilen.';
+      };
+
+      // Körs när taligenkänningen ger resultat.
+      recognition.onresult = function (event) {
+        // Skapar en tom textsträng för det som fångats upp.
+        let transcript = '';
+        // Loopar igenom alla resultat från taligenkänningen.
+        for (let i = event.resultIndex; i < event.results.length; i += 1) {
+          // Lägger till texten från varje resultat i strängen.
+          transcript += event.results[i][0].transcript;
+        }
+        // Skriver in den fångade texten i fältet.
+        heardText.value = transcript;
+      };
+
+      // Körs om något går fel i taligenkänningen.
+      recognition.onerror = function (event) {
+        // Visar tydlig felstatus för eleven.
+        speechStatus.textContent = 'Taligenkänningen kunde inte starta eller avbröts: ' + event.error + '. Prova att skriva manuellt om det inte fungerar.';
+      };
+
+      // Körs när taligenkänningen avslutas.
+      recognition.onend = function () {
+        // Visar att taligenkänningen inte längre lyssnar.
+        speechStatus.textContent = 'Mikrofonen är stoppad.';
+      };
+    } else {
+      // Visar direkt om webbläsaren saknar stöd för taligenkänning.
+      speechStatus.textContent = 'Taligenkänning stöds inte i den här webbläsaren. Skriv texten manuellt i stället.';
+    }
+
+    // Startar taligenkänning när användaren trycker på startknappen.
+    startSpeechButton.addEventListener('click', function () {
+      // Avbryter om taligenkänning inte stöds.
+      if (!speechSupported || !recognition) {
+        // Visar tydlig information om att manuell text behövs.
+        speechStatus.textContent = 'Den här webbläsaren stöder inte taligenkänning. Skriv manuellt i rutan.';
+        // Avslutar funktionen direkt.
+        return;
+      }
+      // Försöker starta taligenkänningen.
+      try {
+        // Startar lyssningen.
+        recognition.start();
+      } catch (error) {
+        // Visar om taligenkänningen redan är igång eller inte kan starta.
+        speechStatus.textContent = 'Kunde inte starta mikrofonen: ' + error.message;
+      }
+    });
+
+    // Stoppar taligenkänningen när användaren trycker på stoppknappen.
+    stopSpeechButton.addEventListener('click', function () {
+      // Kontrollerar att igenkänningen finns.
+      if (recognition) {
+        // Stoppar lyssningen.
+        recognition.stop();
+      }
+    });
+
+    // Tömmer textfältet med det som hörts.
+    clearTranscriptButton.addEventListener('click', function () {
+      // Rensar textinnehållet i fältet.
+      heardText.value = '';
+      // Visar en enkel bekräftelse.
+      speechStatus.textContent = 'Textfältet är tömt.';
+    });
+
+    // Startar ljudinspelning via mobilens mikrofon.
+    startRecordButton.addEventListener('click', async function () {
+      // Försöker få tillgång till mikrofonen.
+      try {
+        // Begär mikrofonåtkomst från webbläsaren.
+        recordStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        // Nollställer listan med ljuddelar.
+        recordedChunks = [];
+        // Skapar en ny inspelare från mikrofonströmmen.
+        mediaRecorder = new MediaRecorder(recordStream);
+
+        // Körs varje gång en ljudbit blir klar.
+        mediaRecorder.ondataavailable = function (event) {
+          // Lägger till ljudbiten om den innehåller data.
+          if (event.data && event.data.size > 0) {
+            // Sparar ljudbiten i listan.
+            recordedChunks.push(event.data);
+          }
+        };
+
+        // Körs när inspelningen stoppas.
+        mediaRecorder.onstop = function () {
+          // Bygger en färdig ljudfil av alla ljuddelar.
+          recordedBlob = new Blob(recordedChunks, { type: 'audio/webm' });
+          // Skapar en lokal adress till ljudfilen.
+          const audioUrl = URL.createObjectURL(recordedBlob);
+          // Lägger ljudet i spelaren så det kan lyssnas på.
+          audioPlayback.src = audioUrl;
+          // Visar status att inspelningen är klar.
+          recordStatus.textContent = 'Inspelningen är klar. Du kan spela upp eller ladda ner ljudklippet.';
+          // Stoppar mikrofonspåren så mobilen frigör mikrofonen.
+          recordStream.getTracks().forEach(function (track) {
+            track.stop();
+          });
+        };
+
+        // Startar inspelningen.
+        mediaRecorder.start();
+        // Visar att inspelningen är igång.
+        recordStatus.textContent = 'Inspelning pågår... tala nära mobilen eller låt radion höras tydligt.';
+      } catch (error) {
+        // Visar felmeddelande om mikrofonåtkomst misslyckas.
+        recordStatus.textContent = 'Kunde inte starta inspelningen: ' + error.message;
+      }
+    });
+
+    // Stoppar ljudinspelningen när användaren trycker på stopp.
+    stopRecordButton.addEventListener('click', function () {
+      // Kontrollerar att inspelaren finns och verkligen spelar in.
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        // Stoppar inspelningen.
+        mediaRecorder.stop();
+      } else {
+        // Visar information om ingen inspelning pågår.
+        recordStatus.textContent = 'Ingen inspelning pågår just nu.';
+      }
+    });
+
+    // Laddar ner det inspelade ljudet till en fil.
+    downloadRecordButton.addEventListener('click', function () {
+      // Kontrollerar att ett ljudklipp faktiskt finns.
+      if (!recordedBlob) {
+        // Visar information om att inget finns att spara.
+        recordStatus.textContent = 'Det finns inget inspelat ljud att ladda ner ännu.';
+        // Avslutar funktionen direkt.
+        return;
+      }
+      // Skapar en lokal adress till blobben.
+      const downloadUrl = URL.createObjectURL(recordedBlob);
+      // Skapar en osynlig länk för nedladdning.
+      const link = document.createElement('a');
+      // Anger länken till ljudfilens adress.
+      link.href = downloadUrl;
+      // Anger filnamnet som ska användas vid nedladdning.
+      link.download = 'dx-academy-ljudklipp.webm';
+      // Lägger länken till sidan tillfälligt.
+      document.body.appendChild(link);
+      // Simulerar ett klick på länken.
+      link.click();
+      // Tar bort länken igen när den använts.
+      document.body.removeChild(link);
+      // Visar att nedladdningen har startat.
+      recordStatus.textContent = 'Nedladdning av ljudklipp har startat.';
+    });
+
+    // Bygger en färdig AI-prompt utifrån elevens inmatning.
+    buildPromptButton.addEventListener('click', function () {
+      // Hämtar frekvensvärdet eller ersätter med tomt tecken.
+      const frequencyValue = frequency.value.trim() || '-';
+      // Hämtar tidsvärdet eller ersätter med tomt tecken.
+      const utcTimeValue = utcTime.value.trim() || '-';
+      // Hämtar mottagarvärdet eller ersätter med tomt tecken.
+      const receiverValue = receiver.value.trim() || '-';
+      // Hämtar språkfältet eller ersätter med tomt tecken.
+      const languageValue = language.value.trim() || '-';
+      // Hämtar det eleven hört eller ersätter med tomt tecken.
+      const heardTextValue = heardText.value.trim() || '-';
+      // Hämtar elevens observationer eller ersätter med tomt tecken.
+      const notesValue = notes.value.trim() || '-';
+
+      // Bygger själva prompttexten rad för rad.
+      const prompt = [
+        'Du är en pedagogisk DX-expert.',
+        'Förklara enkelt.',
+        'Var tydlig.',
+        'Översätt till svenska om texten inte är på svenska.',
+        'Säg till om du är osäker.',
+        '',
+        'Identifiera och analysera detta:',
+        'Frekvens: ' + frequencyValue,
+        'Tid UTC: ' + utcTimeValue,
+        'Mottagare/plats: ' + receiverValue,
+        'Språk jag tror att jag hör: ' + languageValue,
+        'Det här hör jag: ' + heardTextValue,
+        'Observationer: ' + notesValue,
+        '',
+        'Uppgift:',
+        '1. Gissa språk.',
+        '2. Översätt eller sammanfatta det som hörs till svenska.',
+        '3. Förklara enkelt vad innehållet verkar handla om.',
+        '4. Ge en försiktig bedömning av möjlig station.',
+        '5. Säg tydligt hur säker du är.'
+      ].join('\n');
+
+      // Skriver ut prompten på sidan.
+      promptOutput.textContent = prompt;
+    });
+
+    // Kopierar prompten till användarens urklipp.
+    copyPromptButton.addEventListener('click', async function () {
+      // Hämtar den text som visas i promptfältet.
+      const textToCopy = promptOutput.textContent.trim();
+      // Kontrollerar att det finns något att kopiera.
+      if (!textToCopy) {
+        // Visar att prompten först måste byggas.
+        promptOutput.textContent = 'Bygg prompten först, sedan kan du kopiera den.';
+        // Avslutar funktionen direkt.
+        return;
+      }
+      // Försöker kopiera texten till urklipp.
+      try {
+        // Använder webbläsarens urklippsfunktion.
+        await navigator.clipboard.writeText(textToCopy);
+        // Visar en enkel bekräftelse i statusrutan.
+        speechStatus.textContent = 'Prompten är kopierad.';
+      } catch (error) {
+        // Visar om kopieringen misslyckas.
+        speechStatus.textContent = 'Kunde inte kopiera automatiskt. Markera texten och kopiera manuellt.';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,706 @@
+<!doctype html> <!-- Anger att dokumentet är ett HTML5-dokument. -->
+<html lang="sv"> <!-- Startar HTML-dokumentet och anger svenska som språk. -->
+<head> <!-- Startar head-delen med metadata och titel. -->
+  <meta charset="utf-8"> <!-- Anger teckenkodning så att svenska tecken visas korrekt. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Gör sidan mobilvänlig och anpassad till skärmbredden. -->
+  <title>DX Logg & Inspelning – Mobil</title> <!-- Sätter sidans titel i webbläsarfliken. -->
+  <style> /* Startar CSS-stilarna för sidan. */
+    :root { /* Definierar återanvändbara färgvariabler för hela sidan. */
+      --bg: #0b0f1a; /* Sätter mörk bakgrundsfärg. */
+      --panel: #111827; /* Sätter panelernas bakgrundsfärg. */
+      --panel-2: #1f2937; /* Sätter alternativ panelbakgrund. */
+      --text: #f9fafb; /* Sätter ljus textfärg. */
+      --muted: #cbd5e1; /* Sätter dämpad textfärg. */
+      --accent: #c18b00; /* Sätter mörkgul accentfärg. */
+      --accent-2: #eab308; /* Sätter ljusare gul accentfärg. */
+      --danger: #b91c1c; /* Sätter röd färg för stopp/radera. */
+      --ok: #166534; /* Sätter grön färg för lyckade statusmeddelanden. */
+      --border: rgba(255,255,255,0.08); /* Sätter diskret kantlinjefärg. */
+      --shadow: 0 12px 30px rgba(0,0,0,0.35); /* Definierar skugga för kort/paneler. */
+    } /* Avslutar variabeldefinitionerna. */
+
+    * { box-sizing: border-box; } /* Gör att padding och border räknas in i elementens storlek. */
+
+    body { /* Styr hela sidans utseende. */
+      margin: 0; /* Tar bort standardmarginal runt sidan. */
+      font-family: Arial, Helvetica, sans-serif; /* Anger enkel och tydlig typsnittsfamilj. */
+      background: linear-gradient(180deg, #08111f 0%, #0b0f1a 100%); /* Lägger mörk tonad bakgrund. */
+      color: var(--text); /* Sätter standardtextfärg. */
+      padding: 16px; /* Lägger luft runt innehållet. */
+    } /* Avslutar body-stilen. */
+
+    .wrap { /* Styr sidans huvudcontainer. */
+      max-width: 980px; /* Begränsar sidans bredd för bättre läsbarhet. */
+      margin: 0 auto; /* Centrerar innehållet horisontellt. */
+    } /* Avslutar wrapper-stilen. */
+
+    .title { /* Styr huvudrubrikens block. */
+      text-align: center; /* Centrerar rubriken. */
+      margin-bottom: 16px; /* Lägger avstånd under rubriken. */
+    } /* Avslutar titelblocket. */
+
+    h1 { /* Styr huvudrubriken. */
+      margin: 0 0 8px 0; /* Sätter luft runt rubriken. */
+      font-size: 1.9rem; /* Gör rubriken tydligt större. */
+    } /* Avslutar h1-stilen. */
+
+    .subtitle { /* Styr underrubriken. */
+      color: var(--muted); /* Sätter dämpad färg för hjälpinformation. */
+      margin: 0; /* Tar bort standardmarginal. */
+      line-height: 1.45; /* Ger luftigare radavstånd. */
+    } /* Avslutar subtitle-stilen. */
+
+    .grid { /* Skapar tvåkolumnslayout för större skärmar. */
+      display: grid; /* Aktiverar grid-layout. */
+      grid-template-columns: 1fr; /* Använder en kolumn som standard på mobil. */
+      gap: 16px; /* Lägger luft mellan paneler. */
+    } /* Avslutar grid-stilen. */
+
+    @media (min-width: 860px) { /* Startar regler för större skärmar. */
+      .grid { grid-template-columns: 1.08fr 0.92fr; } /* Delar upp sidan i två kolumner på större skärmar. */
+    } /* Avslutar media query. */
+
+    .card { /* Styr utseendet för varje panel/kort. */
+      background: rgba(17,24,39,0.96); /* Ger mörk panelbakgrund. */
+      border: 1px solid var(--border); /* Lägger tunn kantlinje runt panelen. */
+      border-radius: 18px; /* Rundar panelens hörn. */
+      box-shadow: var(--shadow); /* Lägger mjuk skugga bakom panelen. */
+      padding: 16px; /* Ger inre luft i panelen. */
+    } /* Avslutar card-stilen. */
+
+    h2 { /* Styr underrubriker i paneler. */
+      margin: 0 0 12px 0; /* Sätter avstånd under rubrikerna. */
+      font-size: 1.15rem; /* Gör rubriken tydlig men mindre än huvudrubriken. */
+    } /* Avslutar h2-stilen. */
+
+    .row { /* Skapar en rad för formulärfält. */
+      display: grid; /* Aktiverar grid för raden. */
+      grid-template-columns: 1fr; /* Visar en kolumn på smal skärm. */
+      gap: 10px; /* Lägger luft mellan fälten. */
+      margin-bottom: 10px; /* Ger avstånd under raden. */
+    } /* Avslutar row-stilen. */
+
+    @media (min-width: 600px) { /* Startar regler för lite större skärmar. */
+      .row.two { grid-template-columns: 1fr 1fr; } /* Visar två kolumner för tvåfält-rader. */
+      .row.three { grid-template-columns: 1fr 1fr 1fr; } /* Visar tre kolumner för trefält-rader. */
+    } /* Avslutar media query för formulär. */
+
+    label { /* Styr etiketter till formulärfälten. */
+      display: block; /* Gör etiketten till blockelement. */
+      margin-bottom: 6px; /* Lägger liten luft under etiketten. */
+      color: var(--muted); /* Sätter dämpad etikettfärg. */
+      font-size: 0.95rem; /* Gör etiketten lättläst. */
+    } /* Avslutar label-stilen. */
+
+    input, textarea, select { /* Styr formulärfälten. */
+      width: 100%; /* Gör fälten fullbredd i sin kolumn. */
+      background: #0f172a; /* Ger mörk fältbakgrund. */
+      color: var(--text); /* Ger ljus text i fälten. */
+      border: 1px solid rgba(255,255,255,0.12); /* Lägger tunn kantlinje runt fälten. */
+      border-radius: 12px; /* Rundar fältens hörn. */
+      padding: 12px; /* Ger luft inne i fälten. */
+      font-size: 1rem; /* Gör texten i fälten lättläst. */
+    } /* Avslutar input/textarea/select-stilen. */
+
+    textarea { /* Styr textområdets utseende. */
+      min-height: 100px; /* Ger tillräcklig höjd för anteckningar. */
+      resize: vertical; /* Tillåter bara vertikal storleksändring. */
+    } /* Avslutar textarea-stilen. */
+
+    .btns { /* Styr knappområdet. */
+      display: flex; /* Lägger knapparna på rad. */
+      flex-wrap: wrap; /* Tillåter radbrytning på små skärmar. */
+      gap: 10px; /* Ger luft mellan knapparna. */
+      margin-top: 12px; /* Lägger avstånd ovanför knappraden. */
+    } /* Avslutar btns-stilen. */
+
+    button { /* Styr alla knappar. */
+      border: none; /* Tar bort standardkantlinje. */
+      border-radius: 12px; /* Rundar hörnen på knapparna. */
+      padding: 12px 16px; /* Ger tydlig klickyta. */
+      font-size: 0.98rem; /* Ger lagom textstorlek i knappen. */
+      font-weight: 700; /* Gör knapptexten tydlig. */
+      cursor: pointer; /* Visar klickbar muspekare. */
+      color: #111; /* Sätter mörk text på gula knappar. */
+      background: var(--accent-2); /* Ger mörkgul/gul bakgrund. */
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25); /* Ger knapparna lite djup. */
+    } /* Avslutar button-stilen. */
+
+    button.secondary { /* Styr sekundära knappar. */
+      background: #d1d5db; /* Ger ljusgrå bakgrund. */
+      color: #111827; /* Ger mörk text på den grå knappen. */
+    } /* Avslutar secondary-knappen. */
+
+    button.danger { /* Styr röd varningsknapp. */
+      background: #ef4444; /* Ger röd bakgrund till farlig åtgärd. */
+      color: white; /* Ger vit text på röd knapp. */
+    } /* Avslutar danger-knappen. */
+
+    button.dark { /* Styr mörk knappvariant. */
+      background: var(--accent); /* Ger mörkare gul ton. */
+      color: white; /* Ger vit text på den mörka knappen. */
+    } /* Avslutar dark-knappen. */
+
+    button:disabled { /* Styr knappar när de är inaktiva. */
+      opacity: 0.55; /* Tonar ner knappen när den inte går att använda. */
+      cursor: not-allowed; /* Visar att knappen inte är klickbar. */
+    } /* Avslutar disabled-stilen. */
+
+    .status { /* Styr statusrutan. */
+      margin-top: 12px; /* Lägger luft ovanför statusrutan. */
+      background: #0f172a; /* Ger mörk bakgrund. */
+      border: 1px solid rgba(255,255,255,0.1); /* Lägger diskret kant. */
+      border-radius: 12px; /* Rundar hörnen. */
+      padding: 12px; /* Ger inre luft. */
+      line-height: 1.45; /* Gör texten lättare att läsa. */
+      color: var(--muted); /* Gör texten lite dämpad. */
+    } /* Avslutar status-stilen. */
+
+    .ok { /* Definierar klass för grön status. */
+      color: #86efac; /* Visar positivt statusmeddelande i grönt. */
+    } /* Avslutar ok-stilen. */
+
+    .warn { /* Definierar klass för gul varningstext. */
+      color: #fde68a; /* Visar varningstext i gul ton. */
+    } /* Avslutar warn-stilen. */
+
+    .small { /* Definierar liten hjälptrxt. */
+      font-size: 0.92rem; /* Gör texten lite mindre. */
+      color: var(--muted); /* Gör texten dämpad. */
+    } /* Avslutar small-stilen. */
+
+    .timer { /* Styr inspelningstimern. */
+      font-size: 1.2rem; /* Gör timern tydlig. */
+      font-weight: 700; /* Gör siffrorna tydliga. */
+      margin-top: 6px; /* Lägger liten luft över timern. */
+    } /* Avslutar timer-stilen. */
+
+    .list { /* Styr listan med sparade poster. */
+      display: flex; /* Lägger posterna i en kolumn. */
+      flex-direction: column; /* Visar varje post under varandra. */
+      gap: 12px; /* Lägger luft mellan posterna. */
+      margin-top: 10px; /* Lägger avstånd ovanför listan. */
+    } /* Avslutar list-stilen. */
+
+    .item { /* Styr varje sparad post. */
+      background: var(--panel-2); /* Ger mörkare bakgrund på varje post. */
+      border: 1px solid rgba(255,255,255,0.08); /* Lägger tunn ram runt posten. */
+      border-radius: 14px; /* Rundar hörnen på posten. */
+      padding: 12px; /* Ger luft inne i varje post. */
+    } /* Avslutar item-stilen. */
+
+    .item-top { /* Styr rubrikdelen i varje sparad post. */
+      display: flex; /* Lägger innehåll på rad. */
+      justify-content: space-between; /* Skjuter isär vänster och höger del. */
+      gap: 10px; /* Ger luft mellan delarna. */
+      align-items: flex-start; /* Låter innehållet börja upptill. */
+      flex-wrap: wrap; /* Tillåter radbrytning vid behov. */
+    } /* Avslutar item-top-stilen. */
+
+    .item h3 { /* Styr postens rubrik. */
+      margin: 0 0 6px 0; /* Tar bort onödiga marginaler. */
+      font-size: 1rem; /* Sätter normal rubrikstorlek. */
+    } /* Avslutar item-h3-stilen. */
+
+    .meta { /* Styr metadata-raden i varje post. */
+      color: var(--muted); /* Ger dämpad färg. */
+      font-size: 0.92rem; /* Gör metadata lite mindre. */
+      line-height: 1.45; /* Ger luftig radhöjd. */
+    } /* Avslutar meta-stilen. */
+
+    audio { /* Styr ljudspelaren. */
+      width: 100%; /* Gör ljudspelaren fullbredd. */
+      margin-top: 10px; /* Lägger avstånd ovanför spelaren. */
+    } /* Avslutar audio-stilen. */
+
+    .footer-note { /* Styr hjälprutan längst ned. */
+      text-align: center; /* Centrerar hjälptrxten. */
+      color: var(--muted); /* Ger dämpad färg. */
+      margin-top: 16px; /* Lägger luft ovanför notisen. */
+      font-size: 0.92rem; /* Gör hjälptrxten lite mindre. */
+      line-height: 1.5; /* Ger luftig radhöjd. */
+    } /* Avslutar footer-note-stilen. */
+
+    .pill { /* Styr små infobadges. */
+      display: inline-block; /* Gör badge kompakt men blocklik. */
+      padding: 4px 10px; /* Ger luft runt texten. */
+      border-radius: 999px; /* Gör badge helt rundad. */
+      background: rgba(234,179,8,0.15); /* Ger gultonad bakgrund. */
+      color: #fde68a; /* Ger ljusgul text. */
+      font-size: 0.84rem; /* Gör texten kompakt. */
+      margin-right: 6px; /* Lägger avstånd till nästa badge. */
+      margin-bottom: 6px; /* Lägger avstånd när rad bryts. */
+    } /* Avslutar pill-stilen. */
+  </style> <!-- Avslutar CSS-blocket. -->
+</head> <!-- Avslutar head-delen. -->
+<body> <!-- Startar body-delen med synligt innehåll. -->
+  <div class="wrap"> <!-- Startar sidans huvudcontainer. -->
+    <div class="title"> <!-- Startar rubrikområdet högst upp. -->
+      <h1>DX Logg & Inspelning – Mobil</h1> <!-- Visar sidans huvudrubrik. -->
+      <p class="subtitle">Spela in direkt i mobilen, logga stationen och spara posten lokalt i webbläsaren. Fungerar både lokalt och online. På Android behöver du tillåta mikrofon första gången.</p> <!-- Visar en kort beskrivning av sidans funktion. -->
+    </div> <!-- Avslutar rubrikområdet. -->
+
+    <div class="grid"> <!-- Startar tvådelad layout för formulär och sparad lista. -->
+      <section class="card"> <!-- Startar vänstra panelen med loggformulär och inspelning. -->
+        <h2>Ny DX-post</h2> <!-- Visar rubrik för loggformuläret. -->
+
+        <div class="row three"> <!-- Startar rad med tre fält. -->
+          <div> <!-- Startar första fältblocket. -->
+            <label for="frequency">Frekvens (kHz)</label> <!-- Visar etikett för frekvensfältet. -->
+            <input id="frequency" type="text" placeholder="Exempel: 7265"> <!-- Tar emot frekvens från användaren. -->
+          </div> <!-- Avslutar första fältblocket. -->
+          <div> <!-- Startar andra fältblocket. -->
+            <label for="utc">Tid (UTC)</label> <!-- Visar etikett för UTC-fältet. -->
+            <input id="utc" type="text" placeholder="Exempel: 06:18 UTC"> <!-- Tar emot UTC-tid från användaren. -->
+          </div> <!-- Avslutar andra fältblocket. -->
+          <div> <!-- Startar tredje fältblocket. -->
+            <label for="signal">Signal</label> <!-- Visar etikett för signalfältet. -->
+            <input id="signal" type="text" placeholder="Exempel: S6"> <!-- Tar emot signalstyrka från användaren. -->
+          </div> <!-- Avslutar tredje fältblocket. -->
+        </div> <!-- Avslutar raden med tre fält. -->
+
+        <div class="row two"> <!-- Startar rad med två fält. -->
+          <div> <!-- Startar första fältblocket i raden. -->
+            <label for="language">Språk</label> <!-- Visar etikett för språkfältet. -->
+            <input id="language" type="text" placeholder="Exempel: tyska"> <!-- Tar emot språk från användaren. -->
+          </div> <!-- Avslutar första fältblocket. -->
+          <div> <!-- Startar andra fältblocket i raden. -->
+            <label for="receiver">Mottagare/plats</label> <!-- Visar etikett för mottagare/plats. -->
+            <input id="receiver" type="text" placeholder="Exempel: Arvika, Sweden"> <!-- Tar emot mottagare eller plats från användaren. -->
+          </div> <!-- Avslutar andra fältblocket. -->
+        </div> <!-- Avslutar raden med två fält. -->
+
+        <div class="row two"> <!-- Startar ny rad med två fält. -->
+          <div> <!-- Startar första fältet. -->
+            <label for="station">Station / preliminärt ID</label> <!-- Visar etikett för stationsnamn. -->
+            <input id="station" type="text" placeholder="Exempel: Radio Europa"> <!-- Tar emot stationens namn eller preliminär identifiering. -->
+          </div> <!-- Avslutar första fältet. -->
+          <div> <!-- Startar andra fältet. -->
+            <label for="program">Programtyp</label> <!-- Visar etikett för programtyp. -->
+            <select id="program"> <!-- Startar listan för programtyp. -->
+              <option value="">Välj</option> <!-- Visar tomt standardval. -->
+              <option>Musik</option> <!-- Visar val för musikprogram. -->
+              <option>Nyheter</option> <!-- Visar val för nyhetsprogram. -->
+              <option>Religiöst</option> <!-- Visar val för religiöst innehåll. -->
+              <option>Talk</option> <!-- Visar val för pratprogram. -->
+              <option>Amatör / tvåväg</option> <!-- Visar val för amatörradio eller tvåvägssamband. -->
+              <option>Pirat</option> <!-- Visar val för piratradio. -->
+              <option>Annat</option> <!-- Visar val för övrigt innehåll. -->
+            </select> <!-- Avslutar listan för programtyp. -->
+          </div> <!-- Avslutar andra fältet. -->
+        </div> <!-- Avslutar raden. -->
+
+        <div class="row"> <!-- Startar rad för anteckningar. -->
+          <div> <!-- Startar anteckningsblocket. -->
+            <label for="notes">Observationer</label> <!-- Visar etikett för observationsfältet. -->
+            <textarea id="notes" placeholder="Exempel: engelsk musik, man sa 'Radio Europa', pratade tyska, svag fading..."></textarea> <!-- Tar emot fria anteckningar från användaren. -->
+          </div> <!-- Avslutar anteckningsblocket. -->
+        </div> <!-- Avslutar raden för anteckningar. -->
+
+        <div> <!-- Startar block för inspelningsstatus. -->
+          <span class="pill">Offlinevänlig</span> <!-- Visar badge som berättar att sidan fungerar offline. -->
+          <span class="pill">Lokal lagring</span> <!-- Visar badge för lokal lagring. -->
+          <span class="pill">Android-stöd</span> <!-- Visar badge för Android-stöd. -->
+          <div class="timer" id="timer">00:00</div> <!-- Visar inspelningstid i minuter och sekunder. -->
+        </div> <!-- Avslutar blocket för inspelningsstatus. -->
+
+        <div class="btns"> <!-- Startar området med kontrollknappar. -->
+          <button id="startBtn">Starta inspelning</button> <!-- Knapp för att starta mikrofoninspelning. -->
+          <button id="stopBtn" class="danger" disabled>Stoppa inspelning</button> <!-- Knapp för att stoppa aktiv inspelning. -->
+          <button id="saveBtn" class="dark" disabled>Spara post</button> <!-- Knapp för att spara posten när inspelning eller data finns. -->
+          <button id="clearBtn" class="secondary" type="button">Rensa formulär</button> <!-- Knapp för att tömma formuläret. -->
+        </div> <!-- Avslutar knappraden. -->
+
+        <div id="status" class="status">Klar att spela in. Fyll gärna i frekvens, tid och mottagare först. Inspelningen sparas inte automatiskt förrän du trycker <strong>Spara post</strong>.</div> <!-- Visar aktuell status och hjälptext. -->
+      </section> <!-- Avslutar vänstra panelen. -->
+
+      <section class="card"> <!-- Startar högra panelen med sparade poster. -->
+        <h2>Sparade poster</h2> <!-- Visar rubrik för sparade poster. -->
+        <div class="btns"> <!-- Startar knapprad för export och hantering. -->
+          <button id="exportCsvBtn" class="secondary" type="button">Exportera CSV</button> <!-- Knapp för att exportera loggar som CSV-fil. -->
+          <button id="exportJsonBtn" class="secondary" type="button">Exportera JSON</button> <!-- Knapp för att exportera loggar som JSON-fil. -->
+          <button id="clearAllBtn" class="danger" type="button">Radera alla poster</button> <!-- Knapp för att radera alla sparade poster. -->
+        </div> <!-- Avslutar knappraden. -->
+        <p class="small">Varje post kan innehålla både ljudfil och loggdata. Ljudet ligger lokalt i denna webbläsare tills du exporterar eller laddar ned det.</p> <!-- Visar förklarande hjälptrxt om lokal lagring. -->
+        <div id="records" class="list"></div> <!-- Behållare där sparade poster renderas ut. -->
+      </section> <!-- Avslutar högra panelen. -->
+    </div> <!-- Avslutar grid-layouten. -->
+
+    <p class="footer-note">Tips: Om ingen mikrofonruta kommer upp på Android, öppna webbläsarens appinställningar och tillåt mikrofon. Fungerar bäst i Chrome eller Samsung Internet.</p> <!-- Visar en sista hjälprad med tips om mikrofonbehörighet. -->
+  </div> <!-- Avslutar sidans huvudcontainer. -->
+
+  <script> // Startar JavaScript-koden för logik och funktioner.
+    const storageKey = "dx_mobile_log_records_v1"; // Definierar nyckeln som används i localStorage.
+    const frequencyInput = document.getElementById("frequency"); // Hämtar fältet för frekvens.
+    const utcInput = document.getElementById("utc"); // Hämtar fältet för UTC-tid.
+    const signalInput = document.getElementById("signal"); // Hämtar fältet för signalstyrka.
+    const languageInput = document.getElementById("language"); // Hämtar fältet för språk.
+    const receiverInput = document.getElementById("receiver"); // Hämtar fältet för mottagare/plats.
+    const stationInput = document.getElementById("station"); // Hämtar fältet för station/preliminärt ID.
+    const programInput = document.getElementById("program"); // Hämtar listan för programtyp.
+    const notesInput = document.getElementById("notes"); // Hämtar textfältet för observationer.
+    const startBtn = document.getElementById("startBtn"); // Hämtar startknappen.
+    const stopBtn = document.getElementById("stopBtn"); // Hämtar stoppknappen.
+    const saveBtn = document.getElementById("saveBtn"); // Hämtar spara-knappen.
+    const clearBtn = document.getElementById("clearBtn"); // Hämtar rensa-knappen.
+    const exportCsvBtn = document.getElementById("exportCsvBtn"); // Hämtar knappen för CSV-export.
+    const exportJsonBtn = document.getElementById("exportJsonBtn"); // Hämtar knappen för JSON-export.
+    const clearAllBtn = document.getElementById("clearAllBtn"); // Hämtar knappen för att radera allt.
+    const statusBox = document.getElementById("status"); // Hämtar statusrutan.
+    const timerBox = document.getElementById("timer"); // Hämtar timervisningen.
+    const recordsBox = document.getElementById("records"); // Hämtar containern för sparade poster.
+
+    let mediaRecorder = null; // Skapar variabel för inspelningsobjektet.
+    let mediaStream = null; // Skapar variabel för mikrofonströmmen.
+    let audioChunks = []; // Skapar array som lagrar delar av inspelat ljud.
+    let currentAudioBase64 = ""; // Skapar variabel som lagrar färdig ljudfil i base64-format.
+    let currentAudioMimeType = ""; // Skapar variabel som lagrar ljudfilens mime-typ.
+    let timerInterval = null; // Skapar variabel för timerns intervall.
+    let startTime = null; // Skapar variabel för inspelningens starttid.
+
+    function setStatus(message, type = "") { // Definierar funktion som visar statusmeddelanden.
+      statusBox.innerHTML = message; // Skriver meddelandet till statusrutan.
+      statusBox.className = "status"; // Återställer statusrutans standardklass.
+      if (type === "ok") { statusBox.classList.add("ok"); } // Lägger till grön text om typen är ok.
+      if (type === "warn") { statusBox.classList.add("warn"); } // Lägger till gul text om typen är varning.
+    } // Avslutar funktionen för statusmeddelanden.
+
+    function pad(value) { // Definierar hjälpfunktion för tvåsiffrigt tal.
+      return String(value).padStart(2, "0"); // Omvandlar till sträng och fyller ut med nolla till vänster.
+    } // Avslutar hjälpfunktionen.
+
+    function updateTimer() { // Definierar funktion som uppdaterar inspelningstimern.
+      if (!startTime) { timerBox.textContent = "00:00"; return; } // Avbryter och visar nollor om inspelning inte startat.
+      const seconds = Math.floor((Date.now() - startTime) / 1000); // Räknar ut antal sekunder sedan start.
+      const minutesPart = Math.floor(seconds / 60); // Räknar ut minuter från total tid.
+      const secondsPart = seconds % 60; // Räknar ut återstående sekunder.
+      timerBox.textContent = `${pad(minutesPart)}:${pad(secondsPart)}`; // Visar tiden i formatet mm:ss.
+    } // Avslutar timerfunktionen.
+
+    function startTimer() { // Definierar funktion som startar timern.
+      startTime = Date.now(); // Sparar aktuell tid som starttid.
+      updateTimer(); // Uppdaterar timern direkt första gången.
+      timerInterval = setInterval(updateTimer, 500); // Uppdaterar timern två gånger per sekund.
+    } // Avslutar startTimer-funktionen.
+
+    function stopTimer() { // Definierar funktion som stoppar timern.
+      clearInterval(timerInterval); // Stoppar pågående intervall.
+      timerInterval = null; // Nollställer intervallvariabeln.
+      startTime = null; // Nollställer starttiden.
+      updateTimer(); // Återställer visningen till 00:00.
+    } // Avslutar stopTimer-funktionen.
+
+    function loadRecords() { // Definierar funktion som läser sparade poster från localStorage.
+      try { // Startar felhantering vid läsning.
+        const raw = localStorage.getItem(storageKey); // Hämtar rådata från localStorage.
+        return raw ? JSON.parse(raw) : []; // Returnerar tolkad data eller tom lista om inget finns.
+      } catch (error) { // Fångar eventuella fel vid JSON-läsning.
+        console.error(error); // Skriver felet i konsolen för felsökning.
+        return []; // Returnerar tom lista vid fel.
+      } // Avslutar felhanteringen.
+    } // Avslutar loadRecords-funktionen.
+
+    function saveRecords(records) { // Definierar funktion som sparar alla poster till localStorage.
+      localStorage.setItem(storageKey, JSON.stringify(records)); // Sparar poster som JSON-sträng i webbläsaren.
+    } // Avslutar saveRecords-funktionen.
+
+    function formatNow() { // Definierar funktion som ger lokal tidsstämpel.
+      const now = new Date(); // Skapar ett nytt datumobjekt för nuvarande tid.
+      return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`; // Returnerar formatterad lokal tid.
+    } // Avslutar formatNow-funktionen.
+
+    function fileNameSafe(text) { // Definierar funktion som gör text filvänlig.
+      return (text || "dx_post").replace(/[^a-z0-9åäöA-ZÅÄÖ._-]+/g, "_"); // Byter otillåtna tecken mot understreck.
+    } // Avslutar fileNameSafe-funktionen.
+
+    function blobToBase64(blob) { // Definierar funktion som omvandlar blob till base64.
+      return new Promise((resolve, reject) => { // Returnerar ett Promise för asynkron konvertering.
+        const reader = new FileReader(); // Skapar en FileReader för att läsa bloben.
+        reader.onloadend = () => resolve(reader.result); // Returnerar resultatet när läsningen är klar.
+        reader.onerror = reject; // Skickar vidare fel om läsningen misslyckas.
+        reader.readAsDataURL(blob); // Läser bloben som data-URL/base64.
+      }); // Avslutar Promise-blocket.
+    } // Avslutar blobToBase64-funktionen.
+
+    function base64ToBlob(dataUrl) { // Definierar funktion som omvandlar data-URL tillbaka till blob.
+      const parts = dataUrl.split(","); // Delar upp data-URL i metadata och data.
+      const header = parts[0]; // Hämtar metadata-delen.
+      const data = parts[1]; // Hämtar själva base64-datan.
+      const mimeMatch = header.match(/data:(.*?);base64/); // Hämtar mime-typen från headern.
+      const mimeType = mimeMatch ? mimeMatch[1] : "audio/webm"; // Sätter mime-typ eller standardtyp.
+      const binary = atob(data); // Avkodar base64-strängen till binär text.
+      const array = new Uint8Array(binary.length); // Skapar en byte-array med rätt längd.
+      for (let i = 0; i < binary.length; i += 1) { array[i] = binary.charCodeAt(i); } // Fyller arrayen med bytevärden.
+      return new Blob([array], { type: mimeType }); // Returnerar en ny blob med rätt mime-typ.
+    } // Avslutar base64ToBlob-funktionen.
+
+    function downloadBlob(blob, fileName) { // Definierar funktion som laddar ned en fil i webbläsaren.
+      const url = URL.createObjectURL(blob); // Skapar en temporär objekt-URL för bloben.
+      const link = document.createElement("a"); // Skapar en osynlig länk.
+      link.href = url; // Pekar länken på blobens URL.
+      link.download = fileName; // Anger filnamn vid nedladdning.
+      document.body.appendChild(link); // Lägger till länken till dokumentet tillfälligt.
+      link.click(); // Simulerar klick för att starta nedladdning.
+      document.body.removeChild(link); // Tar bort länken efter klick.
+      URL.revokeObjectURL(url); // Frigör den temporära objekt-URL:en.
+    } // Avslutar downloadBlob-funktionen.
+
+    function getCurrentFormData() { // Definierar funktion som hämtar formulärets aktuella innehåll.
+      return { // Returnerar ett objekt med alla formulärvärden.
+        frequency: frequencyInput.value.trim(), // Hämtar frekvens utan överflödiga blanksteg.
+        utc: utcInput.value.trim(), // Hämtar UTC-tid utan överflödiga blanksteg.
+        signal: signalInput.value.trim(), // Hämtar signalstyrka utan överflödiga blanksteg.
+        language: languageInput.value.trim(), // Hämtar språk utan överflödiga blanksteg.
+        receiver: receiverInput.value.trim(), // Hämtar mottagare/plats utan överflödiga blanksteg.
+        station: stationInput.value.trim(), // Hämtar stationsnamn utan överflödiga blanksteg.
+        program: programInput.value.trim(), // Hämtar vald programtyp.
+        notes: notesInput.value.trim() // Hämtar observationer utan överflödiga blanksteg.
+      }; // Avslutar objektet med formulärdata.
+    } // Avslutar getCurrentFormData-funktionen.
+
+    function clearForm(keepStatus = false) { // Definierar funktion som tömmer formuläret.
+      frequencyInput.value = ""; // Tömmer frekvensfältet.
+      utcInput.value = ""; // Tömmer UTC-fältet.
+      signalInput.value = ""; // Tömmer signalfältet.
+      languageInput.value = ""; // Tömmer språkfältet.
+      receiverInput.value = ""; // Tömmer mottagarfältet.
+      stationInput.value = ""; // Tömmer stationsfältet.
+      programInput.value = ""; // Återställer programlistan.
+      notesInput.value = ""; // Tömmer observationsfältet.
+      currentAudioBase64 = ""; // Nollställer inspelat ljud i minnet.
+      currentAudioMimeType = ""; // Nollställer mime-typen.
+      saveBtn.disabled = true; // Inaktiverar spara-knappen tills något nytt finns att spara.
+      if (!keepStatus) { setStatus("Formuläret är rensat. Klar för ny DX-post."); } // Visar status om användaren inte vill behålla tidigare status.
+    } // Avslutar clearForm-funktionen.
+
+    function renderRecords() { // Definierar funktion som visar alla sparade poster på sidan.
+      const records = loadRecords(); // Hämtar alla sparade poster.
+      recordsBox.innerHTML = ""; // Tömmer listan innan ny rendering.
+      if (records.length === 0) { // Kontrollerar om listan är tom.
+        recordsBox.innerHTML = '<div class="item"><div class="meta">Inga poster sparade ännu.</div></div>'; // Visar meddelande när inga poster finns.
+        return; // Avbryter funktionen efter meddelandet.
+      } // Avslutar kontroll av tom lista.
+
+      records.slice().reverse().forEach((record) => { // Loopa igenom posterna i omvänd ordning så senaste visas först.
+        const item = document.createElement("div"); // Skapar en ny container för posten.
+        item.className = "item"; // Ger posten rätt CSS-klass.
+
+        const title = record.station || `Okänd station ${record.frequency ? "– " + record.frequency + " kHz" : ""}`; // Bygger en rubrik för posten.
+        const audioHtml = record.audioDataUrl ? `<audio controls src="${record.audioDataUrl}"></audio>` : ""; // Bygger ljudspelare om ljud finns.
+        const notesHtml = record.notes ? `<div class="meta" style="margin-top:8px;"><strong>Observationer:</strong> ${escapeHtml(record.notes)}</div>` : ""; // Bygger observationsrad om anteckningar finns.
+
+        item.innerHTML = ` <!-- Startar den renderade HTML-koden för en post. -->
+          <div class="item-top"> <!-- Startar postens övre del. -->
+            <div> <!-- Startar vänsterblock med rubrik och metadata. -->
+              <h3>${escapeHtml(title)}</h3> <!-- Visar postens rubrik. -->
+              <div class="meta"> <!-- Startar metadata-blocket. -->
+                ${record.frequency ? `<strong>Frekvens:</strong> ${escapeHtml(record.frequency)} kHz<br>` : ""} <!-- Visar frekvens om den finns. -->
+                ${record.utc ? `<strong>Tid:</strong> ${escapeHtml(record.utc)}<br>` : ""} <!-- Visar UTC-tid om den finns. -->
+                ${record.signal ? `<strong>Signal:</strong> ${escapeHtml(record.signal)}<br>` : ""} <!-- Visar signalstyrka om den finns. -->
+                ${record.language ? `<strong>Språk:</strong> ${escapeHtml(record.language)}<br>` : ""} <!-- Visar språk om det finns. -->
+                ${record.receiver ? `<strong>Mottagare/plats:</strong> ${escapeHtml(record.receiver)}<br>` : ""} <!-- Visar mottagare/plats om den finns. -->
+                ${record.program ? `<strong>Programtyp:</strong> ${escapeHtml(record.program)}<br>` : ""} <!-- Visar programtyp om den finns. -->
+                <strong>Sparad:</strong> ${escapeHtml(record.savedAt)} <!-- Visar när posten sparades. -->
+              </div> <!-- Avslutar metadata-blocket. -->
+            </div> <!-- Avslutar vänsterblocket. -->
+            <div class="btns"> <!-- Startar knappar för den enskilda posten. -->
+              ${record.audioDataUrl ? `<button class="secondary" data-action="download-audio" data-id="${record.id}" type="button">Ladda ned ljud</button>` : ""} <!-- Visar knapp för att ladda ned ljud om ljud finns. -->
+              <button class="secondary" data-action="download-json" data-id="${record.id}" type="button">Ladda ned post</button> <!-- Visar knapp för att ladda ned just denna post som JSON. -->
+              <button class="danger" data-action="delete" data-id="${record.id}" type="button">Radera</button> <!-- Visar knapp för att radera posten. -->
+            </div> <!-- Avslutar knappdelen. -->
+          </div> <!-- Avslutar postens övre del. -->
+          ${notesHtml} <!-- Lägger in observationsdelen om den finns. -->
+          ${audioHtml} <!-- Lägger in ljudspelaren om ljud finns. -->
+        `; // Avslutar och sätter HTML-innehållet för posten.
+
+        recordsBox.appendChild(item); // Lägger till posten i listan på sidan.
+      }); // Avslutar loopen genom alla poster.
+    } // Avslutar renderRecords-funktionen.
+
+    function escapeHtml(text) { // Definierar funktion som skyddar text innan den skrivs ut som HTML.
+      return String(text) // Säkerställer att värdet behandlas som sträng.
+        .replaceAll("&", "&amp;") // Ersätter & för att undvika HTML-tolkning.
+        .replaceAll("<", "&lt;") // Ersätter < för att undvika HTML-tolkning.
+        .replaceAll(">", "&gt;") // Ersätter > för att undvika HTML-tolkning.
+        .replaceAll('"', "&quot;") // Ersätter dubbla citattecken.
+        .replaceAll("'", "&#39;"); // Ersätter enkla citattecken.
+    } // Avslutar escapeHtml-funktionen.
+
+    async function startRecording() { // Definierar asynkron funktion som startar mikrofoninspelning.
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { // Kontrollerar om webbläsaren stöder mikrofonåtkomst.
+        setStatus("Din webbläsare stöder inte mikrofoninspelning här. Testa i Chrome eller Samsung Internet.", "warn"); // Visar varning om stöd saknas.
+        return; // Avbryter funktionen om stöd saknas.
+      } // Avslutar stödkontroll.
+
+      try { // Startar felhantering för mikrofonåtkomst.
+        audioChunks = []; // Nollställer tidigare ljuddelar.
+        currentAudioBase64 = ""; // Nollställer tidigare ljuddata.
+        currentAudioMimeType = ""; // Nollställer tidigare mime-typ.
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true }); // Begär åtkomst till mikrofonen.
+        let mimeType = ""; // Skapar variabel för vald mime-typ.
+        if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) { mimeType = "audio/webm;codecs=opus"; } // Väljer modern webm-typ om den stöds.
+        else if (MediaRecorder.isTypeSupported("audio/webm")) { mimeType = "audio/webm"; } // Faller tillbaka till enkel webm om codec-varianten inte stöds.
+        mediaRecorder = mimeType ? new MediaRecorder(mediaStream, { mimeType }) : new MediaRecorder(mediaStream); // Skapar inspelningsobjektet med eller utan specifik mime-typ.
+        currentAudioMimeType = mediaRecorder.mimeType || mimeType || "audio/webm"; // Sparar slutlig mime-typ för filen.
+
+        mediaRecorder.ondataavailable = (event) => { // Definierar vad som ska hända när ljuddata kommer in.
+          if (event.data && event.data.size > 0) { audioChunks.push(event.data); } // Lägger till ljudchunk om den innehåller data.
+        }; // Avslutar hanteraren för inkommande ljuddata.
+
+        mediaRecorder.onstop = async () => { // Definierar vad som ska hända när inspelningen stoppas.
+          const audioBlob = new Blob(audioChunks, { type: currentAudioMimeType || "audio/webm" }); // Bygger en ljudblob av inspelade chunkar.
+          currentAudioBase64 = await blobToBase64(audioBlob); // Omvandlar ljudbloben till base64 för lokal lagring.
+          saveBtn.disabled = false; // Aktiverar spara-knappen när ljud finns klart.
+          setStatus("Inspelningen är stoppad och klar att sparas tillsammans med loggposten.", "ok"); // Visar positivt statusmeddelande.
+          if (mediaStream) { mediaStream.getTracks().forEach((track) => track.stop()); } // Stänger mikrofonspåren efter stopp.
+          mediaStream = null; // Nollställer variabeln för mikrofonströmmen.
+          mediaRecorder = null; // Nollställer inspelningsobjektet.
+        }; // Avslutar stopp-hanteraren.
+
+        mediaRecorder.start(); // Startar själva ljudinspelningen.
+        startBtn.disabled = true; // Inaktiverar startknappen under inspelning.
+        stopBtn.disabled = false; // Aktiverar stoppknappen under inspelning.
+        saveBtn.disabled = true; // Håller spara-knappen inaktiv tills inspelningen stoppas.
+        startTimer(); // Startar tidräknaren.
+        setStatus("Inspelning pågår… När du hör stations-ID, låt inspelningen rulla några sekunder till och tryck sedan <strong>Stoppa inspelning</strong>."); // Visar hjälptext under inspelning.
+      } catch (error) { // Fångar fel om mikrofonåtkomst misslyckas.
+        console.error(error); // Skriver felet i konsolen för felsökning.
+        setStatus("Kunde inte starta mikrofonen. Kontrollera att webbläsaren har tillåtelse att använda mikrofonen.", "warn"); // Visar varning till användaren.
+      } // Avslutar felhanteringen.
+    } // Avslutar startRecording-funktionen.
+
+    function stopRecording() { // Definierar funktion som stoppar aktiv inspelning.
+      if (mediaRecorder && mediaRecorder.state !== "inactive") { mediaRecorder.stop(); } // Stoppar inspelningen om den fortfarande pågår.
+      stopBtn.disabled = true; // Inaktiverar stoppknappen efter klick.
+      startBtn.disabled = false; // Aktiverar startknappen igen.
+      stopTimer(); // Stoppar och nollställer timern.
+    } // Avslutar stopRecording-funktionen.
+
+    function saveCurrentRecord() { // Definierar funktion som sparar aktuell post.
+      const data = getCurrentFormData(); // Hämtar alla nuvarande formulärvärden.
+      const hasAnyData = Object.values(data).some((value) => value); // Kontrollerar om något formulärfält innehåller data.
+      if (!hasAnyData && !currentAudioBase64) { // Kontrollerar om både formulär och ljud saknar innehåll.
+        setStatus("Det finns inget att spara ännu. Fyll i loggen eller spela in ljud först.", "warn"); // Visar varning om inget finns att spara.
+        return; // Avbryter sparandet.
+      } // Avslutar kontrollen.
+
+      const records = loadRecords(); // Hämtar tidigare sparade poster.
+      const record = { // Skapar ett nytt postobjekt.
+        id: `dx_${Date.now()}`, // Skapar unikt ID baserat på tid.
+        savedAt: formatNow(), // Sparar lokal tid då posten skapades.
+        ...data, // Lägger in alla formulärvärden i posten.
+        audioDataUrl: currentAudioBase64 || "", // Sparar ljudet som data-URL om det finns.
+        audioMimeType: currentAudioMimeType || "" // Sparar mime-typen om den finns.
+      }; // Avslutar det nya postobjektet.
+
+      records.push(record); // Lägger till posten sist i listan.
+      saveRecords(records); // Sparar hela listan till localStorage.
+      renderRecords(); // Renderar om listan så nya posten syns direkt.
+      clearForm(true); // Rensar formuläret men behåller möjlighet att sätta eget statusmeddelande.
+      setStatus("DX-posten är sparad lokalt i webbläsaren. Du kan nu spela upp ljudet, exportera posten eller ladda ned ljudfilen.", "ok"); // Visar bekräftelse om lyckad sparning.
+    } // Avslutar saveCurrentRecord-funktionen.
+
+    function exportAllJson() { // Definierar funktion som exporterar alla poster som JSON.
+      const records = loadRecords(); // Hämtar alla sparade poster.
+      const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json;charset=utf-8" }); // Skapar en JSON-fil som blob.
+      downloadBlob(blob, `dx_logg_${fileNameSafe(formatNow())}.json`); // Startar nedladdning av JSON-filen.
+    } // Avslutar exportAllJson-funktionen.
+
+    function csvEscape(value) { // Definierar funktion som gör värden säkra för CSV-format.
+      const text = String(value ?? ""); // Omvandlar värdet till sträng eller tom sträng.
+      return `"${text.replaceAll('"', '""')}"`; // Omsluter texten med citattecken och dubblar interna citattecken.
+    } // Avslutar csvEscape-funktionen.
+
+    function exportAllCsv() { // Definierar funktion som exporterar alla poster som CSV.
+      const records = loadRecords(); // Hämtar alla sparade poster.
+      const header = ["savedAt", "frequency", "utc", "signal", "language", "receiver", "station", "program", "notes", "hasAudio"]; // Definierar kolumnrubrikerna i CSV-filen.
+      const rows = [header.join(";")]; // Startar CSV-filen med rubrikraden.
+      records.forEach((record) => { // Loopa igenom alla poster.
+        const row = [ // Bygger en rad med värden i rätt ordning.
+          csvEscape(record.savedAt), // Lägger till sparad tid.
+          csvEscape(record.frequency), // Lägger till frekvens.
+          csvEscape(record.utc), // Lägger till UTC-tid.
+          csvEscape(record.signal), // Lägger till signalstyrka.
+          csvEscape(record.language), // Lägger till språk.
+          csvEscape(record.receiver), // Lägger till mottagare/plats.
+          csvEscape(record.station), // Lägger till station.
+          csvEscape(record.program), // Lägger till programtyp.
+          csvEscape(record.notes), // Lägger till observationer.
+          csvEscape(record.audioDataUrl ? "ja" : "nej") // Markerar om posten har ljud.
+        ]; // Avslutar raden.
+        rows.push(row.join(";")); // Lägger till raden i CSV-innehållet.
+      }); // Avslutar loopen genom posterna.
+      const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" }); // Skapar CSV-filen som blob.
+      downloadBlob(blob, `dx_logg_${fileNameSafe(formatNow())}.csv`); // Startar nedladdning av CSV-filen.
+    } // Avslutar exportAllCsv-funktionen.
+
+    function deleteRecordById(id) { // Definierar funktion som raderar en specifik post.
+      const records = loadRecords().filter((record) => record.id !== id); // Filtrerar bort posten med valt ID.
+      saveRecords(records); // Sparar den uppdaterade listan.
+      renderRecords(); // Renderar om listan efter radering.
+      setStatus("Posten är raderad."); // Visar bekräftelse om radering.
+    } // Avslutar deleteRecordById-funktionen.
+
+    function downloadSingleRecordJson(id) { // Definierar funktion som laddar ned en enskild post som JSON.
+      const record = loadRecords().find((item) => item.id === id); // Letar upp posten med valt ID.
+      if (!record) { return; } // Avbryter om posten inte hittas.
+      const blob = new Blob([JSON.stringify(record, null, 2)], { type: "application/json;charset=utf-8" }); // Skapar JSON-fil för posten.
+      const baseName = `${fileNameSafe(record.station || "dx_post")}_${fileNameSafe(record.frequency || "")}_${fileNameSafe(record.utc || "")}`; // Bygger ett filvänligt namn.
+      downloadBlob(blob, `${baseName}.json`); // Startar nedladdning av postens JSON-fil.
+    } // Avslutar downloadSingleRecordJson-funktionen.
+
+    function downloadSingleAudio(id) { // Definierar funktion som laddar ned ljudet från en specifik post.
+      const record = loadRecords().find((item) => item.id === id); // Letar upp posten med valt ID.
+      if (!record || !record.audioDataUrl) { return; } // Avbryter om posten eller ljudet saknas.
+      const blob = base64ToBlob(record.audioDataUrl); // Omvandlar sparad data-URL till blob.
+      const extension = record.audioMimeType && record.audioMimeType.includes("ogg") ? "ogg" : "webm"; // Väljer filändelse beroende på mime-typ.
+      const baseName = `${fileNameSafe(record.station || "dx_audio")}_${fileNameSafe(record.frequency || "")}_${fileNameSafe(record.utc || "")}`; // Bygger ett filvänligt basnamn.
+      downloadBlob(blob, `${baseName}.${extension}`); // Startar nedladdning av ljudfilen.
+    } // Avslutar downloadSingleAudio-funktionen.
+
+    startBtn.addEventListener("click", startRecording); // Kopplar klick på startknappen till startRecording.
+    stopBtn.addEventListener("click", stopRecording); // Kopplar klick på stoppknappen till stopRecording.
+    saveBtn.addEventListener("click", saveCurrentRecord); // Kopplar klick på spara-knappen till saveCurrentRecord.
+    clearBtn.addEventListener("click", () => clearForm()); // Kopplar klick på rensa-knappen till clearForm.
+    exportCsvBtn.addEventListener("click", exportAllCsv); // Kopplar klick på CSV-export till exportAllCsv.
+    exportJsonBtn.addEventListener("click", exportAllJson); // Kopplar klick på JSON-export till exportAllJson.
+
+    clearAllBtn.addEventListener("click", () => { // Startar hantering för knappen som raderar alla poster.
+      const ok = confirm("Vill du verkligen radera alla sparade poster i denna webbläsare?"); // Frågar användaren om bekräftelse.
+      if (!ok) { return; } // Avbryter om användaren inte bekräftar.
+      localStorage.removeItem(storageKey); // Tar bort alla poster från localStorage.
+      renderRecords(); // Renderar om listan så att den blir tom.
+      setStatus("Alla poster är raderade från denna webbläsare."); // Visar bekräftelse om att allt raderats.
+    }); // Avslutar händelsehanteraren för radera alla.
+
+    recordsBox.addEventListener("click", (event) => { // Startar delegerad klickhantering för posterna i listan.
+      const button = event.target.closest("button"); // Letar efter närmaste knapp som klickats.
+      if (!button) { return; } // Avbryter om klicket inte kom från en knapp.
+      const action = button.dataset.action; // Hämtar knappens angivna åtgärd.
+      const id = button.dataset.id; // Hämtar postens ID från knappen.
+
+      if (action === "delete") { // Kontrollerar om användaren vill radera en post.
+        const ok = confirm("Vill du radera denna post?"); // Frågar efter bekräftelse.
+        if (ok) { deleteRecordById(id); } // Raderar posten om användaren bekräftar.
+      } // Avslutar kontrollen för delete.
+
+      if (action === "download-json") { downloadSingleRecordJson(id); } // Laddar ned JSON om rätt knapp användes.
+      if (action === "download-audio") { downloadSingleAudio(id); } // Laddar ned ljudfil om rätt knapp användes.
+    }); // Avslutar delegerad klickhantering.
+
+    [frequencyInput, utcInput, signalInput, languageInput, receiverInput, stationInput, notesInput].forEach((input) => { // Loopa igenom viktiga fält som ska kunna aktivera spara-knappen.
+      input.addEventListener("input", () => { // Lyssnar på inmatning i varje fält.
+        const hasAnyData = Object.values(getCurrentFormData()).some((value) => value); // Kontrollerar om något fält innehåller data.
+        if (hasAnyData) { saveBtn.disabled = false; } // Aktiverar spara-knappen om något finns ifyllt.
+      }); // Avslutar input-hanteraren.
+    }); // Avslutar loopen genom formulärfälten.
+
+    programInput.addEventListener("change", () => { // Lyssnar på ändringar i programtyp-listan.
+      const hasAnyData = Object.values(getCurrentFormData()).some((value) => value); // Kontrollerar om formuläret innehåller data.
+      if (hasAnyData) { saveBtn.disabled = false; } // Aktiverar spara-knappen om något finns ifyllt.
+    }); // Avslutar change-hanteraren.
+
+    renderRecords(); // Visar eventuella tidigare sparade poster när sidan öppnas.
+  </script> <!-- Avslutar JavaScript-koden. -->
+</body> <!-- Avslutar body-delen. -->
+</html> <!-- Avslutar HTML-dokumentet. -->

@@ -12,6 +12,7 @@ body {
   color: white;
   text-align: center;
   padding: 20px;
+  margin: 0;
 }
 
 h1 {
@@ -29,10 +30,11 @@ input {
   margin: 15px 0;
   border-radius: 8px;
   border: none;
+  font-size: 16px;
 }
 
 .file {
-  margin: 5px 0;
+  margin: 8px 0;
 }
 
 button {
@@ -44,6 +46,7 @@ button {
   color: black;
   font-weight: bold;
   cursor: pointer;
+  font-size: 16px;
 }
 
 button:hover {
@@ -57,11 +60,8 @@ button:hover {
 <h1>📂 DX LAGER</h1>
 
 <div class="container">
-
-<input id="search" placeholder="🔍 Sök fil..." oninput="filterList()">
-
-<div id="fileList"></div>
-
+  <input id="search" placeholder="🔍 Sök fil..." oninput="filterList()">
+  <div id="fileList"></div>
 </div>
 
 <script>
@@ -69,10 +69,10 @@ button:hover {
 // DX LAGER PORTAL V1
 // ===============================
 
-// 🔴 ÄNDRA ENDAST DENNA VID BEHOV
+// Bas-sökväg till lager
 const BASE_PATH = "/test/lager/";
 
-// 🔴 LÄGG TILL DINA FILER HÄR
+// Lista med filer
 const files = [
   "dx-listen-pro",
   "ai-popup",
@@ -81,9 +81,7 @@ const files = [
   "dx_operations_center"
 ];
 
-// ===============================
 // Bygg lista
-// ===============================
 function buildList(list) {
   let html = "";
 
@@ -100,9 +98,7 @@ function buildList(list) {
   document.getElementById("fileList").innerHTML = html;
 }
 
-// ===============================
 // Öppna sida
-// ===============================
 function openPage(name) {
   let file = name.toLowerCase();
 
@@ -113,24 +109,17 @@ function openPage(name) {
   let url = BASE_PATH + file;
 
   console.log("Öppnar:", url);
-
   window.location.href = url;
 }
 
-// ===============================
 // Sök
-// ===============================
 function filterList() {
   let search = document.getElementById("search").value.toLowerCase();
-
-  let filtered = files.filter(f => f.includes(search));
-
+  let filtered = files.filter(f => f.toLowerCase().includes(search));
   buildList(filtered);
 }
 
-// ===============================
-// INIT
-// ===============================
+// Init
 buildList(files);
 </script>
 

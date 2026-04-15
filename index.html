@@ -1,19 +1,80 @@
+<!-- DX-OS TESTCENTER V5 -->
 <!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>DX TEST MILJÖ</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX-OS Testcenter V5</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+body { margin:0; font-family:Arial; background:#0b0f1a; color:white; text-align:center; }
+h1 { margin:15px; }
+.section { margin:15px auto; max-width:800px; background:#111827; padding:15px; border-radius:15px; }
+button { width:90%; padding:10px; margin:5px; border-radius:10px; border:none; font-weight:bold; cursor:pointer; }
+.tab { background:#1f2937; color:white; }
+.active { background:#22c55e; color:black; }
+.preview { width:100%; height:400px; border:none; border-radius:10px; }
+.search { width:90%; padding:10px; border-radius:10px; border:none; }
+</style>
 </head>
 
 <body>
 
-<h1>🧪 DX TEST MILJÖ</h1>
-<p>Här testar du alla funktioner innan de går in i DX-OS</p>
+<h1>DX-OS TESTCENTER V5</h1>
 
-<button onclick="location.href='testcenter.html'">🚀 Gå till Testcenter</button>
+<div class="section">
+<button class="tab active" onclick="load('lager', event)">🧪 Lager</button>
+<button class="tab" onclick="load('klara', event)">✅ Klara</button>
+
+<br><br>
+<input class="search" id="search" placeholder="Sök..." oninput="filter()">
+
+<div id="buttons"></div>
+</div>
+
+<div class="section">
+<h3>Preview</h3>
+<iframe id="preview" class="preview"></iframe>
+</div>
+
+<script>
+let data = [];
+let type = "lager";
+
+function load(t,e){
+    type=t;
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+
+    fetch(t+'/manifest.json')
+    .then(r=>r.json())
+    .then(d=>{
+        data=d;
+        render(d);
+    });
+}
+
+function render(d){
+    let c=document.getElementById('buttons');
+    c.innerHTML="";
+    d.forEach(i=>{
+        let b=document.createElement('button');
+        b.innerText=i.name;
+        b.onclick=()=>{
+            document.getElementById('preview').src=type+"/"+i.file;
+        };
+        c.appendChild(b);
+    });
+}
+
+function filter(){
+    let s=document.getElementById('search').value.toLowerCase();
+    let f=data.filter(i=>i.name.toLowerCase().includes(s));
+    render(f);
+}
+
+load("lager");
+</script>
 
 </body>
 </html>

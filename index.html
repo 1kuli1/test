@@ -1,80 +1,206 @@
-<!-- DX-OS TESTCENTER V5 -->
 <!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DX-OS Testcenter V5</title>
+<title>DX-OS Testcenter</title>
 
 <style>
-body { margin:0; font-family:Arial; background:#0b0f1a; color:white; text-align:center; }
-h1 { margin:15px; }
-.section { margin:15px auto; max-width:800px; background:#111827; padding:15px; border-radius:15px; }
-button { width:90%; padding:10px; margin:5px; border-radius:10px; border:none; font-weight:bold; cursor:pointer; }
-.tab { background:#1f2937; color:white; }
-.active { background:#22c55e; color:black; }
-.preview { width:100%; height:400px; border:none; border-radius:10px; }
-.search { width:90%; padding:10px; border-radius:10px; border:none; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
+h1 {
+    margin: 20px 10px;
+}
+.section {
+    margin: 20px auto;
+    max-width: 700px;
+    background: #111827;
+    padding: 20px;
+    border-radius: 15px;
+}
+.topbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.tab {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #1f2937;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+.tab.active {
+    background: #22c55e;
+    color: black;
+}
+.search {
+    width: 90%;
+    max-width: 500px;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+}
+button.file-btn {
+    width: 90%;
+    max-width: 500px;
+    padding: 12px;
+    margin: 8px auto;
+    display: block;
+    border: none;
+    border-radius: 10px;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+button.file-btn:hover {
+    background: #facc15;
+}
+.preview {
+    width: 100%;
+    height: 420px;
+    border: none;
+    border-radius: 10px;
+    background: white;
+}
+.status {
+    margin-top: 10px;
+    color: #9ecfff;
+}
 </style>
 </head>
-
 <body>
 
-<h1>DX-OS TESTCENTER V5</h1>
+<h1>DX-OS TESTCENTER</h1>
 
 <div class="section">
-<button class="tab active" onclick="load('lager', event)">🧪 Lager</button>
-<button class="tab" onclick="load('klara', event)">✅ Klara</button>
+    <div class="topbar">
+        <button id="tab-lager" class="tab active">🧪 Lager</button>
+        <button id="tab-klara" class="tab">✅ Klara</button>
+    </div>
 
-<br><br>
-<input class="search" id="search" placeholder="Sök..." onkeyup="filter()">onkeyup="filter()"
+    <input
+        type="text"
+        id="search"
+        class="search"
+        placeholder="Sök på namn eller filnamn..."
+    >
 
-<div id="buttons"></div>
+    <div id="status" class="status">Laddar...</div>
+    <div id="fileList"></div>
 </div>
 
 <div class="section">
-<h3>Preview</h3>
-<iframe id="preview" class="preview"></iframe>
+    <h2>Förhandsvisning</h2>
+    <iframe id="preview" class="preview"></iframe>
 </div>
 
 <script>
-let data = [];
-let type = "lager";
+// Aktuell mapp.
+let currentFolder = "lager";
 
-function load(t,e){
-    type=t;
-    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-    e.target.classList.add('active');
+// Alla poster från manifest.
+let allFiles = [];
 
-    fetch(t+'/manifest.json')
-    .then(r=>r.json())
-    .then(d=>{
-        data=d;
-        render(d);
-    });
+// Element.
+const fileList = document.getElementById("fileList");
+const statusBox = document.getElementById("status");
+const preview = document.getElementById("preview");
+const searchInput = document.getElementById("search");
+const tabLager = document.getElementById("tab-lager");
+const tabKlara = document.getElementById("tab-klara");
+
+// Läser manifest för vald mapp.
+function loadFolder(folderName) {
+    currentFolder = folderName;
+
+    // Visuell markering av aktiv flik.
+    tabLager.classList.remove("active");
+    tabKlara.classList.remove("active");
+
+    if (folderName === "lager") {
+        tabLager.classList.add("active");
+    } else {
+        tabKlara.classList.add("active");
+    }
+
+    statusBox.textContent = "Laddar " + folderName + "...";
+    fileList.innerHTML = "";
+
+    fetch(folderName + "/manifest.json?cache=" + Date.now())
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error("Kunde inte läsa " + folderName + "/manifest.json");
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            allFiles = Array.isArray(data) ? data : [];
+            renderFiles();
+            statusBox.textContent = "Laddat: " + folderName + " (" + allFiles.length + " filer)";
+        })
+        .catch(function(error) {
+            allFiles = [];
+            fileList.innerHTML = "";
+            statusBox.textContent = "Fel: " + error.message;
+        });
 }
 
-function render(d){
-    let c=document.getElementById('buttons');
-    c.innerHTML="";
-    d.forEach(i=>{
-        let b=document.createElement('button');
-        b.innerText=i.name;
-        b.onclick=()=>{
-            document.getElementById('preview').src=type+"/"+i.file;
+// Ritar knapparna efter sökning.
+function renderFiles() {
+    const searchText = searchInput.value.trim().toLowerCase();
+    fileList.innerHTML = "";
+
+    const filtered = allFiles.filter(function(item) {
+        const nameText = (item.name || "").toLowerCase();
+        const fileText = (item.file || "").toLowerCase();
+
+        return nameText.includes(searchText) || fileText.includes(searchText);
+    });
+
+    if (filtered.length === 0) {
+        fileList.innerHTML = '<div class="status">Inga träffar.</div>';
+        return;
+    }
+
+    filtered.forEach(function(item) {
+        const btn = document.createElement("button");
+        btn.className = "file-btn";
+        btn.textContent = item.name + " (" + item.file + ")";
+        btn.onclick = function() {
+            preview.src = currentFolder + "/" + item.file;
         };
-        c.appendChild(b);
+        fileList.appendChild(btn);
     });
 }
 
-function filter(){
-    let s=document.getElementById('search').value.toLowerCase();
-    let f=data.filter(i=>i.name.toLowerCase().includes(s));
-    render(f);
-}
+// Händelser.
+searchInput.addEventListener("input", renderFiles);
 
-load("lager");
+tabLager.addEventListener("click", function() {
+    loadFolder("lager");
+});
+
+tabKlara.addEventListener("click", function() {
+    loadFolder("klara");
+});
+
+// Start.
+loadFolder("lager");
 </script>
 
 </body>
 </html>
+

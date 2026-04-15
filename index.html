@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DX-OS Testcenter</title>
-
+<title>SÖKTEST V7</title>
 <style>
 body {
     margin: 0;
@@ -13,45 +12,14 @@ body {
     color: white;
     text-align: center;
 }
-h1 {
-    margin: 20px 10px;
-}
-.section {
-    margin: 20px auto;
+.wrap {
     max-width: 700px;
+    margin: 20px auto;
     background: #111827;
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 14px;
 }
-.topbar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-.tab {
-    padding: 12px 18px;
-    border: none;
-    border-radius: 10px;
-    background: #1f2937;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-.tab.active {
-    background: #22c55e;
-    color: black;
-}
-.search {
-    width: 90%;
-    max-width: 500px;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-}
-button.file-btn {
+button {
     width: 90%;
     max-width: 500px;
     padding: 12px;
@@ -63,144 +31,132 @@ button.file-btn {
     color: black;
     font-weight: bold;
     font-size: 16px;
-    cursor: pointer;
 }
-button.file-btn:hover {
-    background: #facc15;
+.tab {
+    width: auto;
+    display: inline-block;
+    margin: 5px;
+    background: #1f2937;
+    color: white;
 }
-.preview {
-    width: 100%;
-    height: 420px;
-    border: none;
+.active {
+    background: #22c55e;
+    color: black;
+}
+input {
+    width: 90%;
+    max-width: 500px;
+    padding: 12px;
     border-radius: 10px;
-    background: white;
+    border: none;
+    margin: 10px 0;
+    font-size: 16px;
 }
-.status {
-    margin-top: 10px;
-    color: #9ecfff;
+#debug {
+    color: #7dd3fc;
+    margin: 10px 0;
+    font-size: 14px;
+}
+#status {
+    color: #fca5a5;
+    margin: 10px 0;
+    font-size: 14px;
 }
 </style>
 </head>
 <body>
 
-<h1>DX-OS TESTCENTER</h1>
+<div class="wrap">
+    <h1>SÖKTEST V7</h1>
 
-<div class="section">
-    <div class="topbar">
-        <button id="tab-lager" class="tab active">🧪 Lager</button>
-        <button id="tab-klara" class="tab">✅ Klara</button>
+    <button id="lagerBtn" class="tab active" onclick="loadFolder('lager')">Lager</button>
+    <button id="klaraBtn" class="tab" onclick="loadFolder('klara')">Klara</button>
+
+    <div>
+        <input type="text" id="search" placeholder="Skriv här för att söka...">
     </div>
 
-    <input
-        type="text"
-        id="search"
-        class="search"
-        placeholder="Sök på namn eller filnamn..."
-    >
+    <div id="debug">Debug: väntar</div>
+    <div id="status">Status: laddar...</div>
 
-    <div id="status" class="status">Laddar...</div>
-    <div id="fileList"></div>
-</div>
-
-<div class="section">
-    <h2>Förhandsvisning</h2>
-    <iframe id="preview" class="preview"></iframe>
+    <div id="list"></div>
 </div>
 
 <script>
-// Aktuell mapp.
+let allFiles = [];
 let currentFolder = "lager";
 
-// Alla poster från manifest.
-let allFiles = [];
-
-// Element.
-const fileList = document.getElementById("fileList");
-const statusBox = document.getElementById("status");
-const preview = document.getElementById("preview");
 const searchInput = document.getElementById("search");
-const tabLager = document.getElementById("tab-lager");
-const tabKlara = document.getElementById("tab-klara");
+const list = document.getElementById("list");
+const debug = document.getElementById("debug");
+const status = document.getElementById("status");
 
-// Läser manifest för vald mapp.
-function loadFolder(folderName) {
-    currentFolder = folderName;
+function setActive(folder) {
+    document.getElementById("lagerBtn").classList.remove("active");
+    document.getElementById("klaraBtn").classList.remove("active");
 
-    // Visuell markering av aktiv flik.
-    tabLager.classList.remove("active");
-    tabKlara.classList.remove("active");
-
-    if (folderName === "lager") {
-        tabLager.classList.add("active");
+    if (folder === "lager") {
+        document.getElementById("lagerBtn").classList.add("active");
     } else {
-        tabKlara.classList.add("active");
+        document.getElementById("klaraBtn").classList.add("active");
     }
+}
 
-    statusBox.textContent = "Laddar " + folderName + "...";
-    fileList.innerHTML = "";
+function loadFolder(folder) {
+    currentFolder = folder;
+    setActive(folder);
+    status.textContent = "Status: laddar " + folder + "...";
 
-    fetch(folderName + "/manifest.json?cache=" + Date.now())
-        .then(function(response) {
+    fetch(folder + "/manifest.json?v=" + Date.now())
+        .then(response => {
             if (!response.ok) {
-                throw new Error("Kunde inte läsa " + folderName + "/manifest.json");
+                throw new Error("Kunde inte läsa " + folder + "/manifest.json");
             }
             return response.json();
         })
-        .then(function(data) {
+        .then(data => {
             allFiles = Array.isArray(data) ? data : [];
-            renderFiles();
-            statusBox.textContent = "Laddat: " + folderName + " (" + allFiles.length + " filer)";
+            status.textContent = "Status: laddat " + allFiles.length + " filer i " + folder;
+            renderList();
         })
-        .catch(function(error) {
+        .catch(error => {
             allFiles = [];
-            fileList.innerHTML = "";
-            statusBox.textContent = "Fel: " + error.message;
+            list.innerHTML = "";
+            status.textContent = "Status: FEL - " + error.message;
         });
 }
 
-// Ritar knapparna efter sökning.
-function renderFiles() {
-    const searchText = searchInput.value.trim().toLowerCase();
-    fileList.innerHTML = "";
+function renderList() {
+    const q = searchInput.value.toLowerCase().trim();
+    debug.textContent = 'Debug: söktext = "' + q + '" | filer = ' + allFiles.length;
 
-    const filtered = allFiles.filter(function(item) {
-        const nameText = (item.name || "").toLowerCase();
-        const fileText = (item.file || "").toLowerCase();
-
-        return nameText.includes(searchText) || fileText.includes(searchText);
+    const filtered = allFiles.filter(item => {
+        const name = (item.name || "").toLowerCase();
+        const file = (item.file || "").toLowerCase();
+        return name.includes(q) || file.includes(q);
     });
 
+    list.innerHTML = "";
+
     if (filtered.length === 0) {
-        fileList.innerHTML = '<div class="status">Inga träffar.</div>';
+        list.innerHTML = "<p>Inga träffar</p>";
         return;
     }
 
-    filtered.forEach(function(item) {
+    filtered.forEach(item => {
         const btn = document.createElement("button");
-        btn.className = "file-btn";
         btn.textContent = item.name + " (" + item.file + ")";
-        btn.onclick = function() {
-            preview.src = currentFolder + "/" + item.file;
+        btn.onclick = () => {
+            window.location.href = currentFolder + "/" + item.file;
         };
-        fileList.appendChild(btn);
+        list.appendChild(btn);
     });
 }
 
-// Händelser.
-searchInput.addEventListener("input", renderFiles);
+searchInput.addEventListener("input", renderList);
 
-tabLager.addEventListener("click", function() {
-    loadFolder("lager");
-});
-
-tabKlara.addEventListener("click", function() {
-    loadFolder("klara");
-});
-
-// Start.
 loadFolder("lager");
 </script>
 
 </body>
 </html>
-

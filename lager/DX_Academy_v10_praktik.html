@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DX Academy – Praktik</title>
+
+<style>
+/* Grundinställningar */
+body {
+    margin: 0; /* Tar bort standardmarginal */
+    font-family: Arial, sans-serif; /* Enkel och tydlig font */
+    background-color: #0a0f1c; /* Mörk DX-bakgrund */
+    color: #ffffff; /* Vit text */
+    display: flex; /* Flexbox för centrering */
+    justify-content: center; /* Centrerar horisontellt */
+    align-items: center; /* Centrerar vertikalt */
+    height: 100vh; /* Full höjd */
+}
+
+/* Container */
+.container {
+    width: 90%; /* Anpassad bredd */
+    max-width: 500px; /* Maxbredd */
+    text-align: center; /* Centrerad text */
+}
+
+/* Rubrik */
+h1 {
+    font-size: 24px; /* Storlek */
+    margin-bottom: 20px; /* Avstånd */
+}
+
+/* Knappar */
+button {
+    width: 100%; /* Full bredd */
+    padding: 15px; /* Stor klickyta */
+    margin-top: 10px; /* Avstånd */
+    font-size: 16px; /* Textstorlek */
+    border: none; /* Ingen kant */
+    border-radius: 8px; /* Rundade hörn */
+    cursor: pointer; /* Pekare */
+}
+
+/* SDR-knapp */
+.open-sdr {
+    background-color: #1e90ff; /* Blå färg */
+    color: white; /* Vit text */
+}
+
+/* Spara-knapp */
+.save-btn {
+    background-color: #28a745; /* Grön färg */
+    color: white; /* Vit text */
+}
+
+/* Textfält */
+textarea {
+    width: 100%; /* Full bredd */
+    height: 120px; /* Höjd */
+    margin-top: 15px; /* Avstånd */
+    padding: 10px; /* Inre marginal */
+    border-radius: 8px; /* Rundade hörn */
+    border: none; /* Ingen kant */
+    font-size: 14px; /* Textstorlek */
+}
+
+/* Status */
+#status {
+    margin-top: 10px; /* Avstånd */
+    font-size: 14px; /* Mindre text */
+    color: #00ffcc; /* Cyan */
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🎧 DX Praktik</h1>
+
+    <!-- Knapp för SDR -->
+    <button class="open-sdr" onclick="openSDR()">Öppna SDR (198 kHz)</button>
+
+    <!-- Anteckningsfält -->
+    <textarea id="notes" placeholder="Vad hör du?"></textarea>
+
+    <!-- Spara-knapp -->
+    <button class="save-btn" onclick="saveNotes()">Spara anteckning</button>
+
+    <!-- Statusmeddelande -->
+    <div id="status"></div>
+
+</div>
+
+<script>
+// Funktion för att öppna SDR-sidan
+function openSDR() {
+    // Öppnar WebSDR i ny flik
+    window.open("http://websdr.ewi.utwente.nl:8901/?tune=198am", "_blank");
+}
+
+// Funktion för att spara anteckningar
+function saveNotes() {
+    // Hämtar texten från textarea
+    const text = document.getElementById("notes").value;
+
+    // Sparar i localStorage
+    localStorage.setItem("dx_notes_v10", text);
+
+    // Visar status
+    document.getElementById("status").innerText = "✔ Sparat!";
+}
+
+// Laddar sparad text när sidan öppnas
+window.onload = function() {
+    // Hämtar sparad data
+    const saved = localStorage.getItem("dx_notes_v10");
+
+    // Om det finns sparad text
+    if (saved) {
+        // Fyller textarea
+        document.getElementById("notes").value = saved;
+    }
+}
+</script>
+
+</body>
+</html>

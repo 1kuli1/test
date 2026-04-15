@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <!-- Anger teckenkodning så att svenska tecken visas rätt. -->
+  <meta charset="UTF-8">
+  <!-- Gör att sidan skalar bra på mobil. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Titel som visas i fliken. -->
+  <title>DX Academy AI Switch v1</title>
+  <style>
+    /* Nollställer boxmodell så att storlekar blir lättare att styra. */
+    * { box-sizing: border-box; }
+
+    /* Grundstil för hela sidan. */
+    body {
+      /* Väljer lättläst typsnitt. */
+      font-family: Arial, sans-serif;
+      /* Ger sidan en mörk bakgrund. */
+      background: #0b0f14;
+      /* Sätter ljus textfärg. */
+      color: #ffffff;
+      /* Tar bort standardmarginal. */
+      margin: 0;
+      /* Lägger till luft runt innehållet. */
+      padding: 20px;
+    }
+
+    /* Yttre behållare som centrerar innehållet. */
+    .wrapper {
+      /* Begränsar maximal bredd. */
+      max-width: 900px;
+      /* Centrerar rutan horisontellt. */
+      margin: 0 auto;
+    }
+
+    /* Stil för huvudrubriken. */
+    .title {
+      /* Gör texten större. */
+      font-size: 30px;
+      /* Gör rubriken tydlig. */
+      font-weight: bold;
+      /* Ger luft under rubriken. */
+      margin-bottom: 10px;
+    }
+
+    /* Stil för kort introduktionstext. */
+    .subtitle {
+      /* Ger lite mjukare färg än huvudtexten. */
+      color: #b7c7d9;
+      /* Ökar radavståndet för läsbarhet. */
+      line-height: 1.5;
+      /* Ger luft under texten. */
+      margin-bottom: 24px;
+    }
+
+    /* Gemensam stil för alla kort. */
+    .card {
+      /* Ger mörk panelbakgrund. */
+      background: #111821;
+      /* Rundar hörnen. */
+      border-radius: 14px;
+      /* Ger inre luft. */
+      padding: 18px;
+      /* Ger luft mellan paneler. */
+      margin-bottom: 18px;
+      /* Lägger till diskret kant. */
+      border: 1px solid #1c2a38;
+      /* Ger lätt skugga. */
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Rutnät för lägesknapparna. */
+    .mode-grid {
+      /* Använder grid för jämn layout. */
+      display: grid;
+      /* Skapar kolumner som anpassar sig efter bredd. */
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      /* Lägger mellanrum mellan rutorna. */
+      gap: 14px;
+    }
+
+    /* Stil för varje lägesruta. */
+    .mode-card {
+      /* Ger mörk bakgrundston. */
+      background: #16202a;
+      /* Rundar hörn. */
+      border-radius: 12px;
+      /* Lägger inre luft. */
+      padding: 16px;
+      /* Visar att rutan är klickbar. */
+      cursor: pointer;
+      /* Ger kant som ändras vid aktivt läge. */
+      border: 2px solid transparent;
+      /* Mjuk övergång för hover och aktivt läge. */
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    /* Hovereffekt för lägesrutorna. */
+    .mode-card:hover {
+      /* Flyttar rutan lite uppåt. */
+      transform: translateY(-2px);
+      /* Ljusar upp bakgrunden lite. */
+      background: #1a2632;
+    }
+
+    /* Aktivt läge markeras tydligt. */
+    .mode-card.active {
+      /* Färgad kant runt aktiv ruta. */
+      border-color: #6ec1ff;
+      /* Något ljusare bakgrund vid aktivt läge. */
+      background: #1a2b3a;
+    }
+
+    /* Stil för rubriken inne i varje lägesruta. */
+    .mode-card h3 {
+      /* Tar bort onödig toppmarginal. */
+      margin-top: 0;
+      /* Ger lagom luft under rubriken. */
+      margin-bottom: 10px;
+    }
+
+    /* Stil för mindre hjälptest. */
+    .muted {
+      /* Använder mildare blågrå text. */
+      color: #a7b8ca;
+      /* Gör texten lite mindre. */
+      font-size: 14px;
+      /* Ger bättre radavstånd. */
+      line-height: 1.5;
+    }
+
+    /* Visar aktuell statusrad. */
+    .status {
+      /* Gör statusraden lite större. */
+      font-size: 16px;
+      /* Ger luftigare rad. */
+      line-height: 1.5;
+    }
+
+    /* Färgmarkering för valt läge. */
+    .badge {
+      /* Gör märket till inline-block så det kan stylas snyggt. */
+      display: inline-block;
+      /* Ger lagom inre luft. */
+      padding: 6px 10px;
+      /* Rundar märket. */
+      border-radius: 999px;
+      /* Ger mörkblå bakgrund. */
+      background: #1a2b3a;
+      /* Ger ljus textfärg. */
+      color: #9ed3ff;
+      /* Gör texten lite fetare. */
+      font-weight: bold;
+      /* Lägger diskret kant. */
+      border: 1px solid #28455f;
+    }
+
+    /* Rad för knappar. */
+    .button-row {
+      /* Låter knapparna ligga på rad. */
+      display: flex;
+      /* Tillåter radbrytning på små skärmar. */
+      flex-wrap: wrap;
+      /* Ger mellanrum mellan knappar. */
+      gap: 12px;
+      /* Ger lite luft överst. */
+      margin-top: 16px;
+    }
+
+    /* Grundstil för alla knappar. */
+    button {
+      /* Tar bort standardkant. */
+      border: none;
+      /* Rundar hörnen. */
+      border-radius: 10px;
+      /* Ger inre luft. */
+      padding: 12px 16px;
+      /* Gör texten tydlig. */
+      font-size: 15px;
+      /* Gör texten lite fetare. */
+      font-weight: bold;
+      /* Visar att knappen är klickbar. */
+      cursor: pointer;
+      /* Mjuk hoverkänsla. */
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    /* Hovereffekt för knappar. */
+    button:hover {
+      /* Flyttar knappen lite uppåt. */
+      transform: translateY(-1px);
+      /* Gör knappen aningen mjukare. */
+      opacity: 0.95;
+    }
+
+    /* Primärknapp. */
+    .primary {
+      /* Blå bakgrund för huvudknappen. */
+      background: #6ec1ff;
+      /* Mörk text för kontrast. */
+      color: #081018;
+    }
+
+    /* Sekundärknapp. */
+    .secondary {
+      /* Mörkare bakgrund. */
+      background: #233241;
+      /* Ljus text. */
+      color: #ffffff;
+      /* Tydlig kant. */
+      border: 1px solid #32485f;
+    }
+
+    /* Stil för textfältet som visar prompten. */
+    textarea {
+      /* Gör fältet fullt brett. */
+      width: 100%;
+      /* Sätter bra höjd. */
+      min-height: 320px;
+      /* Mörk bakgrund. */
+      background: #0d141b;
+      /* Ljus text. */
+      color: #ffffff;
+      /* Tydlig kant. */
+      border: 1px solid #284055;
+      /* Rundar hörn. */
+      border-radius: 10px;
+      /* Ger inre luft. */
+      padding: 14px;
+      /* Gör texten lätt att läsa. */
+      line-height: 1.5;
+      /* Tillåter användaren att ändra höjd. */
+      resize: vertical;
+    }
+
+    /* Stil för små informationsrader. */
+    .small-note {
+      /* Mindre textstorlek. */
+      font-size: 13px;
+      /* Mild färg. */
+      color: #95a9bc;
+      /* Ger luft ovanför. */
+      margin-top: 10px;
+      /* Bra radavstånd. */
+      line-height: 1.5;
+    }
+
+    /* Anpassning för mindre skärmar. */
+    @media (max-width: 640px) {
+      /* Minskar rubrikstorleken på mobil. */
+      .title { font-size: 24px; }
+      /* Minskar höjden på promptfältet på mobil. */
+      textarea { min-height: 260px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Yttre container som centrerar sidan. -->
+  <div class="wrapper">
+    <!-- Huvudrubrik för verktyget. -->
+    <div class="title">DX Academy AI Switch v1</div>
+
+    <!-- Kort beskrivning av vad verktyget gör. -->
+    <div class="subtitle">
+      Välj vilket AI-läge du vill använda, se exakt vilken prompt som används och öppna sedan ChatGPT med rätt text färdig att klistra in eller skicka vidare i ditt system.
+    </div>
+
+    <!-- Kort med val av läge. -->
+    <div class="card">
+      <!-- Rubrik för lägesval. -->
+      <h2>Välj läge</h2>
+
+      <!-- Grid med tre klickbara lägen. -->
+      <div class="mode-grid">
+        <!-- Ruta för elevläge. -->
+        <div class="mode-card" id="mode-elev" data-mode="elev">
+          <!-- Rubrik för elevläget. -->
+          <h3>🎓 Elevläge</h3>
+          <!-- Förklarar vad elevläget är till för. -->
+          <div class="muted">Pedagogiskt, enkelt och låst till radio, signaler och identifiering. Inget byggsnack.</div>
+        </div>
+
+        <!-- Ruta för builderläge. -->
+        <div class="mode-card" id="mode-builder" data-mode="builder">
+          <!-- Rubrik för builderläget. -->
+          <h3>🛠️ Builderläge</h3>
+          <!-- Förklarar vad builderläget är till för. -->
+          <div class="muted">Fritt men strukturerat läge för att bygga DX-OS, Academy, funktioner, flöden och idéer.</div>
+        </div>
+
+        <!-- Ruta för standardläge. -->
+        <div class="mode-card" id="mode-standard" data-mode="standard">
+          <!-- Rubrik för standardläget. -->
+          <h3>⚡ Standard</h3>
+          <!-- Förklarar vad standardläget är till för. -->
+          <div class="muted">Neutral startpunkt när du vill jobba mer öppet utan att låsa dig helt till elev- eller byggläge.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kort som visar valt läge och handlingar. -->
+    <div class="card">
+      <!-- Rubrik för aktuell status. -->
+      <h2>Aktivt läge</h2>
+
+      <!-- Statusrad som uppdateras med valt läge. -->
+      <div class="status">Nu valt läge: <span class="badge" id="activeModeBadge">Laddar...</span></div>
+
+      <!-- Knappsektion för åtgärder. -->
+      <div class="button-row">
+        <!-- Knapp som öppnar ChatGPT i ny flik. -->
+        <button class="primary" id="openChatgptBtn">Öppna ChatGPT</button>
+        <!-- Knapp som kopierar prompten. -->
+        <button class="secondary" id="copyPromptBtn">Kopiera prompt</button>
+        <!-- Knapp som återställer sparat val. -->
+        <button class="secondary" id="resetModeBtn">Återställ till Standard</button>
+      </div>
+
+      <!-- Hjälptext som förklarar hur öppning fungerar. -->
+      <div class="small-note">
+        Tips: vissa webbläsare fyller inte automatiskt in text i ChatGPT via länk. Därför finns alltid hela prompten nedan så att du snabbt kan kopiera den.
+      </div>
+    </div>
+
+    <!-- Kort som visar själva prompten. -->
+    <div class="card">
+      <!-- Rubrik för promptfältet. -->
+      <h2>Aktiv prompt</h2>
+
+      <!-- Textarea där användaren kan läsa och kopiera prompten. -->
+      <textarea id="promptOutput" spellcheck="false"></textarea>
+
+      <!-- Hjälptext om localStorage och redigering. -->
+      <div class="small-note">
+        Valet sparas lokalt i din webbläsare med localStorage så att samma läge ligger kvar nästa gång du öppnar filen.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sparnyckel för valt läge i localStorage.
+    const STORAGE_KEY = 'dx_academy_ai_mode_v1';
+
+    // Prompt för elevläge.
+    const elevPrompt = `Du är en pedagogisk DX-expert.
+
+Ditt uppdrag:
+- Hjälp användaren att identifiera radiostationer
+- Förklara signaler (brus, fading, störningar)
+- Lära ut hur man tänker inom DX
+
+Regler:
+- Svara direkt utan inledning
+- Max 5–8 meningar om inget annat behövs
+- Använd enkla och tydliga förklaringar
+
+Viktigt:
+- Föreslå ALDRIG att bygga appar, system eller funktioner
+- Håll fokus på radio, frekvenser och signalanalys
+- Anpassa nivån till nybörjare om inget annat anges
+
+Vid osäkerhet:
+- Säg att du är osäker
+- Ge 2–3 troliga alternativ
+- Förklara varför
+
+Mål:
+- Användaren ska förstå vad de hör och kunna ta nästa steg själv`;
+
+    // Prompt för builderläge.
+    const builderPrompt = `Du är en expert på att bygga DX-system, utbildningar och AI-lösningar.
+
+Ditt arbetssätt:
+- Svara direkt utan onödig inledning
+- Tänk praktiskt och lösningsorienterat
+- Ge färdiga lösningar (inte bara idéer)
+
+Fokus:
+- Förbättra och utveckla DX-OS och DX Academy
+- Föreslå funktioner, system och smarta lösningar
+- Tänk skalbart (kurser, betalning, struktur, användarflöde)
+
+Viktigt:
+- Anpassa dig till användarens tempo (snabbt framåt)
+- Undvik teori om det inte efterfrågas
+- Bygg saker som går att använda direkt (HTML, struktur, system)
+
+Extra:
+- Om något kan göras enklare → föreslå det
+- Om något saknas → påpeka det tydligt
+- Tänk som en partner, inte bara en assistent`;
+
+    // Prompt för standardläge.
+    const standardPrompt = `Du är en hjälpsam DX-assistent.
+
+Fokus:
+- Hjälp användaren med radio, DX, stationer, signaler och praktiska frågor
+- Svara tydligt och direkt
+- Anpassa nivån efter användaren
+
+Viktigt:
+- Håll svaren relevanta för uppgiften
+- Var tydlig om något är osäkert
+- Ge praktiska nästa steg när det hjälper`;
+
+    // Samlar alla lägen och tillhörande data på ett ställe.
+    const modes = {
+      // Definition för elevläge.
+      elev: {
+        // Visningsnamn för elevläge.
+        label: '🎓 Elevläge',
+        // Prompttext för elevläge.
+        prompt: elevPrompt
+      },
+      // Definition för builderläge.
+      builder: {
+        // Visningsnamn för builderläge.
+        label: '🛠️ Builderläge',
+        // Prompttext för builderläge.
+        prompt: builderPrompt
+      },
+      // Definition för standardläge.
+      standard: {
+        // Visningsnamn för standardläge.
+        label: '⚡ Standard',
+        // Prompttext för standardläge.
+        prompt: standardPrompt
+      }
+    };
+
+    // Hämtar alla klickbara lägeskort.
+    const modeCards = document.querySelectorAll('.mode-card');
+    // Hämtar märket som visar aktivt läge.
+    const activeModeBadge = document.getElementById('activeModeBadge');
+    // Hämtar textfältet där prompten visas.
+    const promptOutput = document.getElementById('promptOutput');
+    // Hämtar knappen som öppnar ChatGPT.
+    const openChatgptBtn = document.getElementById('openChatgptBtn');
+    // Hämtar knappen som kopierar prompten.
+    const copyPromptBtn = document.getElementById('copyPromptBtn');
+    // Hämtar knappen som återställer läget.
+    const resetModeBtn = document.getElementById('resetModeBtn');
+
+    // Läser tidigare sparat läge eller använder standard som reserv.
+    let currentMode = localStorage.getItem(STORAGE_KEY) || 'standard';
+
+    // Säkerställer att läget verkligen finns i vår modes-lista.
+    if (!modes[currentMode]) {
+      // Faller tillbaka till standard om något blivit fel i lagringen.
+      currentMode = 'standard';
+    }
+
+    // Funktion som uppdaterar hela gränssnittet efter valt läge.
+    function renderMode() {
+      // Loopa igenom alla lägeskort.
+      modeCards.forEach((card) => {
+        // Hämtar vilket läge kortet representerar.
+        const cardMode = card.getAttribute('data-mode');
+        // Markerar bara det kort som matchar aktivt läge.
+        card.classList.toggle('active', cardMode === currentMode);
+      });
+
+      // Visar lägets namn i statusmärket.
+      activeModeBadge.textContent = modes[currentMode].label;
+      // Skriver ut rätt prompt i textfältet.
+      promptOutput.value = modes[currentMode].prompt;
+      // Sparar aktivt läge lokalt i webbläsaren.
+      localStorage.setItem(STORAGE_KEY, currentMode);
+    }
+
+    // Funktion som byter läge när användaren klickar på ett kort.
+    function setMode(newMode) {
+      // Avbryter om läget inte finns.
+      if (!modes[newMode]) {
+        // Stoppar funktionen direkt vid ogiltigt värde.
+        return;
+      }
+
+      // Uppdaterar aktuell lägesvariabel.
+      currentMode = newMode;
+      // Ritar om gränssnittet med det nya läget.
+      renderMode();
+    }
+
+    // Lägger klickhändelse på varje lägeskort.
+    modeCards.forEach((card) => {
+      // Registrerar klick på kortet.
+      card.addEventListener('click', () => {
+        // Hämtar läget från kortets data-attribut.
+        const selectedMode = card.getAttribute('data-mode');
+        // Byter till valt läge.
+        setMode(selectedMode);
+      });
+    });
+
+    // Öppnar ChatGPT i ny flik när knappen klickas.
+    openChatgptBtn.addEventListener('click', () => {
+      // Hämtar prompten för aktuellt läge.
+      const prompt = modes[currentMode].prompt;
+      // Kodar prompten säkert för URL-användning.
+      const encodedPrompt = encodeURIComponent(prompt);
+      // Skapar en länk mot ChatGPT med prompten som querytext.
+      const chatgptUrl = `https://chatgpt.com/?q=${encodedPrompt}`;
+      // Öppnar länken i ny flik.
+      window.open(chatgptUrl, '_blank');
+    });
+
+    // Kopierar prompten när användaren klickar på kopieraknappen.
+    copyPromptBtn.addEventListener('click', async () => {
+      // Försöker kopiera texten via Clipboard API.
+      try {
+        // Kopierar promptens innehåll till urklipp.
+        await navigator.clipboard.writeText(promptOutput.value);
+        // Visar tillfällig bekräftelse på knappen.
+        copyPromptBtn.textContent = 'Kopierad';
+        // Återställer knapptexten efter en kort stund.
+        setTimeout(() => {
+          // Sätter tillbaka ursprunglig knapptext.
+          copyPromptBtn.textContent = 'Kopiera prompt';
+        }, 1400);
+      } catch (error) {
+        // Markerar textfältet om kopiering misslyckas.
+        promptOutput.focus();
+        // Markerar all text så att användaren lätt kan kopiera manuellt.
+        promptOutput.select();
+        // Informerar användaren om manuell kopiering.
+        alert('Automatisk kopiering misslyckades. Prompten är nu markerad så att du kan kopiera manuellt.');
+      }
+    });
+
+    // Återställer läget till standard när knappen klickas.
+    resetModeBtn.addEventListener('click', () => {
+      // Byter till standardläge.
+      setMode('standard');
+    });
+
+    // Renderar sidan direkt när filen öppnas.
+    renderMode();
+  </script>
+</body>
+</html>

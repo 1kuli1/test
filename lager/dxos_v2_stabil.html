@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<title>DX-OS V2 Stabil</title>
+<style>
+body {font-family: Arial; background:#0b0f14; color:white; margin:0; text-align:center;}
+header {background:#111821; padding:20px; font-size:28px;}
+.section {margin:20px; padding:20px; background:#16202a; border-radius:10px;}
+input, button {padding:10px; margin:5px; font-size:16px;}
+button {background:#1e90ff; color:white; border:none; cursor:pointer;}
+button:hover {background:#63b3ff;}
+#map {width:100%; height:300px; background:#000;}
+</style>
+</head>
+<body>
+
+<header>DX-OS V2 Stabil</header>
+
+<div class="section">
+<h2>🌐 SDR Mottagare</h2>
+<input id="rx1" placeholder="RX1 URL">
+<input id="rx2" placeholder="RX2 URL">
+<input id="rx3" placeholder="RX3 URL"><br>
+<button onclick="openRX(1)">RX1</button>
+<button onclick="openRX(2)">RX2</button>
+<button onclick="openRX(3)">RX3</button>
+<button onclick="openAll()">Öppna alla</button>
+</div>
+
+<div class="section">
+<h2>📡 Snabblänkar</h2>
+<button onclick="window.open('http://rx.linkfanel.net/')">KiwiSDR</button>
+<button onclick="window.open('http://websdr.ewi.utwente.nl:8901/')">WebSDR</button>
+<button onclick="window.open('https://mwlist.org/mwlist_quick_and_easy.php')">MWList</button>
+</div>
+
+<div class="section">
+<h2>📍 QTH</h2>
+<input id="qth" placeholder="Din position">
+<button onclick="saveQTH()">Spara QTH</button>
+<p id="qthOut"></p>
+</div>
+
+<div class="section">
+<h2>📒 Loggbok</h2>
+<input id="freq" placeholder="Frekvens">
+<input id="station" placeholder="Station">
+<button onclick="saveLog()">Spara logg</button>
+<div id="logs"></div>
+</div>
+
+<div class="section">
+<h2>🗺️ Karta</h2>
+<div id="map">Karta (lokal)</div>
+</div>
+
+<div class="section">
+<h2>🤖 AI</h2>
+<button onclick="window.open('https://chat.openai.com')">Öppna AI</button>
+</div>
+
+<script>
+function openRX(n){
+    const url = document.getElementById('rx'+n).value;
+    if(url) window.open(url, '_blank');
+}
+
+function openAll(){
+    for(let i=1;i<=3;i++){ openRX(i); }
+}
+
+function saveQTH(){
+    const qth = document.getElementById('qth').value;
+    localStorage.setItem('qth', qth);
+    document.getElementById('qthOut').innerText = "Sparat: " + qth;
+}
+
+document.getElementById('qthOut').innerText = localStorage.getItem('qth') || "";
+
+function saveLog(){
+    const freq = document.getElementById('freq').value;
+    const station = document.getElementById('station').value;
+
+    let logs = JSON.parse(localStorage.getItem('logs') || "[]");
+    logs.push(freq + " - " + station);
+    localStorage.setItem('logs', JSON.stringify(logs));
+    showLogs();
+}
+
+function showLogs(){
+    let logs = JSON.parse(localStorage.getItem('logs') || "[]");
+    document.getElementById('logs').innerHTML = logs.join("<br>");
+}
+
+showLogs();
+</script>
+
+</body>
+</html>

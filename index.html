@@ -3,159 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SÖKTEST V7</title>
+<title>DX-OS Testcenter V6</title>
+
 <style>
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b0f1a;
-    color: white;
-    text-align: center;
+    margin:0;
+    font-family:Arial;
+    background:#0b0f1a;
+    color:white;
+    text-align:center;
 }
-.wrap {
-    max-width: 700px;
-    margin: 20px auto;
-    background: #111827;
-    padding: 20px;
-    border-radius: 14px;
+h1 { margin:15px; }
+
+.section {
+    margin:15px auto;
+    max-width:800px;
+    background:#111827;
+    padding:15px;
+    border-radius:15px;
 }
-button {
-    width: 90%;
-    max-width: 500px;
-    padding: 12px;
-    margin: 8px auto;
-    display: block;
-    border: none;
-    border-radius: 10px;
-    background: #eab308;
-    color: black;
-    font-weight: bold;
-    font-size: 16px;
-}
+
 .tab {
-    width: auto;
-    display: inline-block;
-    margin: 5px;
-    background: #1f2937;
-    color: white;
+    padding:12px;
+    margin:5px;
+    border:none;
+    border-radius:10px;
+    background:#1f2937;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
 }
 .active {
-    background: #22c55e;
-    color: black;
+    background:#22c55e;
+    color:black;
 }
-input {
-    width: 90%;
-    max-width: 500px;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    margin: 10px 0;
-    font-size: 16px;
+
+.search {
+    width:90%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    margin:10px;
 }
-#debug {
-    color: #7dd3fc;
-    margin: 10px 0;
-    font-size: 14px;
+
+.btn {
+    width:90%;
+    padding:12px;
+    margin:6px;
+    border-radius:10px;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
 }
-#status {
-    color: #fca5a5;
-    margin: 10px 0;
-    font-size: 14px;
+
+.main { background:#eab308; color:black; }
+.open { background:#38bdf8; color:black; }
+.ai { background:#a855f7; color:white; }
+
+.preview {
+    width:100%;
+    height:400px;
+    border:none;
+    border-radius:10px;
+    background:white;
+}
+
+.status {
+    color:#9ecfff;
+    margin:10px;
 }
 </style>
 </head>
+
 <body>
 
-<div class="wrap">
-    <h1>SÖKTEST V7</h1>
+<h1>DX-OS TESTCENTER V6</h1>
 
-    <button id="lagerBtn" class="tab active" onclick="loadFolder('lager')">Lager</button>
-    <button id="klaraBtn" class="tab" onclick="loadFolder('klara')">Klara</button>
+<div class="section">
 
-    <div>
-        <input type="text" id="search" placeholder="Skriv här för att söka...">
-    </div>
+<button id="lagerBtn" class="tab active">🧪 Lager</button>
+<button id="klaraBtn" class="tab">✅ Klara</button>
 
-    <div id="debug">Debug: väntar</div>
-    <div id="status">Status: laddar...</div>
+<br>
 
-    <div id="list"></div>
+<input id="search" class="search" placeholder="Sök namn eller fil...">
+
+<div id="status" class="status">Laddar...</div>
+
+<div id="list"></div>
+
+</div>
+
+<div class="section">
+<h3>Förhandsvisning</h3>
+<iframe id="preview" class="preview"></iframe>
 </div>
 
 <script>
-let allFiles = [];
-let currentFolder = "lager";
 
-const searchInput = document.getElementById("search");
+let current = "lager";
+let data = [];
+
 const list = document.getElementById("list");
-const debug = document.getElementById("debug");
-const status = document.getElementById("status");
+const search = document.getElementById("search");
+const preview = document.getElementById("preview");
 
-function setActive(folder) {
+function setTab(type){
+    current = type;
     document.getElementById("lagerBtn").classList.remove("active");
     document.getElementById("klaraBtn").classList.remove("active");
 
-    if (folder === "lager") {
+    if(type==="lager"){
         document.getElementById("lagerBtn").classList.add("active");
     } else {
         document.getElementById("klaraBtn").classList.add("active");
     }
 }
 
-function loadFolder(folder) {
-    currentFolder = folder;
-    setActive(folder);
-    status.textContent = "Status: laddar " + folder + "...";
+function load(type){
+    setTab(type);
 
-    fetch(folder + "/manifest.json?v=" + Date.now())
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Kunde inte läsa " + folder + "/manifest.json");
-            }
-            return response.json();
-        })
-        .then(data => {
-            allFiles = Array.isArray(data) ? data : [];
-            status.textContent = "Status: laddat " + allFiles.length + " filer i " + folder;
-            renderList();
-        })
-        .catch(error => {
-            allFiles = [];
-            list.innerHTML = "";
-            status.textContent = "Status: FEL - " + error.message;
-        });
+    fetch(type + "/manifest.json?v=" + Date.now())
+    .then(r=>r.json())
+    .then(d=>{
+        data = d;
+        render();
+        document.getElementById("status").innerText = "Laddat " + data.length + " filer";
+    })
+    .catch(()=>{
+        document.getElementById("status").innerText = "Fel: manifest saknas";
+    });
 }
 
-function renderList() {
-    const q = searchInput.value.toLowerCase().trim();
-    debug.textContent = 'Debug: söktext = "' + q + '" | filer = ' + allFiles.length;
-
-    const filtered = allFiles.filter(item => {
-        const name = (item.name || "").toLowerCase();
-        const file = (item.file || "").toLowerCase();
-        return name.includes(q) || file.includes(q);
-    });
+function render(){
+    let s = search.value.toLowerCase();
 
     list.innerHTML = "";
 
-    if (filtered.length === 0) {
+    let filtered = data.filter(i =>
+        i.name.toLowerCase().includes(s) ||
+        i.file.toLowerCase().includes(s)
+    );
+
+    if(filtered.length === 0){
         list.innerHTML = "<p>Inga träffar</p>";
         return;
     }
 
-    filtered.forEach(item => {
-        const btn = document.createElement("button");
-        btn.textContent = item.name + " (" + item.file + ")";
-        btn.onclick = () => {
-            window.location.href = currentFolder + "/" + item.file;
+    filtered.forEach(item=>{
+
+        let path = current + "/" + item.file;
+
+        let mainBtn = document.createElement("button");
+        mainBtn.className = "btn main";
+        mainBtn.innerText = item.name;
+        mainBtn.onclick = ()=> preview.src = path;
+
+        let openBtn = document.createElement("button");
+        openBtn.className = "btn open";
+        openBtn.innerText = "Öppna i ny flik";
+        openBtn.onclick = ()=> window.open(path, "_blank");
+
+        let aiBtn = document.createElement("button");
+        aiBtn.className = "btn ai";
+        aiBtn.innerText = "Analysera";
+        aiBtn.onclick = ()=>{
+            let url = new URL(path, window.location.href).href;
+            window.open("https://chat.openai.com/?q=" + encodeURIComponent("Analysera denna sida: " + url));
         };
-        list.appendChild(btn);
+
+        list.appendChild(mainBtn);
+        list.appendChild(openBtn);
+        list.appendChild(aiBtn);
+
     });
 }
 
-searchInput.addEventListener("input", renderList);
+search.addEventListener("input", render);
 
-loadFolder("lager");
+document.getElementById("lagerBtn").onclick = ()=> load("lager");
+document.getElementById("klaraBtn").onclick = ()=> load("klara");
+
+load("lager");
+
 </script>
 
 </body>
